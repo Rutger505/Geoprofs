@@ -10,6 +10,20 @@ log:
 entryPoints:
   web:
     address: :80
+    # Redirect HTTP to HTTPS
+    http:
+      redirections:
+        entryPoint:
+          to: "websecure"
+          scheme: "https"
+          permanent: true
+  websecure:
+    address: :443
+
+tls:
+  certificates:
+    - certFile: /ssl/${DOMAIN}.pem
+      keyFile: /ssl/${DOMAIN}-key.pem
 
 providers:
   docker:

@@ -5,8 +5,9 @@
 - [Docker](https://www.docker.com/)
 - [Node.js](https://nodejs.org/)
 - Make
+- Mkcert
 
-## Install make for windows
+## Install make and mkcert for windows
 
 Here are install instruction for installing make using choco.
 
@@ -44,6 +45,12 @@ choco install make
 7. In the back-end container terminal, run `php artisan db:seed` to seed the database
 8. Exit the terminal session in the back-end container, run `exit`
 9. In the root of the project, run `make restart` to apply the changes
+
+## Troubleshooting
+
+### Mkcert
+
+If mkcert -install crashes due to permission issues. Start the terminal as administrator and run the command again.
 
 # Starting the application
 

@@ -10,6 +10,9 @@ WORKDIR /etc/traefik
 ARG ENVIRONMENT
 ENV ENVIRONMENT=${ENVIRONMENT}
 
+ARG DOMAIN
+ENV DOMAIN=${DOMAIN}
+
 # Copy the necessary files into the working directory
 COPY ${ENVIRONMENT}.traefik.tpl traefik.tpl
 

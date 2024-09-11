@@ -4,7 +4,8 @@ services:
       context: ./proxy/
       dockerfile: Dockerfile
       args:
-        ENVIRONMENT: development
+        ENVIRONMENT: ${ENVIRONMENT}
+        DOMAIN: ${DOMAIN}
     container_name: "proxy"
     restart: unless-stopped
     volumes:
@@ -24,7 +25,8 @@ services:
       - ./front-end:/app
     labels:
       traefik.enable: true
-      traefik.http.routers.front-end.rule: Host(`localhost`)
+      traefik.http.routers.front-end.rule: Host(`${DOMAIN}`)
+      traefik.http.routers.front-end.tls: true
 
   back-end:
     container_name: back-end
@@ -46,7 +48,8 @@ services:
       - db
     labels:
       traefik.enable: true
-      traefik.http.routers.backend-end.rule: Host(`localhost`) && PathPrefix(`/api`)
+      traefik.http.routers.backend-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
+      traefik.http.routers.backend-end.tls: true
 
   db:
     container_name: db
