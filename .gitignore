@@ -2,3 +2,4 @@
 .vscode
 .env
 db/data
+ssl/

@@ -3,10 +3,10 @@ FROM php:8.2-apache
 
 # Install Additional System Dependencies
 RUN apt-get update  \
-    && apt-get install -y libzip-dev zip libpq-dev
+    && apt-get install -y libzip-dev zip libpq-dev \
+    && apt-get install -y sudo \
+    && apt-get clean
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache mod_rewrite for URL rewriting
 RUN a2enmod rewrite

@@ -1,4 +1,20 @@
 services:
+  proxy:
+    build:
+      context: ./proxy/
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: development
+    container_name: "proxy"
+    restart: unless-stopped
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./proxy/ssl/:/ssl/"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+
   front-end:
     container_name: front-end
     build:
@@ -6,8 +22,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./front-end:/app
-    ports:
-      - "80:3000"
+    labels:
+      traefik.enable: true
+      traefik.http.routers.front-end.rule: Host(`localhost`)
 
   back-end:
     container_name: back-end
@@ -25,10 +42,11 @@ services:
       - ./back-end/.env
     volumes:
       - ./back-end:/var/www/html
-    ports:
-      - "8000:80"
     depends_on:
       - db
+    labels:
+      traefik.enable: true
+      traefik.http.routers.backend-end.rule: Host(`localhost`) && PathPrefix(`/api`)
 
   db:
     container_name: db

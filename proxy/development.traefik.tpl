@@ -1,0 +1,19 @@
+accessLog: { }
+
+api:
+  dashboard: true
+  insecure: true
+
+log:
+  level: WARN
+
+entryPoints:
+  web:
+    address: :80
+
+providers:
+  docker:
+    exposedByDefault: true
+  file:
+    directory: /etc/traefik
+    watch: true
