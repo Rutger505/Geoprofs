@@ -1,7 +1,7 @@
 FROM traefik:v2.10
 
 # Install Node.js and npm if needed
-RUN apk add --no-cache nodejs npm
+RUN apk add --no-cache gettext
 
 # Set the working directory to /etc/traefik
 WORKDIR /etc/traefik
@@ -16,8 +16,8 @@ ENV DOMAIN=${DOMAIN}
 # Copy the necessary files into the working directory
 COPY ${ENVIRONMENT}.traefik.tpl traefik.tpl
 
-# Generate the traefik.yaml file using envsub
-RUN npx envsub --env-file .env traefik.tpl traefik.yaml
+# Generate the traefik.yaml file using envsubst
+RUN envsubst < traefik.tpl > traefik.yaml
 
 # Start Traefik with the generated configuration
 CMD ["traefik", "--configFile=/etc/traefik/traefik.yaml"]
