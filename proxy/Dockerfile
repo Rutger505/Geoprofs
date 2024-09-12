@@ -17,7 +17,7 @@ ENV DOMAIN=${DOMAIN}
 COPY ${ENVIRONMENT}.traefik.tpl traefik.tpl
 
 # Generate the traefik.yaml file using envsubst
-RUN envsubst < traefik.tpl > traefik.yaml
+RUN envsubst < traefik.tpl > traefik.yml
 
 # Start Traefik with the generated configuration
-CMD ["traefik", "--configFile=/etc/traefik/traefik.yaml"]
+CMD ["traefik"]

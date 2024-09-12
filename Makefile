@@ -14,6 +14,11 @@ shell-%:
 	docker compose exec $* sh
 
 ssl:
-	cd proxy/ssl &&    \
-	mkcert -install && \
-	mkcert ${DOMAIN}
+	@if not exist proxy\ssl\${DOMAIN}.pem ( \
+		cd proxy\ssl && \
+		mkcert -install && \
+		mkcert ${DOMAIN} && \
+		echo SSL certificates generated. \
+	) else ( \
+		echo SSL certificates already exist. \
+	)
