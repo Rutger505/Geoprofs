@@ -15,15 +15,17 @@ If you have not installed choco already run the following command in a powershel
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
-Verify choco installation:
-```bash
-choco -v
-```
+
 
 If choco is installed correctely run:
 ```bash
 choco install make
 ```
+And
+```bash
+choco install mkcert
+```
+
 
 # Installation
 
