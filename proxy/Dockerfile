@@ -1,7 +1,7 @@
 FROM traefik:v2.10
 
 # Install Node.js and npm if needed
-RUN apk add --no-cache gettext
+RUN apk add --no-cache gettext bash
 
 # Set the working directory to /etc/traefik
 WORKDIR /etc/traefik
