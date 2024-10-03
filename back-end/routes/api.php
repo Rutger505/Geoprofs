@@ -10,3 +10,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/', function () {
     return response()->json(['message' => 'Hello World!']);
 });
+
+Route::get('/health', function () {
+    return response()->json(['status' => 'OK'], 200);
+});
