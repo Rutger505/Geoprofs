@@ -12,5 +12,5 @@ Route::get('/', function () {
 });
 
 Route::get('/health', function () {
-    return response()->json(['status' => 'OK'], 200);
+    return response()->json(['status' => 'òk'], 200);
 });
