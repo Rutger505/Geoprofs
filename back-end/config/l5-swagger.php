@@ -5,6 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
+                // TODO: propper title
                 'title' => 'L5 Swagger UI',
             ],
 
