@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+
 class HealthController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
+     * @SWG\Info(
+     *     version="1.0",
+     *     title="Example for response examples value"
+     * )
      */
     public function index()
     {
