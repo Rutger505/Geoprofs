@@ -4,12 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HealthController;
 
-/**
- * @OA\Info(
- *     version="0.1",
- *     title="API Documentation for the Geoprofs leaven management system",
- * ),
- */
 
 Route::get('/user', function (Request $request) {
     return $request->user();

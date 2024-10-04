@@ -9,7 +9,6 @@ class HealthController extends Controller
 {
 
     /**
-     * 
      * @OA\Get(
      *     path="api/health",
      *     tags={"Health"},
