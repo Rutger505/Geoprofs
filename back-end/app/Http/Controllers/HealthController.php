@@ -9,18 +9,15 @@ class HealthController extends Controller
 {
 
     /**
-     * @OA\Info (
-     *          version="0.1",
-     *          title="API Documentation",
-     * )
+     * 
      * @OA\Get(
      *     path="api/health",
      *     tags={"Health"},
      *     summary="Health check",
-     *     description="Health check",
+     *     description="Check if the API is up",
      *     @OA\Response(
      *         response=200,
-     *         description="Health check",
+     *         description="The API is currently up",
      *         @OA\JsonContent(
      *             @OA\Property(
      *                 property="status",

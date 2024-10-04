@@ -8,7 +8,7 @@ use App\Http\Controllers\HealthController;
 /**
  * @OA\Info(
  *     version="0.1",
- *     title="API Documentation",
+ *     title="API Documentation for the Geoprofs leaven management system",
  * ),
  */
 
