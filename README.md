@@ -82,8 +82,8 @@ make shell-<container-name>
 
 # Access the application
 
-- Frontend: [http://localhost](http://localhost)
-- Backend: [http://localhost:8000](http://localhost:8000)
+- Frontend: [https://localhost](https://localhost)
+- Backend: [https://localhost/api](https://localhost/api)
 
 # Information
 
