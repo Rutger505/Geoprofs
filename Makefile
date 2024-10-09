@@ -11,7 +11,7 @@ down:
 restart: up # start already rebuilds and recreates the containers
 
 shell-%:
-	docker compose exec $* sh
+	docker compose exec $* bash
 
 ssl:
 	@if not exist proxy\ssl\${DOMAIN}.pem (  \
