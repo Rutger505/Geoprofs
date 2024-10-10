@@ -14,7 +14,6 @@ return new class extends Migration
         if (!Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
                 $table->id('UserID');
-                $table->string('UserFirstName', 25);
                 $table->string('UserLastName', 25);
                 $table->string('UserEmail', 50);
                 $table->string('UserPassword', 50);
