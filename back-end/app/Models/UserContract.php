@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserContract extends Model
 {
+    protected $table = "user_contract";
+
     use HasFactory;
 }

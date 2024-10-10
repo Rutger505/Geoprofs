@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Leave extends Model
 {
+    protected $table = "leave";
     use HasFactory;
 }
