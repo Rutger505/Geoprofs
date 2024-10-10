@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id('ContractID');
-            $table->string('ContractName', 25);
+            $table->string('ContractName');
             $table->time('ContractTotalLeaveHours');
             $table->timestamps();
         });

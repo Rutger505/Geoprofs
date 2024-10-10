@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('leave_category', function (Blueprint $table) {
             $table->id('CategorieID');
-            $table->string('LeaveCategoryName', 25);
+            $table->string('LeaveCategoryName');
             $table->boolean('LeaveCategoryIsPaidLeave');
             $table->timestamps();
         });
