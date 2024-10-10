@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('section_user', function (Blueprint $table) {
             $table->foreignId('SectionID')->constrained('sections')->references('SectionID');
-            $table->foreignId('UserID')->constrained('users');
+            $table->foreignId('UserID')->constrained('users')->references('UserID');
             $table->timestamps();
         });
     }

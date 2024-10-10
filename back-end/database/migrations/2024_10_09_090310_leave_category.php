@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('leave_category', function (Blueprint $table) {
-            $table->id('CategorieID');
+            $table->id('CategoryID');
             $table->string('LeaveCategoryName');
             $table->boolean('LeaveCategoryIsPaidLeave');
             $table->timestamps();

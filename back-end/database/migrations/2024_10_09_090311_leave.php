@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('leave', function (Blueprint $table) {
-            $table->id('VerlofID');
+            $table->id('LeaveID');
             $table->dateTime('LeaveStartDate');
             $table->dateTime('LeaveEndDate');
             $table->text('LeaveReden');
             $table->enum('Status', ['pending', 'refused', 'accepted']);
-            $table->foreignId('leave_category')->constrained('leave_category')->references("CategorieID");
-            $table->foreignId('UserID')->constrained('users');
+            $table->foreignId('LeaveCategory')->constrained('leave_category')->references("CategoryID");
+            $table->foreignId('UserID')->constrained('users')->references('UserID');
             $table->timestamps();
         });
     }

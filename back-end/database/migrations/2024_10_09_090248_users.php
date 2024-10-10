@@ -14,14 +14,12 @@ return new class extends Migration
         if (!Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
                 $table->id('UserID');
-
+                $table->string("UserFirstName");
                 $table->string('UserLastName');
                 $table->string('UserEmail');
                 $table->string('UserPassword');
                 $table->date('DateHired')->nullable();
-                $table->integer('UserLeaveHours')->nullable();
-                $table->foreignId('UserRoleID')->constrained('roles');
-                $table->foreignId('ContractID')->constrained('contracts');
+                $table->foreignId('UserRoleID')->constrained('roles')->references('RoleID');
                 $table->timestamps();
             });
         }
