@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User_contract extends Model
+class LeaveCategory extends Model
 {
     use HasFactory;
 }
