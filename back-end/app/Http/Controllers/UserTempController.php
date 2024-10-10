@@ -8,7 +8,27 @@ use App\Models\User;
 class UserTempController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="api/userTemp",
+     *     tags={"test"},
+     *     summary="testing if user data exists",
+     *     description="Check if user data exists",
+     *     @OA\Response(
+     *         response=200,
+     *         description="user data exists",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="ok"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error"
+     *     )
+     * )
      */
     public function index()
     {
