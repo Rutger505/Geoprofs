@@ -18,7 +18,7 @@ class LeaveSeeder extends Seeder
             [
                 'LeaveStartDate' => '2024-11-01 09:00:00',
                 'LeaveEndDate' => '2024-11-15 18:00:00',
-                'LeaveReden' => 'Ik zou graag een mooie vankatie in Griekenland willen vieren',
+                'LeaveReason' => 'Ik zou graag een mooie vankatie in Griekenland willen vieren',
                 'Status' => 'pending',
                 'LeaveCategory' => 1,
                 'UserID' => 2
@@ -27,15 +27,15 @@ class LeaveSeeder extends Seeder
             [
                 'LeaveStartDate' => '2024-10-20 08:00:00',
                 'LeaveEndDate' => '2024-10-25 17:00:00',
-                'LeaveReden' => 'K ben de baas jongen',
-                'Status' => 'refused',
+                'LeaveReason' => 'K ben de baas jongen',
+                'Status' => 'denied',
                 'LeaveCategory' => 2,
                 'UserID' => 1
             ],
             [
                 'LeaveStartDate' => '2024-12-05 08:30:00',
                 'LeaveEndDate' => '2024-12-07 17:30:00',
-                'LeaveReden' => 'Ik heb hoge koorst',
+                'LeaveReason' => 'Ik heb hoge koorst',
                 'Status' => 'pending',
                 'LeaveCategory' => 2,
                 'UserID' => 1
