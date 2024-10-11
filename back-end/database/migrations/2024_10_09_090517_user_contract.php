@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_contract', function (Blueprint $table) {
-            $table->foreignId('contracts')->constrained('contracts')->references('ContractID');
-            $table->foreignId('users')->constrained('users')->references('id');
+            $table->foreignId('ContractID')->constrained('contracts')->references('ContractID');
+            $table->foreignId('UserID')->constrained('users')->references('UserID');
             $table->date('ContractStartDate');
             $table->date('ContractEndDate')->nullable();
             $table->timestamps();

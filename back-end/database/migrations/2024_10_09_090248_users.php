@@ -19,9 +19,7 @@ return new class extends Migration
                 $table->string('UserEmail');
                 $table->string('UserPassword');
                 $table->date('DateHired')->nullable();
-                $table->integer('UserLeaveHours')->nullable();
-                $table->foreignId('UserRoleID')->constrained('roles');
-                $table->foreignId('ContractID')->constrained('contracts');
+                $table->foreignId('UserRoleID')->constrained('roles')->references('RoleID');
                 $table->timestamps();
             });
         }
