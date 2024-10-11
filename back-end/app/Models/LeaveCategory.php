@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Section_user extends Model
+class LeaveCategory extends Model
 {
+    protected $table = "leave_category";
     use HasFactory;
 }

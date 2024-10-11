@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
+
     use HasFactory, Notifiable;
 
     /**

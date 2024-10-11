@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Roles extends Model
+class ProjectUser extends Model
 {
-    protected $table = "roles";
+    protected $table = "project_user";
+
     use HasFactory;
 }
