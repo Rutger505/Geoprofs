@@ -42,7 +42,7 @@ class AuthController extends Controller
      *                 property="email",
      *                 type="string",
      *                 example="user.user@example.com"
-     *             )
+     *             ),
      *              @OA\Property(
      *                 property="password",
      *                 type="string",
