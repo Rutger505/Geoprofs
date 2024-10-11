@@ -22,9 +22,7 @@ class UserSeeder extends Seeder
                 'UserEmail' => 'john.doe@example.com',
                 'UserPassword' => Hash::make('password123'),
                 'DateHired' => '2020-01-15',
-                'UserRoleID' => 1, // Assuming RoleID 1 exists
-                'created_at' => now(),
-                'updated_at' => now(),
+                'UserRoleID' => 1,
             ],
             [
                 'UserFirstName' => 'Jane',
@@ -32,10 +30,33 @@ class UserSeeder extends Seeder
                 'UserEmail' => 'jane.smith@example.com',
                 'UserPassword' => Hash::make('password123'),
                 'DateHired' => '2019-05-20',
-                'UserRoleID' => 2, // Assuming RoleID 2 exists
-                'created_at' => now(),
-                'updated_at' => now(),
+                'UserRoleID' => 2,
             ],
+            [
+                'UserFirstName' => 'Jake',
+                'UserLastName' => 'van de Kolk',
+                'UserEmail' => 'jake.kolkh@example.com',
+                'UserPassword' => Hash::make('jake'),
+                'DateHired' => '2012-05-20',
+                'UserRoleID' => 3,
+            ],
+            [
+                'UserFirstName' => 'Rutger',
+                'UserLastName' => 'Pronk',
+                'UserEmail' => 'Rutger.Pronk@example.com',
+                'UserPassword' => Hash::make('rutgerrr'),
+                'DateHired' => '2023-09-20',
+                'UserRoleID' => 4,
+            ],
+            [
+                'UserFirstName' => 'Bob',
+                'UserLastName' => 'Bobbers',
+                'UserEmail' => 'bob.bobbers@example.com',
+                'UserPassword' => Hash::make('bobbiebobbob'),
+                'DateHired' => '2015-02-01',
+                'UserRoleID' => 5,
+            ],
+
         ]);
     }
 }
