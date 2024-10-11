@@ -40,7 +40,6 @@ class DaysSeeder extends Seeder
             [
                 'DayName' => 'Sunday'
             ],
-
         ]);
     }
 }
