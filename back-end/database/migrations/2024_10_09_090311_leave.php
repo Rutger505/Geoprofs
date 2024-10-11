@@ -16,7 +16,7 @@ return new class extends Migration
             $table->dateTime('LeaveStartDate');
             $table->dateTime('LeaveEndDate');
             $table->text('LeaveReason');
-            $table->enum('Status', ['pending', 'refused', 'accepted']);
+            $table->enum('Status', ['pending', 'denied', 'accepted']);
             $table->foreignId('LeaveCategory')->constrained('leave_category')->references("CategoryID");
             $table->foreignId('UserID')->constrained('users')->references('UserID');
             $table->timestamps();
