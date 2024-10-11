@@ -28,7 +28,36 @@ class AuthController extends Controller
             'token' => $user->createToken('token')->plainTextToken
         ]);
     }
-
+    /**
+     * @OA\Post(
+     *     path="api/auth/login",
+     *     tags={"Authentication"},
+     *     summary="Login",
+     *     description="Log in",
+     *     @OA\Response(
+     *         response=200,
+     *         description="The login was succesfull",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="string",
+     *                 example="ok"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Login failed",
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Invalid credentials"
+     *              )
+     *          )
+     *     )
+     * )
+     */
     public function login(Request $request): JsonResponse
     {
         $request->validate([
