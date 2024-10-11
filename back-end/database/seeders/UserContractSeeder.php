@@ -26,7 +26,26 @@ class UserContractSeeder extends Seeder
                 'UserID' => 2,
                 'ContractStartDate' => '2024-01-01',
                 'ContractEndDate' => null
-            ]
+            ],
+            [
+                'ContractID' => 3,
+                'UserID' => 3,
+                'ContractStartDate' => '2023-01-01',
+                'ContractEndDate' => '2025-01-01'
+            ],
+            [
+                'ContractID' => 4,
+                'UserID' => 4,
+                'ContractStartDate' => '2024-01-01',
+                'ContractEndDate' => null
+            ],
+            [
+                'ContractID' => 5,
+                'UserID' => 5,
+                'ContractStartDate' => '2024-01-01',
+                'ContractEndDate' => null
+            ],
+
         ]);
     }
 }
