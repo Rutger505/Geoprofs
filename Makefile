@@ -3,12 +3,20 @@ include .env
 all: up
 
 up: ssl
-	docker compose up --build --detach --remove-orphans --force-recreate
+	docker compose up --watch --build --remove-orphans --force-recreate
+
+up-%: ssl
+	docker compose up --build --detach --remove-orphans --force-recreate $*
+
+restart: up # start already rebuilds and recreates the containers
+
+restart-%: up-%
 
 down:
 	docker compose down --remove-orphans
 
-restart: up # start already rebuilds and recreates the containers
+down-%:
+	docker compose down --remove-orphans $*
 
 shell-%:
 	docker compose exec $* bash
