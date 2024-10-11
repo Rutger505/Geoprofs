@@ -26,8 +26,6 @@ class UserContractSeeder extends Seeder
                 'UserID' => 2,
                 'ContractStartDate' => '2024-01-01',
                 'ContractEndDate' => null
-
-
             ]
         ]);
     }
