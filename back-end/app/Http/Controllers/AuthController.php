@@ -39,9 +39,14 @@ class AuthController extends Controller
      *         description="The login was succesfull",
      *         @OA\JsonContent(
      *             @OA\Property(
-     *                 property="status",
+     *                 property="email",
      *                 type="string",
-     *                 example="ok"
+     *                 example="user.user@example.com"
+     *             )
+     *              @OA\Property(
+     *                 property="password",
+     *                 type="string",
+     *                 example="password123"
      *             )
      *         )
      *     ),
