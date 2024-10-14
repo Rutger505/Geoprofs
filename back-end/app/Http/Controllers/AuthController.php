@@ -34,6 +34,14 @@ class AuthController extends Controller
      *     tags={"Authentication"},
      *     summary="Login",
      *     description="Log in",
+     *     @OA\Parameter(
+     *          description="Email",
+     *          in="path",
+     *          name="Email",
+     *          required=true,
+     *          @OA\Schema(type="string"),
+     *          @OA\Examples(example="string", value="user@example.com", summary="user email"),
+     *      ),
      *     @OA\Response(
      *         response=200,
      *         description="The login was succesfull",
@@ -66,21 +74,20 @@ class AuthController extends Controller
     public function login(Request $request): JsonResponse
     {
         $request->validate([
-            'UserEmail' => 'required|email',
-            'UserPassword' => 'required|string'
+            'email' => 'required|email',
+            'password' => 'required|string'
         ]);
 
         $user = User::where('UserEmail', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->UserPassword)) {
             return response()->json([
-                'message' => 'Invalid credentials'
+                'message' => 'Invalid credentials',
             ], 401);
         }
 
         return response()->json([
             'message' => 'Logged in successfully',
-            'token' => $user->createToken('token')->plainTextToken
+            // 'token' => $user->createToken('token')->plainTextToken
         ]);
     }
 

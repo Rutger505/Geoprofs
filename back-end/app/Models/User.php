@@ -47,7 +47,7 @@ class User extends Authenticatable
         ];
     }
 
-    protected function passwordHasing($value): void
+    public function passwordHasing($value): void
     {
         $this->attributes['password'] = Hash::make($value);
     }
