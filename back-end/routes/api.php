@@ -18,9 +18,4 @@ Route::get('/user', function (Request $request): mixed {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/', function () {
-    return response()->json(['message' => 'Hello World!']);
-});
-
-
 Route::get('/health', [HealthController::class, 'index']);
