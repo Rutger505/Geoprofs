@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             [
                 'UserFirstName' => 'Jake',
                 'UserLastName' => 'van de Kolk',
-                'UserEmail' => 'jake.kolkh@example.com',
+                'UserEmail' => 'jake.kolk@example.com',
                 'UserPassword' => Hash::make('jake'),
                 'DateHired' => '2012-05-20',
                 'UserRoleID' => 3,
