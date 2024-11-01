@@ -21,8 +21,17 @@ services:
     build:
       context: ./front-end
     restart: unless-stopped
-    volumes:
-      - ./front-end:/app
+    develop:
+      watch:
+        - action: sync
+          path: ./front-end/src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./front-end/package.json
+          target: /app
+
     labels:
       traefik.enable: true
       traefik.http.routers.front-end.rule: Host(`${DOMAIN}`)
@@ -53,13 +62,16 @@ services:
 
   db:
     container_name: db
-    image: postgres
+    image: postgres:17
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - ./db/data:/var/lib/postgresql/data
+      - geoprofs_postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
+volumes:
+  geoprofs_postgres_data:
