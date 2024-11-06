@@ -1,15 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
-import { Popover, Transition } from "@headlessui/react";
-import { MenuIcon, XIcon } from "lucide-react";
-
-const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "About", href: "#" },
-  { name: "Contact", href: "#" },
-];
+import { navigation } from "@/components/Header/Header";
 
 const features = [
   {
@@ -32,76 +23,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      {/* Navigation */}
-
-      <Popover className="relative bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="flex items-center justify-between py-6">
-            <div className="flex justify-start">
-              <span className="text-2xl font-bold">Logo</span>
-            </div>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-gray-500 hover:text-gray-900"
-                >
-                  {item.name}
-                </a>
-              ))}
-            </div>
-
-            {/* Mobile Navigation */}
-            <div className="md:hidden">
-              <Popover.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100">
-                <MenuIcon className="h-6 w-6" />
-              </Popover.Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        <Transition
-          as={Fragment}
-          enter="duration-200 ease-out"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="duration-100 ease-in"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          <Popover.Panel className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
-            <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
-              <div className="pt-5 pb-6 px-5">
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold">Logo</span>
-                  <Popover.Button className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100">
-                    <XIcon className="h-6 w-6" />
-                  </Popover.Button>
-                </div>
-                <div className="mt-6">
-                  <nav className="grid gap-y-8">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="text-gray-600 hover:text-gray-900"
-                      >
-                        {item.name}
-                      </a>
-                    ))}
-                  </nav>
-                </div>
-              </div>
-            </div>
-          </Popover.Panel>
-        </Transition>
-      </Popover>
-
-      {/* Hero Section */}
       <div className="relative bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
