@@ -1,0 +1,199 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOCKER_IMAGE_PREFIX: rutger505/geoprofs
+  APP_NAME: geoprofs
+
+jobs:
+  build-front-end-docker-image:
+    name: Build front-end Docker image
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.config.outputs.tag }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Generate build config
+        id: config
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            TAG=$GITHUB_REF_NAME
+            DOCKER_IMAGE=${{ env.DOCKER_IMAGE_PREFIX }}-frontend
+          else
+            DOCKER_IMAGE=${{ env.DOCKER_IMAGE_PREFIX }}-frontend
+            TAG=$GITHUB_SHA
+          fi
+          
+          echo "Setting docker_image to $DOCKER_IMAGE"
+          echo "docker_image=$DOCKER_IMAGE" >> $GITHUB_OUTPUT
+        
+          echo "Setting tag to $TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: website.Dockerfile
+          push: true
+          tags: ${{ steps.config.outputs.docker_image }}:${{ steps.config.outputs.tag }}
+          cache-from: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache
+          cache-to: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache,mode=max
+
+  build-websocket-docker-image:
+    name: Build WebSocket Docker image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Generate build config
+        id: config
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            TAG=$GITHUB_REF_NAME
+            DOCKER_IMAGE=${{ env.DOCKER_IMAGE_PREFIX }}-websocket
+          else
+            DOCKER_IMAGE=${{ env.DOCKER_IMAGE_PREFIX }}-websocket
+            TAG=$GITHUB_SHA
+          fi
+          
+          echo "Setting docker_image to $DOCKER_IMAGE"
+          echo "docker_image=$DOCKER_IMAGE" >> $GITHUB_OUTPUT
+        
+          echo "Setting tag to $TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: websocket.Dockerfile
+          push: true
+          tags: ${{ steps.config.outputs.docker_image }}:${{ steps.config.outputs.tag }}
+          cache-from: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache
+          cache-to: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache,mode=max
+
+  deploy-to-kubernetes:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs:
+      - build-front-end-docker-image
+      - build-websocket-docker-image
+
+    strategy:
+      matrix:
+        environment:
+          - ${{ startsWith(github.ref, 'refs/tags/') && 'production' || format('pr-{0}', github.event.pull_request.number) }}
+
+    environment:
+      name: ${{ matrix.environment }}
+      url: https://${{ steps.config.outputs.ingress_host }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate deployment config
+        id: config
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            INGRESS_HOST=${{ vars.BASE_DOMAIN }}
+            CLUSTER_ISSUER_NAME=letsencrypt-production
+            POSTGRES_NAMESPACE=postgres-production
+          else
+            INGRESS_HOST=${{ github.sha }}.${{ vars.BASE_DOMAIN }}
+            CLUSTER_ISSUER_NAME=letsencrypt-staging
+            POSTGRES_NAMESPACE=postgres-test
+          fi
+          
+          echo "Setting ingress host to $INGRESS_HOST"
+          echo "ingress_host=$INGRESS_HOST" >> $GITHUB_OUTPUT
+          
+          echo "Setting cluster issuer name to $CLUSTER_ISSUER_NAME"
+          echo "cluster_issuer_name=$CLUSTER_ISSUER_NAME" >> $GITHUB_OUTPUT
+          
+          echo "Setting postgres_namespace to $POSTGRES_NAMESPACE"
+          echo "postgres_namespace=$POSTGRES_NAMESPACE" >> $GITHUB_OUTPUT
+          
+          NAMESPACE=$APP_NAME-${{ matrix.environment }}
+          echo "Setting namespace to $NAMESPACE"
+          echo "namespace=$NAMESPACE" >> $GITHUB_OUTPUT
+
+      - name: Install envsubst
+        run: sudo apt-get update && sudo apt-get install -y gettext-base
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.31.0'
+
+      - name: Set up Kubernetes context
+        uses: azure/k8s-set-context@v4
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: Insert environment variables into Kubernetes files
+        env:
+          ENVIRONMENT: ${{ matrix.environment }}
+          NAMESPACE: ${{ steps.config.outputs.namespace }}
+          TAG: ${{ needs.build-front-end-docker-image.outputs.tag }}
+          INGRESS_HOST: ${{ steps.config.outputs.ingress_host }}
+          CLUSTER_ISSUER_NAME: ${{ steps.config.outputs.cluster_issuer_name }}
+          BASE_URL: https://${{ steps.config.outputs.ingress_host }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
+          AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_NAMESPACE: ${{ steps.config.outputs.postgres_namespace }}
+        run: |
+          FILES=$(ls k8s/*.yaml | tr '\n' ' ')
+          
+          for FILE in $FILES; do
+            echo "Processing $FILE"
+            envsubst < $FILE > /tmp/envsubst || exit 1
+            mv /tmp/envsubst $FILE || exit 1
+          done
+
+      - name: Deploy to Kubernetes
+        uses: Azure/k8s-deploy@v5
+        with:
+          namespace: ${{ steps.config.outputs.namespace }}
+          manifests: |
+            k8s/namespace.yaml
+            k8s/
