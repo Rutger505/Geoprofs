@@ -1,10 +1,63 @@
-node_modules
-# Log files
-logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.next
+# Version control
 .git
+.github
+.gitignore
+.gitattributes
+
+# Development
+.vscode
+.idea
+*.log
+coverage
+test
+tests
+*.test.*
+.editorconfig
+.eslintrc*
+.prettier*
+README.md
+*.md
+*.txt
+# Act
+act
+*event.json
+
+# Build
+.next
+out
+build
+dist
+
+# Dependencies
+node_modules
+.npm
+.pnp.*
+.yarn
+
+# Environment
+.env*
+.secrets
+.vars
+
+# Docker
+Dockerfile
+*.Dockerfile
+.dockerignore
+docker-compose*
+
+# System
+.DS_Store
+Thumbs.db
+
+# Other
+*.zip
+*.tar.gz
+*.tsbuildinfo
+.cache
+
+# Docs
+docs
+
+# Deployment
+Makefile
+k8s
