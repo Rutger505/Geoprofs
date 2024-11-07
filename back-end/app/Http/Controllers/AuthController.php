@@ -34,27 +34,36 @@ class AuthController extends Controller
      *     tags={"Authentication"},
      *     summary="Login",
      *     description="Log in",
-     *     @OA\Parameter(
-     *          description="Email",
-     *          in="path",
-     *          name="Email",
-     *          required=true,
-     *          @OA\Schema(type="string"),
-     *          @OA\Examples(example="string", value="user@example.com", summary="user email"),
-     *      ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="The login was succesfull",
+     *     @OA\RequestBody(
+     *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(
      *                 property="email",
      *                 type="string",
-     *                 example="user.user@example.com"
+     *                 format="email",
+     *                 example="user@example.com"
      *             ),
-     *              @OA\Property(
+     *             @OA\Property(
      *                 property="password",
      *                 type="string",
+     *                 format="password",
      *                 example="password123"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="The login was successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Logged in successfully"
+     *             ),
+     *             @OA\Property(
+     *                 property="token",
+     *                 type="string",
+     *                 example="random string token"
      *             )
      *         )
      *     ),
@@ -62,12 +71,12 @@ class AuthController extends Controller
      *         response=401,
      *         description="Login failed",
      *         @OA\JsonContent(
-     *              @OA\Property(
+     *             @OA\Property(
      *                 property="message",
      *                 type="string",
      *                 example="Invalid credentials"
-     *              )
-     *          )
+     *             )
+     *         )
      *     )
      * )
      */
