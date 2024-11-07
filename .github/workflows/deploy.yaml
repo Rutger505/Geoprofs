@@ -22,10 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.config.outputs.tag }}
-    # run in front-end dir
-
-
-
 
     steps:
       - name: Checkout repository
@@ -66,7 +62,7 @@ jobs:
           cache-to: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache,mode=max
 
   build-back-end-docker-image:
-    name: Build WebSocket Docker image
+    name: Build back-end Docker image
     runs-on: ubuntu-latest
 
     steps:
