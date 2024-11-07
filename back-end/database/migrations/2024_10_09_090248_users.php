@@ -20,6 +20,7 @@ return new class extends Migration
                 $table->string('UserPassword');
                 $table->date('DateHired')->nullable();
                 $table->foreignId('UserRoleID')->constrained('roles')->references('RoleID');
+                $table->rememberToken();
                 $table->timestamps();
             });
         }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('users');
     }
 };
