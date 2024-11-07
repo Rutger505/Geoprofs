@@ -2,8 +2,6 @@ name: Test Front End
 
 on:
   pull_request:
-    paths:
-      - 'front-end/**'
 
 
 jobs:
