@@ -133,10 +133,16 @@ jobs:
             INGRESS_HOST=${{ vars.BASE_DOMAIN }}
             CLUSTER_ISSUER_NAME=letsencrypt-production
             POSTGRES_NAMESPACE=postgres-production
+            LARAVEL_APP_ENV=production
+            LARAVEL_APP_DEBUG=false
+            LARAVEL_LOG_LEVEL=warn
           else
             INGRESS_HOST=${{ github.sha }}.${{ vars.BASE_DOMAIN }}
             CLUSTER_ISSUER_NAME=letsencrypt-staging
             POSTGRES_NAMESPACE=postgres-test
+            LARAVEL_APP_ENV=development
+            LARAVEL_APP_DEBUG=true
+            LARAVEL_LOG_LEVEL=debug
           fi
           
           echo "Setting ingress host to $INGRESS_HOST"
@@ -151,6 +157,15 @@ jobs:
           NAMESPACE=$APP_NAME-${{ matrix.environment }}
           echo "Setting namespace to $NAMESPACE"
           echo "namespace=$NAMESPACE" >> $GITHUB_OUTPUT
+          
+          echo "Setting laravel_app_env to $LARAVEL_APP_ENV"
+          echo "laravel_app_env=$LARAVEL_APP_ENV" >> $GITHUB_OUTPUT
+          
+          echo "Setting laravel_app_debug to $LARAVEL_APP_DEBUG"
+          echo "laravel_app_debug=$LARAVEL_APP_DEBUG" >> $GITHUB_OUTPUT
+          
+          echo "Setting laravel_log_level to $LARAVEL_LOG_LEVEL"
+          echo "laravel_log_level=$LARAVEL_LOG_LEVEL" >> $GITHUB_OUTPUT
 
       - name: Install envsubst
         run: sudo apt-get update && sudo apt-get install -y gettext-base
@@ -177,6 +192,8 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_NAMESPACE: ${{ steps.config.outputs.postgres_namespace }}
           LARAVEL_APP_KEY: ${{ secrets.LARAVEL_APP_KEY }}
+          LARAVEL_APP_ENV: ${{ steps.config.outputs.laravel_app_env }}
+          LARAVEL_APP_DEBUG: ${{ steps.config.outputs.laravel_app_debug }}
         run: |
           FILES=$(ls k8s/*.yaml | tr '\n' ' ')
           

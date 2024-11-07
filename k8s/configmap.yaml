@@ -5,10 +5,10 @@ metadata:
   namespace: ${NAMESPACE}
 data:
   APP_NAME: "geoprofs-back-end"
-  APP_ENV: "local" #TODO set
-  APP_DEBUG: "true" #TODO set
+  APP_ENV: "${LARAVEL_APP_ENV}"
+  APP_DEBUG: "${LARAVEL_APP_DEBUG}"
   APP_TIMEZONE: "UTC"
   APP_URL: "${BASE_URL}"
   LOG_CHANNEL: "stack"
-  LOG_LEVEL: "debug" # TODO set
+  LOG_LEVEL: "${LARAVEL_LOG_LEVEL}"
   L5_SWAGGER_USE_ABSOLUTE_PATH: "false" # TODO check if correctly interpreted
