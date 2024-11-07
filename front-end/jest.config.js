@@ -1,9 +1,10 @@
 module.exports = {
+  testMatch: ["<rootDir>/src/**/*.{js,jsx,ts,tsx}"],
   collectCoverage: true,
   coverageProvider: "v8",
   collectCoverageFrom: [
-    "**/*.{js,jsx,ts,tsx}",
-    "!**/*.d.ts",
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!src/**/*.d.ts",
     "!**/node_modules/**",
     "!**/.next/**",
     "!**/coverage/**",
@@ -13,6 +14,7 @@ module.exports = {
     "^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$":
       "<rootDir>/__mocks__/fileMock.js",
 
+    // Handle module aliases
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
