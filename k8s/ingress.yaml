@@ -20,10 +20,10 @@ spec:
                 name: geoprofs-frontend-service
                 port:
                   number: 80
-          - path: /socket.io
+          - path: /api
             pathType: Prefix
             backend:
               service:
-                name: geoprofs-websocket-service
+                name: geoprofs-backend-service
                 port:
                   number: 80
