@@ -117,6 +117,7 @@ jobs:
 
     environment:
       name: ${{ matrix.environment }}
+      url: https://${{ steps.config.outputs.ingress_host }}
 
     steps:
       - name: Checkout repository
