@@ -168,7 +168,6 @@ jobs:
 
       - name: Insert environment variables into Kubernetes files
         env:
-          ENVIRONMENT: ${{ matrix.environment }}
           NAMESPACE: ${{ steps.config.outputs.namespace }}
           TAG: ${{ needs.build-front-end-docker-image.outputs.tag }}
           INGRESS_HOST: ${{ steps.config.outputs.ingress_host }}
