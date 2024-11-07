@@ -9,6 +9,64 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+
+    /**
+     * @OA\Post(
+     *     path="api/auth/register",
+     *     tags={"Authentication"},
+     *     summary="Register",
+     *     description="Register a new user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 example="John Doe"
+     *             ),
+     *             @OA\Property(
+     *                 property="email",
+     *                 type="string",
+     *                 format="email",
+     *                 example="user@example.com"
+     *             ),
+     *             @OA\Property(
+     *                 property="password",
+     *                 type="string",
+     *                 format="password",
+     *                 example="password123"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="User created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="User created successfully"
+     *             ),
+     *             @OA\Property(
+     *                 property="token",
+     *                 type="string",
+     *                 example="random string token"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="The given data was invalid."
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function register(Request $request): JsonResponse
     {
         $request->validate([
@@ -100,6 +158,37 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="api/auth/logout",
+     *     tags={"Authentication"},
+     *     summary="Logout",
+     *     description="Log out the current user",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Logged out successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Logged out successfully"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Unauthorized"
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function logout(Request $request): JsonResponse
     {
         $request->user('sanctum')->currentAccessToken()->delete();
@@ -108,6 +197,37 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
+    /**
+     * @OA\Get(
+     *     path="api/auth/check",
+     *     tags={"Authentication"},
+     *     summary="Check Authorization",
+     *     description="Check if the user is authenticated",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Authorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Authorized"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Unauthorized"
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function check(Request $request): JsonResponse
     {
         $user = auth('sanctum')->user();
