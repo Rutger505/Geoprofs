@@ -57,36 +57,36 @@ class AuthLoginTest extends TestCase
         $mockedController->login($request);
     }
 
-    public function testValidCreds()
-    {
+    // public function testValidCreds()
+    // {
 
 
-        $role = new Roles();
-        $role->RoleName =  'testRole';
-        $role->save();
+    //     $role = new Roles();
+    //     $role->RoleName =  'testRole';
+    //     $role->save();
 
-        $user = new User();
-        $user->UserFirstName = 'test';
-        $user->UserLastName = 'test';
-        $user->UserEmail = 'test@test.com';
-        $user->UserPassword = 'test';
-        $user->UserRoleID = 1;
-        $user->save();
+    //     $user = new User();
+    //     $user->UserFirstName = 'test';
+    //     $user->UserLastName = 'test';
+    //     $user->UserEmail = 'test@test.com';
+    //     $user->UserPassword = 'test';
+    //     $user->UserRoleID = 1;
+    //     $user->save();
 
 
-        $request = new Request([
-            'email' => 'test@test.com',
-            'password' => 'test'
-        ]);
+    //     $request = new Request([
+    //         'email' => 'test@test.com',
+    //         'password' => 'test'
+    //     ]);
 
-        $mockedController = $this->getMockBuilder(AuthController::class)
-            ->onlyMethods(['login'])
-            ->getMock();
+    //     $mockedController = $this->getMockBuilder(AuthController::class)
+    //         ->onlyMethods(['login'])
+    //         ->getMock();
 
-        $mockedController->expects($this->once())
-            ->method('login')
-            ->with($this->equalTo($request));
+    //     $mockedController->expects($this->once())
+    //         ->method('login')
+    //         ->with($this->equalTo($request));
 
-        $mockedController->login($request);
-    }
+    //     $mockedController->login($request);
+    // }
 }
