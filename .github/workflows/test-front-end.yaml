@@ -1,4 +1,4 @@
-name: Test Front End
+name: Test and SonarCloud Analysis
 
 on:
   push:
@@ -6,17 +6,11 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - front-end/**
-
 
 jobs:
-  test:
-    name: Test Front End
+  test-and-sonar:
+    name: Test and Analyze
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./front-end
 
     steps:
       - uses: actions/checkout@v4
@@ -30,14 +24,16 @@ jobs:
           cache: 'npm'
           cache-dependency-path: front-end/package-lock.json
 
-      - name: Install dependencies
+      - name: Install front-end dependencies
+        working-directory: ./front-end
         run: npm ci
 
-      - name: Run tests
+      - name: Run front-end tests with coverage
+        working-directory: ./front-end
         run: npm run test:coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
