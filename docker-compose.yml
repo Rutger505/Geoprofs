@@ -19,6 +19,7 @@ services:
     container_name: front-end
     build:
       context: ./front-end
+      target: development
     develop:
       watch:
         - action: sync
@@ -29,9 +30,7 @@ services:
         - action: rebuild
           path: ./front-end/package.json
           target: /app
-
     labels:
-      traefik.enable: true
       traefik.http.routers.front-end.rule: Host(`${DOMAIN}`)
       traefik.http.routers.front-end.tls: true
 
@@ -53,7 +52,6 @@ services:
     depends_on:
       - db
     labels:
-      traefik.enable: true
       traefik.http.routers.backend-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
       traefik.http.routers.backend-end.tls: true
 
