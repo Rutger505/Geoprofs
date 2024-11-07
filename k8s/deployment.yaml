@@ -40,7 +40,7 @@ spec:
             - name: POSTGRES_URL
               value: "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):5432/$(POSTGRES_DATABASE)"
         - name: geoprofs-backend
-          image: rutger505/geoprofs-websocket:${TAG}
+          image: rutger505/geoprofs-backend:${TAG}
           ports:
             - containerPort: 3001
           envFrom:
