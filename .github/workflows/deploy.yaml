@@ -121,7 +121,6 @@ jobs:
 
     environment:
       name: ${{ matrix.environment }}
-      url: https://${{ steps.config.outputs.ingress_host }}
 
     steps:
       - name: Checkout repository
@@ -175,12 +174,10 @@ jobs:
           INGRESS_HOST: ${{ steps.config.outputs.ingress_host }}
           CLUSTER_ISSUER_NAME: ${{ steps.config.outputs.cluster_issuer_name }}
           BASE_URL: https://${{ steps.config.outputs.ingress_host }}
-          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-          AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
-          AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_NAMESPACE: ${{ steps.config.outputs.postgres_namespace }}
+          LARAVEL_APP_KEY: ${{ secrets.LARAVEL_APP_KEY }}
         run: |
           FILES=$(ls k8s/*.yaml | tr '\n' ' ')
           
