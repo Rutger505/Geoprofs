@@ -1,5 +1,7 @@
+import { HeaderLink } from "@/components/Header/HeaderLink";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { Menu } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 export const navigation = [
   { name: "Dashboard", href: "#" },
@@ -21,13 +23,26 @@ export function Header() {
             />
           </h1>
         </div>
-        <div className={"flex gap-5"}>
+        <div className={"flex gap-5 hidden right-0"}>
           {navigation.map((item) => (
-            <Link key={item.name} href={item.href} className="hover:opacity-90">
-              {item.name}
-            </Link>
+            <HeaderLink name={item.name} href={item.href} key={item.name} />
           ))}
         </div>
+
+        <Popover className="relative">
+          <PopoverButton>
+            <Menu />
+          </PopoverButton>
+          <PopoverPanel
+            anchor="bottom"
+            transition
+            className="flex origin-top flex-col transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
+          >
+            {navigation.map((item) => (
+              <HeaderLink name={item.name} href={item.href} key={item.name} />
+            ))}
+          </PopoverPanel>
+        </Popover>
       </header>
     </div>
   );
