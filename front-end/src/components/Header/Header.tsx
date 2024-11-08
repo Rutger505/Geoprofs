@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import Image from "next/image";
 
 export const navigation = [
-  { name: "Dashboard", href: "#" },
+  { name: "Dashboard", href: "/dashboard" },
   { name: "Aanvragen", href: "#" },
   { name: "Verlofsaldo", href: "#" },
 ];

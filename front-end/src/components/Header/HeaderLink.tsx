@@ -17,7 +17,10 @@ export function HeaderLink({ name, href }: Props) {
     <Link
       key={name}
       href={href}
-      className={clsx("hover:opacity-90 p-5", currentPage && "bg-cyan-100")}
+      className={clsx(
+        "rounded-sm p-3 hover:opacity-90",
+        currentPage && "bg-cyan-100",
+      )}
     >
       {name}
     </Link>
