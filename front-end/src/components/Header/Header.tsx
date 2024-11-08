@@ -24,13 +24,13 @@ export function Header() {
           </h1>
         </div>
 
-        <div className={"right-0 flex gap-5"}>
+        <div className={"hidden gap-5 md:flex"}>
           {navigation.map((item) => (
             <HeaderLink name={item.name} href={item.href} key={item.name} />
           ))}
         </div>
 
-        <Popover className="relative hidden">
+        <Popover className="relative md:hidden">
           <PopoverButton>
             <Menu />
           </PopoverButton>
