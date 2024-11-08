@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface Props {
   name: string;
@@ -11,7 +12,11 @@ interface Props {
 
 export function HeaderLink({ name, href }: Props) {
   const pathname = usePathname();
-  const currentPage = pathname === href;
+  const [currentPage, setCurrentPage] = useState(false);
+
+  useEffect(() => {
+    setCurrentPage(pathname === href);
+  }, [pathname, href]);
 
   return (
     <Link
