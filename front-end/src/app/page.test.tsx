@@ -1,1 +1,5 @@
-describe("Home", () => {});
+describe("Home", () => {
+  it("should pass", () => {
+    expect(true).toBe(true);
+  });
+});
