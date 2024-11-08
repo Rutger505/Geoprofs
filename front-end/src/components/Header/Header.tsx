@@ -11,8 +11,8 @@ export const navigation = [
 
 export function Header() {
   return (
-    <div className={"w-full flex justify-center"}>
-      <header className="flex items-center justify-between px-20 h-20 max-w-7xl w-full">
+    <div className={"flex w-full justify-center"}>
+      <header className="flex h-20 w-full max-w-7xl items-center justify-between px-20">
         <div>
           <h1>
             <Image
@@ -23,13 +23,14 @@ export function Header() {
             />
           </h1>
         </div>
-        <div className={"flex gap-5 hidden right-0"}>
+
+        <div className={"right-0 flex gap-5"}>
           {navigation.map((item) => (
             <HeaderLink name={item.name} href={item.href} key={item.name} />
           ))}
         </div>
 
-        <Popover className="relative">
+        <Popover className="relative hidden">
           <PopoverButton>
             <Menu />
           </PopoverButton>
