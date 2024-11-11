@@ -48,8 +48,11 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
       - ./back-end/.env
-    volumes:
-      - ./back-end:/var/www/html
+    develop:
+      watch:
+        - action: sync
+          path: ./back-end
+          target: /var/www/html
     depends_on:
       - db
     labels:

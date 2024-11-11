@@ -13,11 +13,13 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available
     zip \
     zlib1g-dev \
     && docker-php-ext-install gettext pdo_pgsql \
-    && mkdir -p /var/www/html/storage \
-    && chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage
 
 
 FROM php:8-apache AS production
@@ -44,8 +46,10 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available
     && echo "opcache.validate_timestamps=0" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "realpath_cache_size=4096K" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "realpath_cache_ttl=600" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && mkdir -p /var/www/html/storage \
-    && chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage
