@@ -25,6 +25,15 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage
 
 
+FROM base AS builder
+
+COPY composer.* ./
+RUN composer install --no-dev --no-scripts --no-autoloader
+
+COPY . .
+RUN composer dump-autoload --optimize
+
+
 FROM base AS production
 
 # Configure Apache to run on non-privileged port
@@ -46,7 +55,10 @@ RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf \
     && echo "realpath_cache_size=4096K" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "realpath_cache_ttl=600" >> /usr/local/etc/php/conf.d/opcache.ini
 
+COPY --chown=dev:dev --from=builder /var/www/html/vendor/ ./vendor/
+
 COPY --chown=dev:dev . .
+
 
 # Create Laravel required directories and set permissions
 RUN mkdir -p storage/framework/{cache/data,sessions,views} storage/logs bootstrap/cache \
@@ -57,5 +69,3 @@ USER dev
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=3s \
-    CMD curl -f http://localhost:8080/api/health || exit 1
