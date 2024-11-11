@@ -27,7 +27,16 @@ RUN chown -R www-data:www-data /var/www/html \
 
 FROM base AS production
 
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+# Configure Apache to run on non-privileged port
+RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf \
+    && sed -i 's/<VirtualHost \*:80>/<VirtualHost *:8080>/' /etc/apache2/sites-available/000-default.conf \
+    # Create non-root user
+    && useradd -G www-data,root -u 1000 -d /home/dev dev \
+    # Update Apache to run as non-root user
+    && sed -i 's/export APACHE_RUN_USER=www-data/export APACHE_RUN_USER=dev/' /etc/apache2/envvars \
+    && sed -i 's/export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=dev/' /etc/apache2/envvars \
+    # Configure PHP for production
+    && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "opcache.enable_cli=1" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/conf.d/opcache.ini \
@@ -37,7 +46,16 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "realpath_cache_size=4096K" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "realpath_cache_ttl=600" >> /usr/local/etc/php/conf.d/opcache.ini
 
-COPY . .
+COPY --chown=dev:dev . .
 
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+# Create Laravel required directories and set permissions
+RUN mkdir -p storage/framework/{cache/data,sessions,views} storage/logs bootstrap/cache \
+    && chown -R dev:dev /var/www/html /var/log/apache2 /var/run/apache2 ${PHP_INI_DIR} \
+    && chmod -R 755 storage bootstrap/cache
+
+USER dev
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=3s \
+    CMD curl -f http://localhost:8080/api/health || exit 1
