@@ -1,36 +1,51 @@
-# Use PHP with Apache as the base image
-FROM php:8.2-apache
+FROM php:8-apache AS development
 
-# Install Additional System Dependencies
-RUN apt-get update  \
-    && apt-get install -y libzip-dev zip libpq-dev \
-    && apt-get install -y sudo \
-    && apt-get clean
-
-
-# Enable Apache mod_rewrite for URL rewriting
-RUN a2enmod rewrite
-
-# Install PHP extensions
-RUN docker-php-ext-install zip pdo pdo_pgsql
-
-# Configure Apache DocumentRoot to point to Laravel's public directory
-# and update Apache configuration files
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# Copy the application code
-COPY . /var/www/html
-
-# Set the working directory
 WORKDIR /var/www/html
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install project dependencies
-RUN composer install
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf \
+    && a2enmod rewrite \
+    && apt-get update -y \
+    && apt-get install -y \
+    libpq-dev \
+    unzip \
+    zip \
+    zlib1g-dev \
+    && docker-php-ext-install gettext pdo_pgsql \
+    && mkdir -p /var/www/html/storage \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+FROM php:8-apache AS production
+
+WORKDIR /var/www/html
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf \
+    && a2enmod rewrite \
+    && apt-get update -y \
+    && apt-get install -y \
+    libpq-dev \
+    unzip \
+    zip \
+    zlib1g-dev \
+    && docker-php-ext-install gettext pdo_pgsql \
+    && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+    && echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.enable_cli=1" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.interned_strings_buffer=16" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.max_accelerated_files=50000" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.validate_timestamps=0" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "realpath_cache_size=4096K" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "realpath_cache_ttl=600" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && mkdir -p /var/www/html/storage \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
