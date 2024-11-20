@@ -28,7 +28,7 @@ WORKDIR /app
 COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
 
-RUN  run build
+RUN npm run build
 
 
 FROM node:22-alpine AS production
