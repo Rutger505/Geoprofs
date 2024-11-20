@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: geoprofs-backend-service
+  namespace: ${NAMESPACE}
+spec:
+  selector:
+    app: geoprofs-deployment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
