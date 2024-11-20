@@ -19,10 +19,12 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available
 
 FROM base AS development
 
+COPY composer.* ./
+RUN composer install --no-interaction --no-scripts
+
 COPY . .
 
-RUN composer install --no-interaction \
-    && chown -R www-data:www-data /var/www/html \
+RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage
 
 
