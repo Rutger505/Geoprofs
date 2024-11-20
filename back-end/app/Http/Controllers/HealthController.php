@@ -37,7 +37,8 @@ class HealthController extends Controller
         return response()->json(['status' => 'ok'], 200);
     }
 
-    public function mailTest(){
+    public function mailTest()
+    {
         Mail::to('vandekolkjake@gmail.com')->send(new WelcomeMail());
     }
 }
