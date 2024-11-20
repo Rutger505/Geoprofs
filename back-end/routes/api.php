@@ -11,6 +11,8 @@ Route::post('/token/test', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
+Route::post('mail/test', [HealthController::class, 'mailTest']);
+
 Route::prefix('auth')->group(function (): void {
 
     Route::post('/register', [AuthController::class, 'register']);

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
 
 class HealthController extends Controller
 {
@@ -34,5 +35,9 @@ class HealthController extends Controller
     public function index()
     {
         return response()->json(['status' => 'ok'], 200);
+    }
+
+    public function mailTest(){
+        Mail::to('vandekolkjake@gmail.com')->send(new WelcomeMail());
     }
 }
