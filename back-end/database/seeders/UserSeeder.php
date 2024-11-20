@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
                 'UserFirstName' => 'John',
                 'UserLastName' => 'Doe',
                 'UserEmail' => 'john.doe@example.com',
-                'UserPassword' => Hash::make('password123'),
+                'UserPassword' => Hash::make('password5'),
                 'DateHired' => '2020-01-15',
                 'UserRoleID' => 1,
             ],
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             [
                 'UserFirstName' => 'Jake',
                 'UserLastName' => 'van de Kolk',
-                'UserEmail' => 'jake.kolkh@example.com',
+                'UserEmail' => 'jake.kolk@example.com',
                 'UserPassword' => Hash::make('jake'),
                 'DateHired' => '2012-05-20',
                 'UserRoleID' => 3,
@@ -56,7 +56,54 @@ class UserSeeder extends Seeder
                 'DateHired' => '2015-02-01',
                 'UserRoleID' => 5,
             ],
-
+            [
+                'UserFirstName' => 'CEO',
+                'UserLastName' => 'Example',
+                'UserEmail' => 'ceo@example.com',
+                'UserPassword' => Hash::make('secret'),
+                'DateHired' => '2015-02-01',
+                'UserRoleID' => 1,
+            ],
+            [
+                'UserFirstName' => 'CEO',
+                'UserLastName' => 'Example',
+                'UserEmail' => 'ceo@example.com',
+                'UserPassword' => Hash::make('secret'),
+                'DateHired' => '2015-02-01',
+                'UserRoleID' => 1,
+            ],
+            [
+                'UserFirstName' => 'Employee',
+                'UserLastName' => 'Example',
+                'UserEmail' => 'employee@example.com',
+                'UserPassword' => Hash::make('secret'),
+                'DateHired' => '2015-02-01',
+                'UserRoleID' => 2,
+            ],
+            [
+                'UserFirstName' => 'Admin',
+                'UserLastName' => 'Example',
+                'UserEmail' => 'admin@example.com',
+                'UserPassword' => Hash::make('secret'),
+                'DateHired' => '2015-02-01',
+                'UserRoleID' => 3,
+            ],
+            [
+                'UserFirstName' => 'SectionManager',
+                'UserLastName' => 'Example',
+                'UserEmail' => 'sectionmanager@example.com',
+                'UserPassword' => Hash::make('secret'),
+                'DateHired' => '2015-02-01',
+                'UserRoleID' => 4,
+            ],
+            [
+                'UserFirstName' => 'ProjectManager',
+                'UserLastName' => 'Example',
+                'UserEmail' => 'projectmanager@example.com',
+                'UserPassword' => Hash::make('secret'),
+                'DateHired' => '2015-02-01',
+                'UserRoleID' => 5,
+            ],
         ]);
     }
 }

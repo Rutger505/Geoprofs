@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: geoprofs-certificate
+  namespace: ${NAMESPACE}
+spec:
+  secretName: geoprofs-tls
+  duration: 2160h # 90 days, maximum allowed by Let's Encrypt
+  renewBefore: 360h # 15 days
+  dnsNames:
+    - ${INGRESS_HOST}
+  issuerRef:
+    name: ${CLUSTER_ISSUER_NAME}
+    kind: ClusterIssuer
