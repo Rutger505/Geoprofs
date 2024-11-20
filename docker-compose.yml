@@ -53,6 +53,8 @@ services:
         - action: sync
           path: ./back-end
           target: /var/www/html
+        - action: rebuild
+          path: ./back-end/composer.json
     depends_on:
       - db
     labels:

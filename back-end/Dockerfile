@@ -21,7 +21,8 @@ FROM base AS development
 
 COPY . .
 
-RUN chown -R www-data:www-data /var/www/html \
+RUN composer install --no-interaction \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage
 
 
@@ -47,8 +48,6 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "realpath_cache_ttl=600" >> /usr/local/etc/php/conf.d/opcache.ini
 
 COPY --from=builder /var/www/html /var/www/html
-
-COPY . .
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage
