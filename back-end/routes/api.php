@@ -5,7 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\AuthController;
 
-Route::post('mail/test', [HealthController::class, 'mailTest']);
+
+Route::prefix('mail')->group(function () {
+
+    Route::post('test', [HealthController::class, 'mailTest']);
+});
 
 Route::prefix('auth')->group(function (): void {
 
