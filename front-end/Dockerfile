@@ -12,7 +12,7 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["", "run", "dev"]
+CMD ["npm", "run", "dev"]
 
 FROM node:22-alpine AS dependencies
 WORKDIR /app
