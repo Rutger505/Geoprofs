@@ -15,7 +15,7 @@ export function LoginForm() {
   } = useForm<LoginInputs>();
 
   function onSubmit(data: LoginInputs) {
-    console.log(data);
+    // TODO: Implement login logic
   }
 
   return (
