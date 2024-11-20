@@ -24,7 +24,8 @@ RUN composer install --no-interaction --no-scripts
 
 COPY . .
 
-RUN chown -R www-data:www-data /var/www/html \
+# Run chown while ignoring the vendor directory
+RUN find /var/www/html -path /var/www/html/vendor -prune -o -exec chown www-data:www-data {} + \
     && chmod -R 755 /var/www/html/storage
 
 
