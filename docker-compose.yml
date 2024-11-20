@@ -34,18 +34,32 @@ services:
       traefik.http.routers.front-end.rule: Host(`${DOMAIN}`)
       traefik.http.routers.front-end.tls: true
 
+  breeze-front-end:
+    container_name: breeze-front-end
+    build:
+      context: ./breeze-next
+      target: development
+    develop:
+      watch:
+        - action: sync
+          path: ./breeze-next/src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./breeze-next/package.json
+          target: /app
+    labels:
+      traefik.http.routers.breeze-front-end.rule: Host(`breeze.${DOMAIN}`)
+      traefik.http.routers.breeze-front-end.tls: true
+
   back-end:
     container_name: back-end
     build:
       context: ./back-end
       target: development
     environment:
-      DB_CONNECTION: pgsql
       DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: ${POSTGRES_DB}
-      DB_USERNAME: ${POSTGRES_USERNAME}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
       - ./back-end/.env
     develop:
@@ -58,8 +72,30 @@ services:
     depends_on:
       - db
     labels:
-      traefik.http.routers.backend-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
-      traefik.http.routers.backend-end.tls: true
+      traefik.http.routers.back-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
+      traefik.http.routers.back-end.tls: true
+
+  breeze-back-end:
+    container_name: breeze-back-end
+    build:
+      context: ./next-backend
+      target: development
+    environment:
+      DB_HOST: db
+    env_file:
+      - ./next-backend/.env
+    develop:
+      watch:
+        - action: sync
+          path: ./next-backend
+          target: /var/www/html
+        - action: rebuild
+          path: ./next-backend/composer.json
+    depends_on:
+      - db
+    labels:
+      traefik.http.routers.breeze-back-end.rule: Host(`breeze.${DOMAIN}`) && PathPrefix(`/api`)
+      traefik.http.routers.breeze-back-end.tls: true
 
   db:
     container_name: db
