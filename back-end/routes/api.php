@@ -4,11 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\MailController;
 
 Route::prefix('mail')->group(function () {
 
-    Route::post('test', [HealthController::class, 'mailTest']);
+    Route::post('register', [MailController::class, 'register']);
 });
 
 Route::prefix('auth')->group(function (): void {
