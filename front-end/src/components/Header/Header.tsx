@@ -2,6 +2,7 @@ import { HeaderLink } from "@/components/Header/HeaderLink";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { Menu } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export const navigation = [
   { name: "Dashboard", href: "#" },
@@ -13,16 +14,9 @@ export function Header() {
   return (
     <div className={"flex w-full justify-center"}>
       <header className="flex h-20 w-full max-w-7xl items-center justify-between px-20">
-        <div>
-          <h1>
-            <Image
-              src="/logo.webp"
-              alt="Geoprofs Logo"
-              width={42}
-              height={42}
-            />
-          </h1>
-        </div>
+        <Link href="/">
+          <Image src="/logo.webp" alt="Geoprofs Logo" width={42} height={42} />
+        </Link>
 
         <div className={"right-0 flex gap-5"}>
           {navigation.map((item) => (
