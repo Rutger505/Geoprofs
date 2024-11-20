@@ -10,7 +10,8 @@ up-%: ssl
 
 restart: up # start already rebuilds and recreates the containers
 
-restart-%: up-%
+restart-%:
+	up-$*
 
 down:
 	docker compose down --remove-orphans
