@@ -75,28 +75,6 @@ services:
       traefik.http.routers.back-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
       traefik.http.routers.back-end.tls: true
 
-  breeze-back-end:
-    container_name: breeze-back-end
-    build:
-      context: ./next-backend
-      target: development
-    environment:
-      DB_HOST: db
-    env_file:
-      - ./next-backend/.env
-    develop:
-      watch:
-        - action: sync
-          path: ./next-backend
-          target: /var/www/html
-        - action: rebuild
-          path: ./next-backend/composer.json
-    depends_on:
-      - db
-    labels:
-      traefik.http.routers.breeze-back-end.rule: Host(`breeze.${DOMAIN}`) && PathPrefix(`/api`)
-      traefik.http.routers.breeze-back-end.tls: true
-
   db:
     container_name: db
     image: postgres:17
