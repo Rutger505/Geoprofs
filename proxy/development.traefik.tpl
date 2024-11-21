@@ -24,8 +24,6 @@ tls:
   certificates:
     - certFile: /ssl/${DOMAIN}.pem
       keyFile: /ssl/${DOMAIN}-key.pem
-    - certFile: /ssl/breeze.${DOMAIN}.pem
-      keyFile: /ssl/breeze.${DOMAIN}-key.pem
 
 providers:
   docker:

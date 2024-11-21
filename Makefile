@@ -22,7 +22,7 @@ down-%:
 shell-%:
 	docker compose exec $* bash
 
-ssl: proxy/ssl/${DOMAIN}.pem proxy/ssl/breeze.${DOMAIN}.pem
+ssl: proxy/ssl/${DOMAIN}.pem
 
 proxy/ssl/%.pem:
 	-mkdir proxy\ssl
