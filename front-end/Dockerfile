@@ -1,11 +1,12 @@
-FROM node:22-alpine AS development
+FROM node:20-alpine AS development
 WORKDIR /app
 
 RUN apk add --no-cache bash
 
 COPY package.json package-lock.json ./
 
-RUN npm install
+
+RUN npm install --verbose --loglevel verbose
 
 COPY . .
 
