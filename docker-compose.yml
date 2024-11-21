@@ -30,10 +30,9 @@ services:
         - action: rebuild
           path: ./front-end/package.json
           target: /app
-      labels:
-        traefik.http.routers.front-end.rule: Host(`${DOMAIN}`)
-        traefik.http.routers.front-end.tls: true
-
+    labels:
+      traefik.http.routers.front-end.rule: Host(`${DOMAIN}`)
+      traefik.http.routers.front-end.tls: true
 
   back-end:
     container_name: back-end
