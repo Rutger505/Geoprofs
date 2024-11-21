@@ -1,8 +1,9 @@
-import { renderHook } from "@testing-library/react-hooks";
-import { useAuth } from "./useAuth";
+import { renderHook, act } from "@testing-library/react";
+import { useAuth } from "@/hooks/auth";
 import axios from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import useSWR from "swr";
 
 // Mock dependencies
 jest.mock("@/lib/axios");
@@ -10,10 +11,7 @@ jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
   useParams: jest.fn(),
 }));
-jest.mock("swr", () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
+jest.mock("swr");
 
 describe("useAuth Hook", () => {
   const mockRouter = {
@@ -21,6 +19,7 @@ describe("useAuth Hook", () => {
   };
   const mockSetErrors = jest.fn();
   const mockSetStatus = jest.fn();
+  const mockMutate = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -28,6 +27,12 @@ describe("useAuth Hook", () => {
     (useParams as jest.Mock).mockReturnValue({ token: "test-token" });
     (axios.get as jest.Mock).mockResolvedValue({ data: {} });
     (axios.post as jest.Mock).mockResolvedValue({ data: {} });
+    // Mock SWR hook
+    (useSWR as jest.Mock).mockReturnValue({
+      data: null,
+      error: null,
+      mutate: mockMutate,
+    });
   });
 
   describe("register", () => {
@@ -41,14 +46,17 @@ describe("useAuth Hook", () => {
     it("should successfully register a user", async () => {
       const { result } = renderHook(() => useAuth());
 
-      await result.current.register({
-        ...registerData,
-        setErrors: mockSetErrors,
+      await act(async () => {
+        await result.current.register({
+          ...registerData,
+          setErrors: mockSetErrors,
+        });
       });
 
       expect(axios.get).toHaveBeenCalledWith("/auth/csrf-cookie");
       expect(axios.post).toHaveBeenCalledWith("/auth/register", registerData);
       expect(mockSetErrors).toHaveBeenCalledWith([]);
+      expect(mockMutate).toHaveBeenCalled();
     });
 
     it("should handle registration errors", async () => {
@@ -59,9 +67,11 @@ describe("useAuth Hook", () => {
 
       const { result } = renderHook(() => useAuth());
 
-      await result.current.register({
-        ...registerData,
-        setErrors: mockSetErrors,
+      await act(async () => {
+        await result.current.register({
+          ...registerData,
+          setErrors: mockSetErrors,
+        });
       });
 
       expect(mockSetErrors).toHaveBeenCalledWith(errors);
@@ -78,16 +88,19 @@ describe("useAuth Hook", () => {
     it("should successfully login a user", async () => {
       const { result } = renderHook(() => useAuth());
 
-      await result.current.login({
-        ...loginData,
-        setErrors: mockSetErrors,
-        setStatus: mockSetStatus,
+      await act(async () => {
+        await result.current.login({
+          ...loginData,
+          setErrors: mockSetErrors,
+          setStatus: mockSetStatus,
+        });
       });
 
       expect(axios.get).toHaveBeenCalledWith("/auth/csrf-cookie");
       expect(axios.post).toHaveBeenCalledWith("/auth/login", loginData);
       expect(mockSetErrors).toHaveBeenCalledWith([]);
       expect(mockSetStatus).toHaveBeenCalledWith(null);
+      expect(mockMutate).toHaveBeenCalled();
     });
 
     it("should handle login errors", async () => {
@@ -98,13 +111,60 @@ describe("useAuth Hook", () => {
 
       const { result } = renderHook(() => useAuth());
 
-      await result.current.login({
-        ...loginData,
-        setErrors: mockSetErrors,
-        setStatus: mockSetStatus,
+      await act(async () => {
+        await result.current.login({
+          ...loginData,
+          setErrors: mockSetErrors,
+          setStatus: mockSetStatus,
+        });
       });
 
       expect(mockSetErrors).toHaveBeenCalledWith(errors);
+    });
+  });
+
+  describe("middleware", () => {
+    it("should redirect authenticated users when using guest middleware", async () => {
+      // Mock authenticated user
+      (useSWR as jest.Mock).mockReturnValue({
+        data: { id: 1, name: "Test User" },
+        error: null,
+        mutate: mockMutate,
+      });
+
+      renderHook(() =>
+        useAuth({
+          middleware: "guest",
+          redirectIfAuthenticated: "/dashboard",
+        }),
+      );
+
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      });
+
+      expect(mockRouter.push).toHaveBeenCalledWith("/dashboard");
+    });
+
+    it("should logout unauthenticated users when using auth middleware", async () => {
+      // Mock authentication error
+      (useSWR as jest.Mock).mockReturnValue({
+        data: null,
+        error: new Error("Unauthenticated"),
+        mutate: mockMutate,
+      });
+
+      const { result } = renderHook(() =>
+        useAuth({
+          middleware: "auth",
+        }),
+      );
+
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+
+      expect(axios.post).toHaveBeenCalledWith("/auth/logout");
     });
   });
 
@@ -115,10 +175,12 @@ describe("useAuth Hook", () => {
 
       const { result } = renderHook(() => useAuth());
 
-      await result.current.forgotPassword({
-        email: "test@example.com",
-        setErrors: mockSetErrors,
-        setStatus: mockSetStatus,
+      await act(async () => {
+        await result.current.forgotPassword({
+          email: "test@example.com",
+          setErrors: mockSetErrors,
+          setStatus: mockSetStatus,
+        });
       });
 
       expect(axios.post).toHaveBeenCalledWith("/auth/forgot-password", {
@@ -141,10 +203,12 @@ describe("useAuth Hook", () => {
 
       const { result } = renderHook(() => useAuth());
 
-      await result.current.resetPassword({
-        ...resetData,
-        setErrors: mockSetErrors,
-        setStatus: mockSetStatus,
+      await act(async () => {
+        await result.current.resetPassword({
+          ...resetData,
+          setErrors: mockSetErrors,
+          setStatus: mockSetStatus,
+        });
       });
 
       expect(axios.post).toHaveBeenCalledWith("/auth/reset-password", {
@@ -161,46 +225,13 @@ describe("useAuth Hook", () => {
     it("should handle logout", async () => {
       const { result } = renderHook(() => useAuth());
 
-      await result.current.logout();
+      await act(async () => {
+        await result.current.logout();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
 
       expect(axios.post).toHaveBeenCalledWith("/auth/logout");
-      expect(window.location.pathname).toBe("/login");
-    });
-  });
-
-  describe("middleware", () => {
-    it("should redirect authenticated users when using guest middleware", async () => {
-      const user = { id: 1, name: "Test User" };
-      (axios.get as jest.Mock).mockResolvedValueOnce({ data: user });
-
-      renderHook(() =>
-        useAuth({
-          middleware: "guest",
-          redirectIfAuthenticated: "/dashboard",
-        }),
-      );
-
-      // Wait for useEffect to run
-      await new Promise((resolve) => setTimeout(resolve, 0));
-
-      expect(mockRouter.push).toHaveBeenCalledWith("/dashboard");
-    });
-
-    it("should logout unauthenticated users when using auth middleware", async () => {
-      (axios.get as jest.Mock).mockRejectedValueOnce(
-        new Error("Unauthenticated"),
-      );
-
-      const { result } = renderHook(() =>
-        useAuth({
-          middleware: "auth",
-        }),
-      );
-
-      // Wait for useEffect to run
-      await new Promise((resolve) => setTimeout(resolve, 0));
-
-      expect(axios.post).toHaveBeenCalledWith("/auth/logout");
+      expect(mockRouter.push).toHaveBeenCalledWith("/login");
     });
   });
 });
