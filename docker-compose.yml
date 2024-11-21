@@ -40,12 +40,7 @@ services:
       context: ./back-end
       target: development
     environment:
-      DB_CONNECTION: pgsql
       DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: ${POSTGRES_DB}
-      DB_USERNAME: ${POSTGRES_USERNAME}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
       - ./back-end/.env
     develop:
@@ -58,8 +53,8 @@ services:
     depends_on:
       - db
     labels:
-      traefik.http.routers.backend-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
-      traefik.http.routers.backend-end.tls: true
+      traefik.http.routers.back-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
+      traefik.http.routers.back-end.tls: true
 
   db:
     container_name: db
