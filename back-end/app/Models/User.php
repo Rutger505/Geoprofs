@@ -2,38 +2,23 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-
     protected $primaryKey = 'UserID';
 
-    use HasFactory, Notifiable, HasApiTokens;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'UserFirstName',
+        'UserLastName',
+        'UserEmail',
+        'UserPassword',
+        'DateHired',
+        'UserRoleID'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
-        'password',
+        'UserPassword',
         'remember_token',
     ];
 
@@ -45,13 +30,26 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'UserPassword' => 'string',
+            'DateHired' => 'datetime',
         ];
     }
 
-    public function passwordHasing($value): void
+    public function username()
     {
-        $this->attributes['password'] = Hash::make($value);
+        return 'UserEmail';  // Your custom email column
+    }
+
+    public function getAuthIdentifierName()
+    {
+        return 'UserEmail';  // Your custom email column
+    }
+
+    /**
+     * Get the password for the user.
+     */
+    public function getAuthPassword()
+    {
+        return $this->UserPassword;  // Your custom password column
     }
 }

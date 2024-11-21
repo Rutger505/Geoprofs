@@ -86,6 +86,7 @@ class AuthController extends Controller
             'token' => $user->createToken('token')->plainTextToken
         ]);
     }
+
     /**
      * @OA\Post(
      *     path="api/auth/login",

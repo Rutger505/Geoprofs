@@ -30,9 +30,9 @@ services:
         - action: rebuild
           path: ./front-end/package.json
           target: /app
-    labels:
-      traefik.http.routers.front-end.rule: Host(`${DOMAIN}`)
-      traefik.http.routers.front-end.tls: true
+    #    labels:
+    #      traefik.http.routers.front-end.rule: Host(`${DOMAIN}`)
+  #      traefik.http.routers.front-end.tls: true
 
   breeze-front-end:
     container_name: breeze-front-end
@@ -50,7 +50,7 @@ services:
           path: ./breeze-next/package.json
           target: /app
     labels:
-      traefik.http.routers.breeze-front-end.rule: Host(`breeze.${DOMAIN}`)
+      traefik.http.routers.breeze-front-end.rule: Host(`${DOMAIN}`)
       traefik.http.routers.breeze-front-end.tls: true
 
   back-end:
