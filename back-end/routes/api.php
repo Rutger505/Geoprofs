@@ -24,9 +24,6 @@ Route::prefix('auth')->group(function (): void {
 });
 
 
-
-
-
 Route::get('/register/confirm/{token}', function ($token) {
     // Validate the token and URL signature
     if (! request()->hasValidSignature() || ! Cache::pull($token)) {
@@ -34,7 +31,7 @@ Route::get('/register/confirm/{token}', function ($token) {
     }
 
     // Logic for confirming registration
-    return response()->json(['status' => 'good'], 200);
+    return response()->json(['status' => 'Succesfully validated token.'], 200);
 })->name('register.confirm')->middleware('signed');
 
 Route::get('/user', function (Request $request): mixed {
