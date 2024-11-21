@@ -9,7 +9,10 @@
     <h1>Welcome!</h1>
     <p>Thank you for joining our platform.</p>
 
-    <button>Register</button>
+
+    <a href="register">
+        <button>Register</button>
+    </a>
 </body>
 
 </html>

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
  * @OA\Info(
  *     version="0.1",
  *     title="API Documentation for the Geoprofs leaven management system",
- * ),
+ * )
  */
 class MailController extends Controller
 {

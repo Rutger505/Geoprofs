@@ -6,7 +6,7 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MailController;
 
-Route::prefix('mail')->group(function () {
+Route::prefix('mail')->group(function (): void {
 
     Route::post('register', [MailController::class, 'register']);
 });
