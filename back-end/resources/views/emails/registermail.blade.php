@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <h1>Welcome!</h1>
+    <h1>Welcome {{ $email }}!</h1>
     <p>Thank you for joining our platform.</p>
 
 

@@ -16,12 +16,14 @@ class RegisterMail extends Mailable
 
 
     public $signedUrl;
+    public $email;
     /**
      * Create a new message instance.
      */
-    public function __construct($signedUrl)
+    public function __construct($signedUrl, $email)
     {
         $this->signedUrl = $signedUrl;
+        $this->email = $email;
     }
 
     /**

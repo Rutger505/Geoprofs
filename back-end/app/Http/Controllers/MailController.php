@@ -82,7 +82,8 @@ class MailController extends Controller
         $request->validate([
             'email' => 'required|email'
         ]);
-        // Send the email with the signed URL
-        Mail::to($request->email)->send(new RegisterMail($signedUrl));
+
+
+        Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email));
     }
 }

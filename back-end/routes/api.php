@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HealthController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Cache;
 
@@ -14,12 +16,24 @@ Route::prefix('mail')->group(function (): void {
 });
 
 Route::prefix('auth')->group(function (): void {
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+        ->middleware('guest')
+        ->name('login');
 
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->middleware('guest')
+        ->name('password.email');
 
-    Route::middleware('auth:sanctum')->group(function (): void {
-        Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])
+        ->middleware('guest')
+        ->name('password.store');
+
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->middleware('auth')
+        ->name('logout');
+
+    Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+        return $request->user();
     });
 });
 
