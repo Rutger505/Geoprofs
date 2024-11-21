@@ -9,16 +9,19 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+
 class RegisterMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+
+    public $signedUrl;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($signedUrl)
     {
-        //
+        $this->signedUrl = $signedUrl;
     }
 
     /**
