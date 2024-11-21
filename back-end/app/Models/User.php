@@ -30,7 +30,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'UserPassword' => 'string',
+            'password' => 'string',
             'DateHired' => 'datetime',
         ];
     }
