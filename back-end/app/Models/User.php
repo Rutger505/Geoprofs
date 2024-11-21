@@ -11,14 +11,14 @@ class User extends Authenticatable
     protected $fillable = [
         'UserFirstName',
         'UserLastName',
-        'UserEmail',
-        'UserPassword',
+        'email',
+        'password',
         'DateHired',
         'UserRoleID'
     ];
 
     protected $hidden = [
-        'UserPassword',
+        'password',
         'remember_token',
     ];
 
@@ -33,23 +33,5 @@ class User extends Authenticatable
             'UserPassword' => 'string',
             'DateHired' => 'datetime',
         ];
-    }
-
-    public function username()
-    {
-        return 'UserEmail';  // Your custom email column
-    }
-
-    public function getAuthIdentifierName()
-    {
-        return 'UserEmail';  // Your custom email column
-    }
-
-    /**
-     * Get the password for the user.
-     */
-    public function getAuthPassword()
-    {
-        return $this->UserPassword;  // Your custom password column
     }
 }
