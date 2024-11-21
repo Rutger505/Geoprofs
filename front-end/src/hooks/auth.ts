@@ -152,9 +152,7 @@ export const useAuth = ({
   const logout = async () => {
     await axios.post("/auth/logout").then(() => mutate());
 
-    console.log("redirecting to /login");
     router.push("/login");
-    console.log("redirected to /login");
   };
 
   useEffect(() => {
