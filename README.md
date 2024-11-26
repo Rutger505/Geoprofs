@@ -1,13 +1,20 @@
 # Geoprofs
 
-# Dependencies
+School project, Web-application made with Next.js and Laravel for managing leave requests for the Geoprofs company.
+
+[Check it out!](https://geoprofs.rutgerpronk.com) 
+
+
+# Installation
+
+## Dependencies
 
 - [Docker](https://www.docker.com/)
 - [Node.js](https://nodejs.org/)
 - Make
 - Mkcert
 
-## Install make and mkcert for windows
+### Install make and mkcert for windows
 
 Here are install instruction for installing make using choco.
 
@@ -26,8 +33,7 @@ And
 choco install mkcert
 ```
 
-
-# Installation
+## Setup
 
 1. Clone the repository
 2. In the root of the project, copy the `.env.example` file to `.env` and fill in the necessary values
