@@ -48,6 +48,6 @@ class NewPasswordController extends Controller
             ]);
         }
 
-        return response()->json(['status' => __($status)]);
+        return response()->json(['status' => __($status), 200]);
     }
 }
