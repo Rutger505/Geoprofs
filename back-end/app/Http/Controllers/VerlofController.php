@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Leave;
+use Illuminate\Support\Facades\Auth;
 
 class VerlofController extends Controller
 {
@@ -24,6 +25,8 @@ class VerlofController extends Controller
         $leaveStartDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d');
         $leaveEndDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d');
 
+        //get user session
+        $user = Auth::user();
 
         //make leave reqeust
         $leaveRequest = Leave::create([
@@ -32,7 +35,7 @@ class VerlofController extends Controller
             'LeaveReason' => $request->reden,
             'Status' => 'pending',
             'LeaveCategory' => $request->category,
-            'UserID' => 1 //needs session support for user
+            'UserID' =>  $user->UserID
 
 
         ]);
