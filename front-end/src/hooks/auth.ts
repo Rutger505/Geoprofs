@@ -52,26 +52,21 @@ export const useAuth = ({
   const {
     data: user,
     error,
-    mutate,
+    mutate: fetchUser,
   } = useSWR<User>("/auth/user", () =>
     axios.get("/auth/user").then((res) => res.data),
   );
 
   const csrf = () => axios.get("/auth/csrf-cookie");
 
-  const register = async ({
-    setErrors,
-    ...props
-  }: Omit<RegisterProps, "setErrors"> & {
-    setErrors: (errors: any[]) => void;
-  }) => {
+  const register = async ({ setErrors, ...props }: RegisterProps) => {
     await csrf();
 
     setErrors([]);
 
     axios
       .post("/auth/register", props)
-      .then(() => mutate())
+      .then(() => fetchUser())
       .catch((error) => {
         if (error.response.status !== 422) throw error;
 
@@ -86,7 +81,7 @@ export const useAuth = ({
 
     axios
       .post("/auth/login", props)
-      .then(() => mutate())
+      .then(() => fetchUser())
       .catch((error) => {
         if (error.response.status !== 422) throw error;
 
@@ -117,14 +112,10 @@ export const useAuth = ({
     setErrors,
     setStatus,
     ...props
-  }: Omit<ResetPasswordProps, "setErrors" | "setStatus"> & {
-    setErrors: (errors: any[]) => void;
-    setStatus: (status: string | null) => void;
-  }) => {
+  }: ResetPasswordProps) => {
     await csrf();
 
     setErrors([]);
-    setStatus(null);
 
     axios
       .post("/auth/reset-password", { token: params.token, ...props })
@@ -139,7 +130,7 @@ export const useAuth = ({
   };
 
   const logout = async () => {
-    await axios.post("/auth/logout").then(() => mutate());
+    await axios.post("/auth/logout").then(() => fetchUser());
 
     router.push("/login");
   };
