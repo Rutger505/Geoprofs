@@ -18,7 +18,7 @@ class PasswordResetLinkController extends Controller
 
     /**
      * @OA\Post(
-     *     path="api/auth/password/forgot",
+     *     path="api/auth/password-forgot",
      *     tags={"Authentication"},
      *     summary="Forgot Password",
      *     description="Send a password reset link to the user's email address.",

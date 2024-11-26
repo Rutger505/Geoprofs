@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Auth;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Handle an incoming authentication request.
-     */
-    /**
      * @OA\Post(
      *     path="api/auth/login",
      *     tags={"Authentication"},
@@ -69,9 +66,6 @@ class AuthenticatedSessionController extends Controller
         return response()->json(["message" => "successful"], 200);
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
 
     /**
      * @OA\Post(
