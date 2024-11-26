@@ -1,7 +1,7 @@
-import useSWR from "swr";
 import axios from "@/lib/axios";
-import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import useSWR from "swr";
 
 interface User {
   id: number;
@@ -20,9 +20,7 @@ interface RegisterProps {
 interface LoginProps {
   email: string;
   password: string;
-  remember?: boolean;
   setErrors: (errors: any[]) => void;
-  setStatus: (status: string | null) => void;
 }
 
 interface ForgotPasswordProps {
@@ -81,18 +79,10 @@ export const useAuth = ({
       });
   };
 
-  const login = async ({
-    setErrors,
-    setStatus,
-    ...props
-  }: Omit<LoginProps, "setErrors" | "setStatus"> & {
-    setErrors: (errors: any[]) => void;
-    setStatus: (status: string | null) => void;
-  }) => {
+  const login = async ({ setErrors, ...props }: LoginProps) => {
     await csrf();
 
     setErrors([]);
-    setStatus(null);
 
     axios
       .post("/auth/login", props)
@@ -112,7 +102,6 @@ export const useAuth = ({
     await csrf();
 
     setErrors([]);
-    setStatus(null);
 
     axios
       .post("/auth/forgot-password", { email })
