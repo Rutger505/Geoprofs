@@ -1,177 +1,173 @@
-import useSWR from 'swr'
-import axios from '@/lib/axios'
-import { useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import useSWR from "swr";
+import axios from "@/lib/axios";
+import { useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 interface User {
-    // Define your user properties here
-    id: number
-    name: string
-    email: string
-    // Add other user properties as needed
+  id: number;
+  name: string;
+  email: string;
 }
 
 interface RegisterProps {
-    name: string
-    email: string
-    password: string
-    password_confirmation: string
-    setErrors: (errors: any[]) => void
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  setErrors: (errors: any[]) => void;
 }
 
 interface LoginProps {
-    email: string
-    password: string
-    remember?: boolean
-    setErrors: (errors: any[]) => void
-    setStatus: (status: string | null) => void
+  email: string;
+  password: string;
+  remember?: boolean;
+  setErrors: (errors: any[]) => void;
+  setStatus: (status: string | null) => void;
 }
 
 interface ForgotPasswordProps {
-    email: string
-    setErrors: (errors: any[]) => void
-    setStatus: (status: string | null) => void
+  email: string;
+  setErrors: (errors: any[]) => void;
+  setStatus: (status: string | null) => void;
 }
 
 interface ResetPasswordProps {
-    email: string
-    password: string
-    password_confirmation: string
-    setErrors: (errors: any[]) => void
-    setStatus: (status: string | null) => void
+  email: string;
+  password: string;
+  password_confirmation: string;
+  setErrors: (errors: any[]) => void;
+  setStatus: (status: string | null) => void;
 }
 
 interface UseAuthProps {
-    middleware?: 'auth' | 'guest'
-    redirectIfAuthenticated?: string
+  middleware?: "auth" | "guest";
+  redirectIfAuthenticated?: string;
 }
 
 export const useAuth = ({
-    middleware,
-    redirectIfAuthenticated,
+  middleware,
+  redirectIfAuthenticated,
 }: UseAuthProps = {}) => {
-    const router = useRouter()
-    const params = useParams()
+  const router = useRouter();
+  const params = useParams();
 
-    const {
-        data: user,
-        error,
-        mutate,
-    } = useSWR<User>('/auth/user', () =>
-        axios.get('/auth/user').then(res => res.data),
-    )
+  const {
+    data: user,
+    error,
+    mutate,
+  } = useSWR<User>("/auth/user", () =>
+    axios.get("/auth/user").then((res) => res.data),
+  );
 
-    const csrf = () => axios.get('/auth/csrf-cookie')
+  const csrf = () => axios.get("/auth/csrf-cookie");
 
-    const register = async ({
-        setErrors,
-        ...props
-    }: Omit<RegisterProps, 'setErrors'> & {
-        setErrors: (errors: any[]) => void
-    }) => {
-        await csrf()
+  const register = async ({
+    setErrors,
+    ...props
+  }: Omit<RegisterProps, "setErrors"> & {
+    setErrors: (errors: any[]) => void;
+  }) => {
+    await csrf();
 
-        setErrors([])
+    setErrors([]);
 
-        axios
-            .post('/auth/register', props)
-            .then(() => mutate())
-            .catch(error => {
-                if (error.response.status !== 422) throw error
+    axios
+      .post("/auth/register", props)
+      .then(() => mutate())
+      .catch((error) => {
+        if (error.response.status !== 422) throw error;
 
-                setErrors(error.response.data.errors)
-            })
-    }
+        setErrors(error.response.data.errors);
+      });
+  };
 
-    const login = async ({
-        setErrors,
-        setStatus,
-        ...props
-    }: Omit<LoginProps, 'setErrors' | 'setStatus'> & {
-        setErrors: (errors: any[]) => void
-        setStatus: (status: string | null) => void
-    }) => {
-        await csrf()
+  const login = async ({
+    setErrors,
+    setStatus,
+    ...props
+  }: Omit<LoginProps, "setErrors" | "setStatus"> & {
+    setErrors: (errors: any[]) => void;
+    setStatus: (status: string | null) => void;
+  }) => {
+    await csrf();
 
-        setErrors([])
-        setStatus(null)
+    setErrors([]);
+    setStatus(null);
 
-        axios
-            .post('/auth/login', props)
-            .then(() => mutate())
-            .catch(error => {
-                if (error.response.status !== 422) throw error
+    axios
+      .post("/auth/login", props)
+      .then(() => mutate())
+      .catch((error) => {
+        if (error.response.status !== 422) throw error;
 
-                setErrors(error.response.data.errors)
-            })
-    }
+        setErrors(error.response.data.errors);
+      });
+  };
 
-    const forgotPassword = async ({
-        setErrors,
-        setStatus,
-        email,
-    }: ForgotPasswordProps) => {
-        await csrf()
+  const forgotPassword = async ({
+    setErrors,
+    setStatus,
+    email,
+  }: ForgotPasswordProps) => {
+    await csrf();
 
-        setErrors([])
-        setStatus(null)
+    setErrors([]);
+    setStatus(null);
 
-        axios
-            .post('/auth/forgot-password', { email })
-            .then(response => setStatus(response.data.status))
-            .catch(error => {
-                if (error.response.status !== 422) throw error
+    axios
+      .post("/auth/forgot-password", { email })
+      .then((response) => setStatus(response.data.status))
+      .catch((error) => {
+        if (error.response.status !== 422) throw error;
 
-                setErrors(error.response.data.errors)
-            })
-    }
+        setErrors(error.response.data.errors);
+      });
+  };
 
-    const resetPassword = async ({
-        setErrors,
-        setStatus,
-        ...props
-    }: Omit<ResetPasswordProps, 'setErrors' | 'setStatus'> & {
-        setErrors: (errors: any[]) => void
-        setStatus: (status: string | null) => void
-    }) => {
-        await csrf()
+  const resetPassword = async ({
+    setErrors,
+    setStatus,
+    ...props
+  }: Omit<ResetPasswordProps, "setErrors" | "setStatus"> & {
+    setErrors: (errors: any[]) => void;
+    setStatus: (status: string | null) => void;
+  }) => {
+    await csrf();
 
-        setErrors([])
-        setStatus(null)
+    setErrors([]);
+    setStatus(null);
 
-        axios
-            .post('/auth/reset-password', { token: params.token, ...props })
-            .then(response =>
-                router.push('/auth/login?reset=' + btoa(response.data.status)),
-            )
-            .catch(error => {
-                if (error.response.status !== 422) throw error
+    axios
+      .post("/auth/reset-password", { token: params.token, ...props })
+      .then((response) =>
+        router.push("/auth/login?reset=" + btoa(response.data.status)),
+      )
+      .catch((error) => {
+        if (error.response.status !== 422) throw error;
 
-                setErrors(error.response.data.errors)
-            })
-    }
+        setErrors(error.response.data.errors);
+      });
+  };
 
-    const logout = async () => {
-        if (!error) {
-            await axios.post('/auth/logout').then(() => mutate())
-        }
+  const logout = async () => {
+    await axios.post("/auth/logout").then(() => mutate());
 
-        window.location.pathname = '/login'
-    }
+    router.push("/login");
+  };
 
-    useEffect(() => {
-        if (middleware === 'guest' && redirectIfAuthenticated && user)
-            router.push(redirectIfAuthenticated)
+  useEffect(() => {
+    if (middleware === "guest" && redirectIfAuthenticated && user)
+      router.push(redirectIfAuthenticated);
 
-        if (middleware === 'auth' && error) logout()
-    }, [user, error, middleware, redirectIfAuthenticated, router])
+    if (middleware === "auth" && error) logout();
+  }, [user, error, middleware, redirectIfAuthenticated, router]);
 
-    return {
-        user,
-        register,
-        login,
-        forgotPassword,
-        resetPassword,
-        logout,
-    }
-}
+  return {
+    user,
+    register,
+    login,
+    forgotPassword,
+    resetPassword,
+    logout,
+  };
+};
