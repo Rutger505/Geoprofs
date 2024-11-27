@@ -79,6 +79,12 @@ export const useAuth = ({
       });
   };
 
+  const logout = async () => {
+    await axios.post("/auth/logout").then(() => fetchUser());
+
+    router.push("/login");
+  };
+
   const forgotPassword = async ({
     setErrors,
     setStatus,
@@ -119,12 +125,6 @@ export const useAuth = ({
       });
   };
 
-  const logout = async () => {
-    await axios.post("/auth/logout").then(() => fetchUser());
-
-    router.push("/login");
-  };
-
   useEffect(() => {
     if (middleware === "guest" && redirectIfAuthenticated && user)
       router.push(redirectIfAuthenticated);
@@ -135,8 +135,8 @@ export const useAuth = ({
   return {
     user,
     login,
+    logout,
     forgotPassword,
     resetPassword,
-    logout,
   };
 };
