@@ -106,7 +106,7 @@ class RegistrationController extends Controller
             'email' => $request->email,
             'DateHired' => $request->dateHired,
             'UserRoleID' => $request->role,
-            'RegistartionStatus' => 'pending'
+            'RegistrationStatus' => 'pending'
         ]);
 
         return response()->json(['message' => 'user successfully created'], 200);
