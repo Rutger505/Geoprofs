@@ -20,7 +20,12 @@ interface RegisterProps {
 interface LoginProps {
   email: string;
   password: string;
-  setErrors: (errors: any[]) => void;
+  setErrors: (errors: LoginErrors) => void;
+}
+
+export interface LoginErrors {
+  email?: string;
+  password?: string;
 }
 
 interface ForgotPasswordProps {
@@ -62,7 +67,7 @@ export const useAuth = ({
   const login = async ({ setErrors, ...props }: LoginProps) => {
     await csrf();
 
-    setErrors([]);
+    setErrors({});
 
     axios
       .post("/auth/login", props)

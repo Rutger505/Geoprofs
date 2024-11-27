@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/hooks/auth";
+import { LoginErrors, useAuth } from "@/hooks/auth";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -19,7 +19,7 @@ export function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<any[]>([]);
+  const [errors, setErrors] = useState<LoginErrors>({});
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -32,7 +32,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="-mt-20 w-full max-w-md space-y-10 p-8">
+    <div className="w-full max-w-md space-y-10 p-8">
       <h1 className="text-center text-4xl font-bold text-gray-900">Inloggen</h1>
 
       <form onSubmit={onSubmit} className="space-y-6">
@@ -50,6 +50,7 @@ export function LoginForm() {
         <Field>
           <Label className="block">Wachtwoord</Label>
           <Input
+            type="password"
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
             onChange={(event) => setPassword(event.target.value)}
           />
