@@ -85,4 +85,29 @@ class RegistrationController extends Controller
             'token' => $user->createToken('token')->plainTextToken
         ]);
     }
+
+    public function adminRegister(Request $request)
+    {
+        $request->validate([
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
+            'email' => 'required|email',
+            'dateHired' => 'required|date',
+            'role' => 'required|int'
+        ]);
+
+        if (User::where('email', $request->email)) {
+            return response()->json(['message' => 'email already has a account'], 403);
+        }
+
+        User::create([
+            'UserFirstName' => $request->firstName,
+            'UserLastName' => $request->lastName,
+            'email' => $request->email,
+            'DateHired' => $request->dateHired,
+            'UserRoleID' => $request->role
+        ]);
+
+        return response()->json(['message' => 'user successfully created']);
+    }
 }
