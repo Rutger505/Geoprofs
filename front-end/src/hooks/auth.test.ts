@@ -1,8 +1,7 @@
-import { renderHook, act } from "@testing-library/react";
 import { useAuth } from "@/hooks/auth";
 import axios from "@/lib/axios";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
+import { act, renderHook } from "@testing-library/react";
+import { useParams, useRouter } from "next/navigation";
 import useSWR from "swr";
 
 // Mock dependencies
@@ -32,49 +31,6 @@ describe("useAuth Hook", () => {
       data: null,
       error: null,
       mutate: mockMutate,
-    });
-  });
-
-  describe("register", () => {
-    const registerData = {
-      name: "Test User",
-      email: "test@example.com",
-      password: "password",
-      password_confirmation: "password",
-    };
-
-    it("should successfully register a user", async () => {
-      const { result } = renderHook(() => useAuth());
-
-      await act(async () => {
-        await result.current.register({
-          ...registerData,
-          setErrors: mockSetErrors,
-        });
-      });
-
-      expect(axios.get).toHaveBeenCalledWith("/auth/csrf-cookie");
-      expect(axios.post).toHaveBeenCalledWith("/auth/register", registerData);
-      expect(mockSetErrors).toHaveBeenCalledWith([]);
-      expect(mockMutate).toHaveBeenCalled();
-    });
-
-    it("should handle registration errors", async () => {
-      const errors = { email: ["Email already taken"] };
-      (axios.post as jest.Mock).mockRejectedValueOnce({
-        response: { status: 422, data: { errors } },
-      });
-
-      const { result } = renderHook(() => useAuth());
-
-      await act(async () => {
-        await result.current.register({
-          ...registerData,
-          setErrors: mockSetErrors,
-        });
-      });
-
-      expect(mockSetErrors).toHaveBeenCalledWith(errors);
     });
   });
 

@@ -59,21 +59,6 @@ export const useAuth = ({
 
   const csrf = () => axios.get("/auth/csrf-cookie");
 
-  const register = async ({ setErrors, ...props }: RegisterProps) => {
-    await csrf();
-
-    setErrors([]);
-
-    axios
-      .post("/auth/register", props)
-      .then(() => fetchUser())
-      .catch((error) => {
-        if (error.response.status !== 422) throw error;
-
-        setErrors(error.response.data.errors);
-      });
-  };
-
   const login = async ({ setErrors, ...props }: LoginProps) => {
     await csrf();
 
@@ -144,7 +129,6 @@ export const useAuth = ({
 
   return {
     user,
-    register,
     login,
     forgotPassword,
     resetPassword,
