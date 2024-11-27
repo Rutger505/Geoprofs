@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={clsx(
-          "min-h-screen grid grid-cols-[auto_*]",
+          "min-h-screen grid grid-rows-[auto_1fr]",
           inter.className,
         )}
       >
