@@ -220,5 +220,4 @@ jobs:
         with:
           namespace: ${{ steps.config.outputs.namespace }}
           manifests: |
-            k8s/namespace.yaml
             k8s/
