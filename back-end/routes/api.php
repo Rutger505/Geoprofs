@@ -7,9 +7,15 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\HealthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HealthController;
+use App\Http\Controllers\MailController;
+use Illuminate\Support\Facades\Cache;
 
 
-Route::get('/health', [HealthController::class, 'index']);
+Route::prefix('mail')->group(function (): void {
+
+    Route::post('register', [MailController::class, 'register']);
+});
 
 Route::prefix('auth')->group(function (): void {
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])
