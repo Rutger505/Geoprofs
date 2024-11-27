@@ -68,6 +68,11 @@ class MailController extends Controller
      */
     public function register(Request $request)
     {
+
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
         $token = (string) Str::uuid(); // Convert the UUID object to a string
         // Create a signed URL
         $signedUrl = URL::temporarySignedRoute(
@@ -78,11 +83,6 @@ class MailController extends Controller
 
         // Store the token in the cache
         Cache::put($token, true, Carbon::now()->addMinutes(30));
-
-        $request->validate([
-            'email' => 'required|email'
-        ]);
-
 
         Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email));
     }

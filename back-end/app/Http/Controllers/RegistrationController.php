@@ -96,7 +96,7 @@ class RegistrationController extends Controller
             'role' => 'required|int'
         ]);
 
-        if (User::where('email', $request->email)) {
+        if (User::where('email', $request->email)->exists()) {
             return response()->json(['message' => 'email already has a account'], 403);
         }
 
