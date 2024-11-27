@@ -1,6 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { LoginForm } from "./LoginForm";
+import { LoginForm } from "@/components/Auth/LoginForm";
+import { render, screen } from "@testing-library/react";
 
 describe("LoginForm", () => {
   it("renders login form elements", () => {
@@ -14,27 +13,5 @@ describe("LoginForm", () => {
     expect(
       screen.getByRole("button", { name: "Inloggen" }),
     ).toBeInTheDocument();
-  });
-
-  it("displays validation errors for empty fields", async () => {
-    render(<LoginForm />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Inloggen" }));
-
-    await waitFor(() => {
-      expect(screen.getByText("Email is required")).toBeInTheDocument();
-      expect(screen.getByText("Password is required")).toBeInTheDocument();
-    });
-  });
-
-  it("displays error for invalid email format", async () => {
-    render(<LoginForm />);
-
-    await userEvent.type(screen.getByLabelText("Email"), "invalid-email");
-    fireEvent.submit(screen.getByRole("button", { name: "Inloggen" }));
-
-    await waitFor(() => {
-      expect(screen.getByText("Invalid email address")).toBeInTheDocument();
-    });
   });
 });

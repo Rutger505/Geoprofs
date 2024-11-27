@@ -1,37 +1,20 @@
 import { useAuth } from "@/hooks/auth";
-import axios from "@/lib/axios";
+import { mockAxios } from "@/tests/mocks/axios";
+import { mockRouter, mockUseParams } from "@/tests/mocks/next";
+import { mockUseSWR } from "@/tests/mocks/swr";
 import { act, renderHook } from "@testing-library/react";
-import { useParams, useRouter } from "next/navigation";
-import useSWR from "swr";
-
-// Mock dependencies
-jest.mock("@/lib/axios");
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-  useParams: jest.fn(),
-}));
-jest.mock("swr");
-
-// it should always fetch the CSRF token
-// it should redirect authenticated users when using guest middleware and redirectIfAuthenticated
-// it should
 
 describe("useAuth Hook", () => {
-  const mockRouter = {
-    push: jest.fn(),
-  };
   const mockSetErrors = jest.fn();
   const mockSetStatus = jest.fn();
   const mockFetchUser = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useRouter as jest.Mock).mockReturnValue(mockRouter);
-    (useParams as jest.Mock).mockReturnValue({ token: "test-token" });
-    (axios.get as jest.Mock).mockResolvedValue({ data: {} });
-    (axios.post as jest.Mock).mockResolvedValue({ data: {} });
-    // Mock SWR hook
-    (useSWR as jest.Mock).mockReturnValue({
+    mockUseParams.mockReturnValue({ token: "test-token" });
+    mockAxios.get.mockResolvedValue({ data: {} });
+    mockAxios.post.mockResolvedValue({ data: {} });
+    mockUseSWR.mockReturnValue({
       data: null,
       error: null,
       mutate: mockFetchUser,
@@ -54,7 +37,7 @@ describe("useAuth Hook", () => {
         });
       });
 
-      expect(axios.get).toHaveBeenCalledWith("/auth/csrf-cookie");
+      expect(mockAxios.get).toHaveBeenCalledWith("/auth/csrf-cookie");
     });
 
     it("should successfully login a user", async () => {
@@ -67,14 +50,14 @@ describe("useAuth Hook", () => {
         });
       });
 
-      expect(axios.post).toHaveBeenCalledWith("/auth/login", loginData);
+      expect(mockAxios.post).toHaveBeenCalledWith("/auth/login", loginData);
       expect(mockSetErrors).toHaveBeenCalledWith({});
       expect(mockFetchUser).toHaveBeenCalled();
     });
 
     it("should handle login errors", async () => {
       const errors = { email: ["Invalid credentials"] };
-      (axios.post as jest.Mock).mockRejectedValueOnce({
+      (mockAxios.post as jest.Mock).mockRejectedValueOnce({
         response: { status: 422, data: { errors } },
       });
 
@@ -93,7 +76,7 @@ describe("useAuth Hook", () => {
 
   describe("middleware", () => {
     it("should redirect authenticated users when using guest middleware", async () => {
-      (useSWR as jest.Mock).mockReturnValue({
+      (mockAxios as jest.Mock).mockReturnValue({
         data: { id: 1, name: "Test User" },
         error: null,
         mutate: mockFetchUser,
@@ -115,7 +98,7 @@ describe("useAuth Hook", () => {
 
     it("should logout unauthenticated users when using auth middleware", async () => {
       // Mock authentication error
-      (useSWR as jest.Mock).mockReturnValue({
+      (mockUseSWR as jest.Mock).mockReturnValue({
         data: null,
         error: new Error("Unauthenticated"),
         mutate: mockFetchUser,
@@ -131,14 +114,14 @@ describe("useAuth Hook", () => {
         await new Promise((resolve) => setTimeout(resolve, 0));
       });
 
-      expect(axios.post).toHaveBeenCalledWith("/auth/logout");
+      expect(mockAxios.post).toHaveBeenCalledWith("/auth/logout");
     });
   });
 
   describe("forgotPassword", () => {
     it("should handle forgot password request", async () => {
       const status = "Password reset link sent";
-      (axios.post as jest.Mock).mockResolvedValueOnce({ data: { status } });
+      (mockAxios.post as jest.Mock).mockResolvedValueOnce({ data: { status } });
 
       const { result } = renderHook(() => useAuth());
 
@@ -150,7 +133,7 @@ describe("useAuth Hook", () => {
         });
       });
 
-      expect(axios.post).toHaveBeenCalledWith("/auth/forgot-password", {
+      expect(mockAxios.post).toHaveBeenCalledWith("/auth/forgot-password", {
         email: "test@example.com",
       });
       expect(mockSetStatus).toHaveBeenCalledWith(status);
@@ -166,7 +149,7 @@ describe("useAuth Hook", () => {
 
     it("should handle password reset", async () => {
       const status = "Password reset successfully";
-      (axios.post as jest.Mock).mockResolvedValueOnce({ data: { status } });
+      (mockAxios.post as jest.Mock).mockResolvedValueOnce({ data: { status } });
 
       const { result } = renderHook(() => useAuth());
 
@@ -178,7 +161,7 @@ describe("useAuth Hook", () => {
         });
       });
 
-      expect(axios.post).toHaveBeenCalledWith("/auth/reset-password", {
+      expect(mockAxios.post).toHaveBeenCalledWith("/auth/reset-password", {
         ...resetData,
         token: "test-token",
       });
@@ -206,7 +189,7 @@ describe("useAuth Hook", () => {
         await result.current.logout();
       });
 
-      expect(axios.post).toHaveBeenCalledWith("/auth/logout");
+      expect(mockAxios.post).toHaveBeenCalledWith("/auth/logout");
       expect(mockRouter.push).toHaveBeenCalledWith("/login");
     });
   });

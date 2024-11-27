@@ -2,7 +2,6 @@
 
 import { LoginErrors, useAuth } from "@/hooks/auth";
 import { Button, Field, Input, Label } from "@headlessui/react";
-import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 interface LoginInputs {
@@ -11,7 +10,6 @@ interface LoginInputs {
 }
 
 export function LoginForm() {
-  const router = useRouter();
   const { login } = useAuth({
     middleware: "guest",
     redirectIfAuthenticated: "/dashboard",

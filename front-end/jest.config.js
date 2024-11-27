@@ -22,5 +22,8 @@ module.exports = {
     "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
   },
   transformIgnorePatterns: ["/node_modules/"],
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  setupFilesAfterEnv: [
+    "<rootDir>/jest.setup.js",
+    "<rootDir>/src/tests/setup.ts",
+  ],
 };
