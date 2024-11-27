@@ -105,9 +105,10 @@ class RegistrationController extends Controller
             'UserLastName' => $request->lastName,
             'email' => $request->email,
             'DateHired' => $request->dateHired,
-            'UserRoleID' => $request->role
+            'UserRoleID' => $request->role,
+            'RegistartionStatus' => 'pending'
         ]);
 
-        return response()->json(['message' => 'user successfully created']);
+        return response()->json(['message' => 'user successfully created'], 200);
     }
 }
