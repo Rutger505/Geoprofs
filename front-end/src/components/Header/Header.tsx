@@ -4,7 +4,12 @@ import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export const navigation = [
+export interface Navigation {
+  name: string;
+  href: string;
+}
+
+export const navigation: Navigation[] = [
   { name: "Dashboard", href: "#" },
   { name: "Aanvragen", href: "#" },
   { name: "Verlofsaldo", href: "#" },
