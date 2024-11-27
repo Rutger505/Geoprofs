@@ -16,7 +16,7 @@ spec:
       initContainers:
         - name: geoprofs-migrate
           image: rutger505/geoprofs-backend:${TAG}
-          command: ["sh", "-c", "echo $(POSTGRES_URL) && php artisan migrate"]
+          command: [ "sh", "-c", "php artisan db:create && php artisan migrate" ]
           envFrom:
             - configMapRef:
                 name: geoprofs-config
