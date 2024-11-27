@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class RegistrationController extends Controller
 {
@@ -100,7 +101,7 @@ class RegistrationController extends Controller
             return response()->json(['message' => 'email already has a account'], 403);
         }
 
-        User::create([
+        $user  = User::create([
             'UserFirstName' => $request->firstName,
             'UserLastName' => $request->lastName,
             'email' => $request->email,
@@ -108,6 +109,17 @@ class RegistrationController extends Controller
             'UserRoleID' => $request->role,
             'RegistrationStatus' => 'pending'
         ]);
+
+
+        $response = Http::post(route('mail.register'), [
+            'email' => $user->email,
+            'firstName' => $user->UserFirstName,
+            'lastName' => $user->UserLastName,
+        ]);
+
+        if ($response->failed()) {
+            return response()->json(['message' => 'user created but email sending failed'], 500);
+        }
 
         return response()->json(['message' => 'user successfully created'], 200);
     }

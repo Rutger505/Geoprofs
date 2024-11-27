@@ -70,7 +70,9 @@ class MailController extends Controller
     {
 
         $request->validate([
-            'email' => 'required|email'
+            'email' => 'required|email',
+            'firstName' => 'string',
+            'lastName' => 'string'
         ]);
 
         $token = (string) Str::uuid(); // Convert the UUID object to a string
@@ -84,6 +86,6 @@ class MailController extends Controller
         // Store the token in the cache
         Cache::put($token, true, Carbon::now()->addMinutes(30));
 
-        Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email));
+        Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email, $request->firstName, $request->lastName));
     }
 }
