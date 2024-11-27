@@ -12,13 +12,17 @@ jest.mock("next/navigation", () => ({
 }));
 jest.mock("swr");
 
+// it should always fetch the CSRF token
+// it should redirect authenticated users when using guest middleware and redirectIfAuthenticated
+// it should
+
 describe("useAuth Hook", () => {
   const mockRouter = {
     push: jest.fn(),
   };
   const mockSetErrors = jest.fn();
   const mockSetStatus = jest.fn();
-  const mockMutate = jest.fn();
+  const mockFetchUser = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -30,7 +34,7 @@ describe("useAuth Hook", () => {
     (useSWR as jest.Mock).mockReturnValue({
       data: null,
       error: null,
-      mutate: mockMutate,
+      mutate: mockFetchUser,
     });
   });
 
@@ -38,8 +42,20 @@ describe("useAuth Hook", () => {
     const loginData = {
       email: "test@example.com",
       password: "password",
-      remember: true,
     };
+
+    it("should fetch CSRF token", async () => {
+      const { result } = renderHook(() => useAuth());
+
+      await act(async () => {
+        await result.current.login({
+          ...loginData,
+          setErrors: mockSetErrors,
+        });
+      });
+
+      expect(axios.get).toHaveBeenCalledWith("/auth/csrf-cookie");
+    });
 
     it("should successfully login a user", async () => {
       const { result } = renderHook(() => useAuth());
@@ -48,15 +64,12 @@ describe("useAuth Hook", () => {
         await result.current.login({
           ...loginData,
           setErrors: mockSetErrors,
-          setStatus: mockSetStatus,
         });
       });
 
-      expect(axios.get).toHaveBeenCalledWith("/auth/csrf-cookie");
       expect(axios.post).toHaveBeenCalledWith("/auth/login", loginData);
-      expect(mockSetErrors).toHaveBeenCalledWith([]);
-      expect(mockSetStatus).toHaveBeenCalledWith(null);
-      expect(mockMutate).toHaveBeenCalled();
+      expect(mockSetErrors).toHaveBeenCalledWith({});
+      expect(mockFetchUser).toHaveBeenCalled();
     });
 
     it("should handle login errors", async () => {
@@ -71,7 +84,6 @@ describe("useAuth Hook", () => {
         await result.current.login({
           ...loginData,
           setErrors: mockSetErrors,
-          setStatus: mockSetStatus,
         });
       });
 
@@ -81,11 +93,10 @@ describe("useAuth Hook", () => {
 
   describe("middleware", () => {
     it("should redirect authenticated users when using guest middleware", async () => {
-      // Mock authenticated user
       (useSWR as jest.Mock).mockReturnValue({
         data: { id: 1, name: "Test User" },
         error: null,
-        mutate: mockMutate,
+        mutate: mockFetchUser,
       });
 
       renderHook(() =>
@@ -96,7 +107,7 @@ describe("useAuth Hook", () => {
       );
 
       await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 0));
       });
 
       expect(mockRouter.push).toHaveBeenCalledWith("/dashboard");
@@ -107,7 +118,7 @@ describe("useAuth Hook", () => {
       (useSWR as jest.Mock).mockReturnValue({
         data: null,
         error: new Error("Unauthenticated"),
-        mutate: mockMutate,
+        mutate: mockFetchUser,
       });
 
       const { result } = renderHook(() =>
@@ -178,12 +189,21 @@ describe("useAuth Hook", () => {
   });
 
   describe("logout", () => {
+    it("should fetch CSRF token", async () => {
+      const { result } = renderHook(() => useAuth());
+
+      await act(async () => {
+        await result.current.logout();
+      });
+
+      expect(axios.get).toHaveBeenCalledWith("/auth/csrf-cookie");
+    });
+
     it("should handle logout", async () => {
       const { result } = renderHook(() => useAuth());
 
       await act(async () => {
         await result.current.logout();
-        await new Promise((resolve) => setTimeout(resolve, 0));
       });
 
       expect(axios.post).toHaveBeenCalledWith("/auth/logout");
