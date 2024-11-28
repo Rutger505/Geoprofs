@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Leave;
 use Illuminate\Support\Facades\Auth;
 
-class VerlofController extends Controller
+class LeaveController extends Controller
 {
 
 
