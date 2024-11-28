@@ -98,6 +98,6 @@ class PasswordResetLinkController extends Controller
             ]);
         }
 
-        return response()->json(['status' => __($status), 200]);
+        return response()->json(['status' => __($status)]);
     }
 }

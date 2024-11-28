@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=200,
+     *         response=204,
      *         description="Login successful",
      *         @OA\JsonContent(
      *             @OA\Property(
@@ -63,7 +63,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return response()->json(["message" => "successful"], 200);
+        return response()->noContent();
     }
 
 
@@ -94,6 +94,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return response()->json(["message" => "successful", 200]);
+        return response()->noContent();
     }
 }
