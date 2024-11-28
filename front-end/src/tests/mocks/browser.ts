@@ -6,5 +6,3 @@ class ResizeObserver {
 }
 
 global.ResizeObserver = ResizeObserver;
-
-console.log("browser");

@@ -25,5 +25,3 @@ export {
   mockUseRouter,
   mockUseSearchParams,
 };
-
-console.log("next");

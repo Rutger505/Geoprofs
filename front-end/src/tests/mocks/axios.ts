@@ -9,4 +9,3 @@ const mockAxios = {
 jest.mock("@/lib/axios", () => mockAxios);
 
 export { mockAxios };
-console.log("axios");
