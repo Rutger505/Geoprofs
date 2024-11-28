@@ -34,7 +34,7 @@ class VerlofController extends Controller
      *                 description="End date of the leave in DD-MM-YYYY format. Must be the same or after the start_date."
      *             ),
      *             @OA\Property(
-     *                 property="reden",
+     *                 property="reason",
      *                 type="string",
      *                 example="Vacation with family",
      *                 description="Reason for the leave request."
@@ -59,7 +59,7 @@ class VerlofController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=400,
+     *         response=422,
      *         description="Bad Request",
      *         @OA\JsonContent(
      *             @OA\Property(
