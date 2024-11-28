@@ -1,5 +1,11 @@
 import { render, screen } from "@testing-library/react";
-import { Header, navigation } from "./Header";
+import { Header, Navigation } from "./Header";
+
+export const navigation: Navigation[] = [
+  { name: "Dashboard", href: "#" },
+  { name: "Aanvragen", href: "#" },
+  { name: "Verlofsaldo", href: "#" },
+];
 
 jest.mock("next/image", () => ({
   __esModule: true,
