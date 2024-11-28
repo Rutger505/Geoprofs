@@ -74,7 +74,7 @@ class AuthenticatedSessionController extends Controller
      *     summary="Logout",
      *     description="Log out the authenticated user and destroy the session",
      *     @OA\Response(
-     *         response=200,
+     *         response=204,
      *         description="Logout successful",
      *         @OA\JsonContent(
      *             @OA\Property(
