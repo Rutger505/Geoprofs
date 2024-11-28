@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Cache;
 
 Route::get('/health', [HealthController::class, 'index']);
 
-Route::prefix('mail')->group(function (): void {
-
-    Route::post('register', [MailController::class, 'register']);
-});
-
 Route::prefix('auth')->group(function (): void {
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])
         ->middleware('guest')
@@ -40,6 +35,11 @@ Route::prefix('auth')->group(function (): void {
     Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
         return $request->user();
     });
+});
+
+Route::prefix('mail')->group(function (): void {
+
+    Route::post('register', [MailController::class, 'register'])->name('mail.register');
 });
 
 Route::get('/register/confirm/{token}', function ($token) {

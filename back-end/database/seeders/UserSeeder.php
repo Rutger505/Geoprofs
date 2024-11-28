@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -24,6 +25,7 @@ class UserSeeder extends Seeder
                 'DateHired' => '2020-01-15',
                 'RegistrationStatus' => 'pending',
                 'UserRoleID' => 1,
+                'RegistrationToken' => (string) Str::uuid()
             ],
             [
                 'UserFirstName' => 'Jane',
@@ -33,6 +35,8 @@ class UserSeeder extends Seeder
                 'DateHired' => '2019-05-20',
                 'RegistrationStatus' => 'pending',
                 'UserRoleID' => 2,
+                'RegistrationToken' => (string) Str::uuid()
+
             ],
             [
                 'UserFirstName' => 'Jake',
@@ -42,6 +46,8 @@ class UserSeeder extends Seeder
                 'DateHired' => '2012-05-20',
                 'RegistrationStatus' => 'created',
                 'UserRoleID' => 3,
+                'RegistrationToken' => (string) Str::uuid()
+
             ],
             [
                 'UserFirstName' => 'Rutger',
@@ -51,6 +57,8 @@ class UserSeeder extends Seeder
                 'DateHired' => '2023-09-20',
                 'RegistrationStatus' => 'created',
                 'UserRoleID' => 4,
+                'RegistrationToken' => (string) Str::uuid()
+
             ],
             [
                 'UserFirstName' => 'Bob',
@@ -60,6 +68,8 @@ class UserSeeder extends Seeder
                 'DateHired' => '2015-02-01',
                 'RegistrationStatus' => 'created',
                 'UserRoleID' => 5,
+                'RegistrationToken' => (string) Str::uuid()
+
             ],
             [
                 'UserFirstName' => 'CEO',
@@ -69,6 +79,8 @@ class UserSeeder extends Seeder
                 'DateHired' => '2015-02-01',
                 'RegistrationStatus' => 'created',
                 'UserRoleID' => 1,
+                'RegistrationToken' => (string) Str::uuid()
+
             ],
             [
                 'UserFirstName' => 'Employee',
@@ -78,6 +90,8 @@ class UserSeeder extends Seeder
                 'DateHired' => '2015-02-01',
                 'RegistrationStatus' => 'created',
                 'UserRoleID' => 2,
+                'RegistrationToken' => (string) Str::uuid()
+
             ],
             [
                 'UserFirstName' => 'Admin',
@@ -87,6 +101,8 @@ class UserSeeder extends Seeder
                 'DateHired' => '2015-02-01',
                 'RegistrationStatus' => 'created',
                 'UserRoleID' => 3,
+                'RegistrationToken' => (string) Str::uuid()
+
             ],
             [
                 'UserFirstName' => 'SectionManager',
@@ -96,6 +112,8 @@ class UserSeeder extends Seeder
                 'DateHired' => '2015-02-01',
                 'RegistrationStatus' => 'created',
                 'UserRoleID' => 4,
+                'RegistrationToken' => (string) Str::uuid()
+
             ],
             [
                 'UserFirstName' => 'ProjectManager',
@@ -105,6 +123,8 @@ class UserSeeder extends Seeder
                 'DateHired' => '2015-02-01',
                 'RegistrationStatus' => 'created',
                 'UserRoleID' => 5,
+                'RegistrationToken' => (string) Str::uuid()
+
             ],
         ]);
     }

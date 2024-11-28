@@ -7,6 +7,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Cache;
+use App\Mail\RegisterMail;
+
 
 class RegistrationController extends Controller
 {
@@ -71,7 +78,6 @@ class RegistrationController extends Controller
     {
         $request->validate([
             'password' => 'required|string',
-            'token' => 'string'
         ]);
 
         $user = User::create([
@@ -81,7 +87,6 @@ class RegistrationController extends Controller
 
         return response()->json([
             'message' => 'User created successfully',
-            'token' => $user->createToken('token')->plainTextToken
         ]);
     }
 
@@ -110,14 +115,22 @@ class RegistrationController extends Controller
         ]);
 
 
-        $response = Http::post(route('mail.register'), [
-            'email' => $user->email,
-        ]);
+        $token = (string) Str::uuid(); // Convert the UUID object to a string
+        // Create a signed URL
+        $signedUrl = URL::temporarySignedRoute(
+            'register.confirm',
+            Carbon::now()->addMinutes(1),
+            ['token' => $token] // Pass the string version of the token
+        );
 
-        if ($response->failed()) {
-            return response()->json(['message' => 'user created but email sending failed'], 500);
-        }
+        // Store the token in the cache
+        Cache::put($token, true, Carbon::now()->addMinutes(30));
 
-        return response()->json(['message' => 'user successfully created'], 200);
+        Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email));
+
+        return response()->json([
+            'message' => 'user successfully created',
+            'token' => $token
+        ], 200);
     }
 }
