@@ -34,6 +34,4 @@ Route::prefix('auth')->group(function (): void {
 });
 
 
-Route::prefix('leave')->group(function () {
-    Route::post('/request', [VerlofController::class, 'storeLeaveRequest']);
-});
+Route::post('/leave', [VerlofController::class, 'storeLeaveRequest']);
