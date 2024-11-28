@@ -109,7 +109,7 @@ class LeaveController extends Controller
         $leaveRequest = Leave::create([
             'LeaveStartDate' => $leaveStartDate,
             'LeaveEndDate' => $leaveEndDate,
-            'LeaveReason' => $request->reden,
+            'LeaveReason' => $request->reason,
             'Status' => 'pending',
             'LeaveCategory' => $request->category,
             'UserID' =>  $user->UserID
