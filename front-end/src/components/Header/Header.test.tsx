@@ -9,31 +9,51 @@ jest.mock("next/image", () => ({
 describe("Header", () => {
   it("renders logo", () => {
     render(<Header />);
+
     const logo = screen.getByAltText("Geoprofs Logo");
+
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute("src", "/logo.webp");
     expect(logo).toHaveAttribute("width", "42");
     expect(logo).toHaveAttribute("height", "42");
   });
 
-  it("renders navigation links for normal header responsive header", () => {
-    render(<Header />);
+  describe("Desktop navigation", () => {
+    it("renders navigation links for normal header", () => {
+      render(<Header />);
 
-    navigation.forEach((item) => {
-      const links = screen.getAllByRole("link", { name: item.name });
-      expect(links).toHaveLength(2); // One for desktop and one for mobile
-
-      expect(links[0]).toHaveTextContent(item.name);
-      expect(links[0]).toHaveAttribute("href", item.href);
-      expect(links[1]).toHaveTextContent(item.name);
-      expect(links[1]).toHaveAttribute("href", item.href);
+      navigation.forEach((item) => {
+        const link = screen.getByRole("link", { name: item.name });
+        expect(link).toBeInTheDocument();
+        expect(link).toHaveTextContent(item.name);
+        expect(link).toHaveAttribute("href", item.href);
+      });
     });
   });
 
-  it("renders correct number of navigation items", () => {
-    render(<Header />);
+  describe("Mobile navigation", () => {
+    it("renders navigation links for responsive header", () => {
+      render(<Header />);
 
-    const links = screen.getAllByRole("link");
-    expect(links).toHaveLength(navigation.length * 2 + 1); // normal and responsive header + logo
+      Object.defineProperty(window, "innerWidth", {
+        writable: true,
+        configurable: true,
+        value: 375, // Mobile device width
+      });
+      window.dispatchEvent(new Event("resize"));
+
+      const mobileNavigationButton = screen.getByRole("button", {
+        name: "Open navigation",
+      });
+      expect(mobileNavigationButton).toBeInTheDocument();
+      mobileNavigationButton.click();
+
+      navigation.forEach((item) => {
+        const link = screen.getByRole("link", { name: item.name });
+        expect(link).toBeInTheDocument();
+        expect(link).toHaveTextContent(item.name);
+        expect(link).toHaveAttribute("href", item.href);
+      });
+    });
   });
 });

@@ -15,7 +15,10 @@ export function MobileNavigation({ navigation }: Readonly<Props>) {
       {({ open }) => (
         <>
           <PopoverButton className="flex items-center p-2">
-            <div className="relative h-6 w-6">
+            <button
+              className="relative h-6 w-6"
+              aria-label={open ? "Close navigation" : "Open navigation"}
+            >
               <Menu
                 className={clsx(
                   "absolute h-6 w-6 transform transition-transform duration-300 ease-in-out",
@@ -28,7 +31,7 @@ export function MobileNavigation({ navigation }: Readonly<Props>) {
                   open ? "rotate-0 opacity-100" : "-rotate-90 opacity-0",
                 )}
               />
-            </div>
+            </button>
           </PopoverButton>
           <PopoverPanel
             anchor="bottom"
