@@ -22,13 +22,13 @@ export function Header() {
           <Image src="/logo.webp" alt="Geoprofs Logo" width={42} height={42} />
         </Link>
 
-        <div className={"right-0 flex gap-5"}>
+        <div className={"hidden gap-5 sm:flex"}>
           {navigation.map((item) => (
             <HeaderLink name={item.name} href={item.href} key={item.name} />
           ))}
         </div>
 
-        <div className="relative hidden">
+        <div className="flex items-center sm:hidden">
           <MobileNavigation navigation={navigation} />
         </div>
       </header>
