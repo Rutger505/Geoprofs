@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - '*'
+    branches:
+      - development
   pull_request:
     branches:
       - '*'
@@ -35,6 +37,8 @@ jobs:
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             TAG=$GITHUB_REF_NAME
+          elif [[ $GITHUB_REF == refs/heads/development ]]; then
+            TAG=staging
           else
             TAG=$GITHUB_SHA
           fi
@@ -42,7 +46,7 @@ jobs:
           DOCKER_IMAGE=${{ env.DOCKER_IMAGE_PREFIX }}-frontend
           echo "Setting docker_image to $DOCKER_IMAGE"
           echo "docker_image=$DOCKER_IMAGE" >> $GITHUB_OUTPUT
-        
+          
           echo "Setting tag to $TAG"
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
@@ -64,6 +68,8 @@ jobs:
   build-back-end-docker-image:
     name: Build back-end Docker image
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.config.outputs.tag }}
 
     steps:
       - name: Checkout repository
@@ -77,6 +83,8 @@ jobs:
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             TAG=$GITHUB_REF_NAME
+          elif [[ $GITHUB_REF == refs/heads/development ]]; then
+            TAG=staging
           else
             TAG=$GITHUB_SHA
           fi
@@ -84,7 +92,7 @@ jobs:
           DOCKER_IMAGE=${{ env.DOCKER_IMAGE_PREFIX }}-backend
           echo "Setting docker_image to $DOCKER_IMAGE"
           echo "docker_image=$DOCKER_IMAGE" >> $GITHUB_OUTPUT
-        
+          
           echo "Setting tag to $TAG"
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
@@ -113,7 +121,7 @@ jobs:
     strategy:
       matrix:
         environment:
-          - ${{ startsWith(github.ref, 'refs/tags/') && 'production' || format('pr-{0}', github.event.pull_request.number) }}
+          - ${{ startsWith(github.ref, 'refs/tags/') && 'production' || (github.ref == 'refs/heads/development' && 'staging' || format('pr-{0}', github.event.pull_request.number)) }}
 
     environment:
       name: ${{ matrix.environment }}
@@ -133,6 +141,13 @@ jobs:
             LARAVEL_APP_ENV=production
             LARAVEL_APP_DEBUG=false
             LARAVEL_LOG_LEVEL=warn
+          elif [[ $GITHUB_REF == refs/heads/development ]]; then
+            INGRESS_HOST=staging.${{ vars.BASE_DOMAIN }}
+            CLUSTER_ISSUER_NAME=letsencrypt-staging
+            POSTGRES_NAMESPACE=postgres-staging
+            LARAVEL_APP_ENV=staging
+            LARAVEL_APP_DEBUG=true
+            LARAVEL_LOG_LEVEL=debug
           else
             INGRESS_HOST=${{ github.sha }}.${{ vars.BASE_DOMAIN }}
             CLUSTER_ISSUER_NAME=letsencrypt-staging
@@ -205,5 +220,4 @@ jobs:
         with:
           namespace: ${{ steps.config.outputs.namespace }}
           manifests: |
-            k8s/namespace.yaml
             k8s/
