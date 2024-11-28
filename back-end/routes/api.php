@@ -34,4 +34,4 @@ Route::prefix('auth')->group(function (): void {
 });
 
 
-Route::post('/leave', [LeaveController::class, 'storeLeaveRequest']);
+Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
