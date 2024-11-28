@@ -65,8 +65,13 @@ class VerlofController extends Controller
      *             @OA\Property(
      *                 property="message",
      *                 type="string",
-     *                 example="The given data was invalid."
+     *                 example="The <field-name> field is required"
      *             )
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="string[]",
+     *                 example="The <field-name> field must be an email"
+     *              )
      *         )
      *     ),
      *     @OA\Response(
