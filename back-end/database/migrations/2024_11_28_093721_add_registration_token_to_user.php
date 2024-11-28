@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->enum('RegistrationStatus', ['pending', 'completed'])->default('pending');
             $table->string('RegistrationToken')->nullable();
+            $table->string('password')->nullable()->change();
         });
     }
 

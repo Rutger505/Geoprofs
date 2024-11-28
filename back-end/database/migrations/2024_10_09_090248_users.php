@@ -17,7 +17,7 @@ return new class extends Migration
                 $table->string('UserFirstName');
                 $table->string('UserLastName');
                 $table->string('email');
-                $table->string('password')->nullable();
+                $table->string('password');
                 $table->date('DateHired')->nullable();
                 $table->foreignId('UserRoleID')->constrained('roles')->references('RoleID');
                 $table->rememberToken();
