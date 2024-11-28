@@ -19,6 +19,5 @@ class Leave extends Model
         'Status',
         'LeaveCategory',
         'UserID'
-
     ];
 }
