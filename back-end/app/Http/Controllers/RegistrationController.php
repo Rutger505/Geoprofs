@@ -70,13 +70,11 @@ class RegistrationController extends Controller
     public function register(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|string'
+            'password' => 'required|string',
+            'token' => 'string'
         ]);
 
         $user = User::create([
-            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
@@ -107,14 +105,13 @@ class RegistrationController extends Controller
             'email' => $request->email,
             'DateHired' => $request->dateHired,
             'UserRoleID' => $request->role,
-            'RegistrationStatus' => 'pending'
+            'RegistrationStatus' => 'pending',
+
         ]);
 
 
         $response = Http::post(route('mail.register'), [
             'email' => $user->email,
-            'firstName' => $user->UserFirstName,
-            'lastName' => $user->UserLastName,
         ]);
 
         if ($response->failed()) {

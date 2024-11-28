@@ -10,8 +10,6 @@
     <p>Thank you for joining our platform.</p>
 
 
-    {{ $firstName }}
-    <p>url: {{ $signedUrl }}</p>
     <a href="{{ $signedUrl }}">
         <button>Register</button>
     </a>
