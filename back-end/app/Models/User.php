@@ -37,7 +37,7 @@ class User extends Authenticatable
             'DateHired' => 'datetime',
         ];
     }
-    public function passwordHasing($value): void
+    public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
     }
