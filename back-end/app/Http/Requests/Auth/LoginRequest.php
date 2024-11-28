@@ -41,11 +41,10 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
 
-        $status =  User::get('RegistrationStatus')->where('RegistrationStatus');
         $this->ensureIsNotRateLimited();
 
 
-        if ($status == 'pending' && !Auth::attempt([
+        if (!Auth::attempt([
             'email' => $this->email,
             'password' => $this->password,
         ], $this->boolean('remember'))) {
