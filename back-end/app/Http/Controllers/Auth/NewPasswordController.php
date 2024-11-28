@@ -19,6 +19,69 @@ class NewPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+    /**
+     * @OA\Post(
+     *     path="api/auth/password-reset",
+     *     tags={"Authentication"},
+     *     summary="Reset Password",
+     *     description="Reset the password for the user based on the provided token, email, and password.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="token",
+     *                 type="string",
+     *                 example="reset-token-example"
+     *             ),
+     *             @OA\Property(
+     *                 property="email",
+     *                 type="string",
+     *                 format="email",
+     *                 example="user@example.com"
+     *             ),
+     *             @OA\Property(
+     *                 property="password",
+     *                 type="string",
+     *                 format="password",
+     *                 example="newpassword123"
+     *             ),
+     *             @OA\Property(
+     *                 property="password_confirmation",
+     *                 type="string",
+     *                 format="password",
+     *                 example="newpassword123"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Password reset successfull"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Bad Request - Validation Error",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="The given data was invalid."
+     *             ),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 additionalProperties={
+     *                     @OA\Property(
+     *                         type="array",
+     *                         items=@OA\Items(type="string"),
+     *                         example={"This field is required."}
+     *                     )
+     *                 }
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function store(Request $request): JsonResponse
     {
         $request->validate([
