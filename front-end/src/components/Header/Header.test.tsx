@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { Header, Navigation } from "./Header";
 
 export const navigation: Navigation[] = [
@@ -38,7 +38,7 @@ describe("Header", () => {
   });
 
   describe("Mobile navigation", () => {
-    it("renders navigation links for responsive header", () => {
+    it("renders navigation links for responsive header", async () => {
       render(<Header />);
 
       Object.defineProperty(window, "innerWidth", {
@@ -52,7 +52,10 @@ describe("Header", () => {
         name: "Open navigation",
       });
       expect(mobileNavigationButton).toBeInTheDocument();
-      mobileNavigationButton.click();
+
+      await act(async () => {
+        mobileNavigationButton.click();
+      });
 
       navigation.forEach((item) => {
         const link = screen.getByRole("link", { name: item.name });
