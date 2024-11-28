@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Http\Request;
@@ -32,6 +33,5 @@ Route::prefix('auth')->group(function (): void {
         return $request->user();
     });
 });
-
 
 Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
