@@ -54,7 +54,7 @@ class VerlofController extends Controller
      *             @OA\Property(
      *                 property="message",
      *                 type="string",
-     *                 example="Verlof verzoek aangemaakt. Moet alleen nog nagekeken worden door een admin"
+     *                 example="Leave request made"
      *             )
      *         )
      *     ),
@@ -89,7 +89,7 @@ class VerlofController extends Controller
         $request->validate([
             'start_date' => 'required|date_format:d-m-Y',
             'end_date' => 'required|date_format:d-m-Y|after_or_equal:start_date',
-            'reden' => 'required|string|max:255',
+            'reason' => 'required|string|max:255',
             'category' => 'required|int'
         ]);
 
@@ -112,6 +112,6 @@ class VerlofController extends Controller
 
         ]);
 
-        return response()->json(['message' => 'Verlof verzoek aangemaakt. Moet alleen nog nagekeken worden door een admin'], 200);
+        return response()->json(['message' => 'Leave request made'], 200);
     }
 }
