@@ -1,8 +1,8 @@
 // @ts-ignore
 class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  observe = jest.fn();
+  unobserve = jest.fn();
+  disconnect = jest.fn();
 }
 
 global.ResizeObserver = ResizeObserver;
