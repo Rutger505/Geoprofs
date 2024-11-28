@@ -34,18 +34,11 @@ class PasswordResetLinkController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=200,
-     *         description="Password reset link sent successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="string",
-     *                 example="Password reset link sent."
-     *             )
-     *         )
+     *         response=204,
+     *         description="Password reset link sent successfully"
      *     ),
      *     @OA\Response(
-     *         response=400,
+     *         response=422,
      *         description="Bad Request - Validation Error",
      *         @OA\JsonContent(
      *             @OA\Property(

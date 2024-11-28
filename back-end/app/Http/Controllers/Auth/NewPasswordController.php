@@ -56,17 +56,10 @@ class NewPasswordController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Password reset successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="string",
-     *                 example="Password reset successfully."
-     *             )
-     *         )
+     *         description="Password reset successfull"
      *     ),
      *     @OA\Response(
-     *         response=400,
+     *         response=422,
      *         description="Bad Request - Validation Error",
      *         @OA\JsonContent(
      *             @OA\Property(
