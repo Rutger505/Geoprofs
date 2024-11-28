@@ -74,21 +74,35 @@ class RegistrationController extends Controller
      *     )
      * )
      */
-    public function register(Request $request): JsonResponse
+    public function register(Request $request, string $token): JsonResponse
     {
+
+        // Find the user with the given register token
+        $user = User::where('RegistrationToken', $token)->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Invalid or expired token',
+            ], 404);
+        }
+
+        // Validate the incoming request
         $request->validate([
             'password' => 'required|string',
         ]);
 
-        $user = User::create([
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
+        // Update the user's registration status and set the password
+        $user->update([
+            'password' => $request->password,
+            'RegistrationStatus' => 'completed',
+            'RegistrationToken' => null,
         ]);
 
         return response()->json([
-            'message' => 'User created successfully',
-        ]);
+            'message' => 'User registered successfully',
+        ], 200);
     }
+
 
     public function adminRegister(Request $request)
     {
@@ -104,17 +118,6 @@ class RegistrationController extends Controller
             return response()->json(['message' => 'email already has a account'], 403);
         }
 
-        $user  = User::create([
-            'UserFirstName' => $request->firstName,
-            'UserLastName' => $request->lastName,
-            'email' => $request->email,
-            'DateHired' => $request->dateHired,
-            'UserRoleID' => $request->role,
-            'RegistrationStatus' => 'pending',
-
-        ]);
-
-
         $token = (string) Str::uuid(); // Convert the UUID object to a string
         // Create a signed URL
         $signedUrl = URL::temporarySignedRoute(
@@ -125,6 +128,17 @@ class RegistrationController extends Controller
 
         // Store the token in the cache
         Cache::put($token, true, Carbon::now()->addMinutes(30));
+
+        $user  = User::create([
+            'UserFirstName' => $request->firstName,
+            'UserLastName' => $request->lastName,
+            'email' => $request->email,
+            'DateHired' => $request->dateHired,
+            'UserRoleID' => $request->role,
+            'RegistrationStatus' => 'pending',
+            'RegistrationToken' => $token
+
+        ]);
 
         Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email));
 

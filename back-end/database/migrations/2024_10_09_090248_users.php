@@ -19,7 +19,6 @@ return new class extends Migration
                 $table->string('email');
                 $table->string('password')->nullable();
                 $table->date('DateHired')->nullable();
-                $table->enum('RegistrationStatus', ['pending', 'created'])->default('pending');
                 $table->foreignId('UserRoleID')->constrained('roles')->references('RoleID');
                 $table->rememberToken();
                 $table->timestamps();

@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('RegistrationToken');
+            $table->enum('RegistrationStatus', ['pending', 'completed'])->default('pending');
+            $table->string('RegistrationToken')->nullable();
         });
     }
 

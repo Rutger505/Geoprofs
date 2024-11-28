@@ -30,16 +30,14 @@ Route::prefix('auth')->group(function (): void {
         ->middleware('auth')
         ->name('logout');
 
-    Route::post('/create-user', [RegistrationController::class, 'adminRegister']);
+    Route::post('/register', [RegistrationController::class, 'adminRegister']);
+
+    Route::put('/register/confirm/{token}', [RegistrationController::class, 'register'])
+        ->name('register.confirm');
 
     Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
         return $request->user();
     });
-});
-
-Route::prefix('mail')->group(function (): void {
-
-    Route::post('register', [MailController::class, 'register'])->name('mail.register');
 });
 
 Route::get('/register/confirm/{token}', function ($token) {

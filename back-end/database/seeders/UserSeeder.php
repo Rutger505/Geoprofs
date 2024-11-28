@@ -25,7 +25,6 @@ class UserSeeder extends Seeder
                 'DateHired' => '2020-01-15',
                 'RegistrationStatus' => 'pending',
                 'UserRoleID' => 1,
-                'RegistrationToken' => (string) Str::uuid()
             ],
             [
                 'UserFirstName' => 'Jane',
@@ -35,7 +34,6 @@ class UserSeeder extends Seeder
                 'DateHired' => '2019-05-20',
                 'RegistrationStatus' => 'pending',
                 'UserRoleID' => 2,
-                'RegistrationToken' => (string) Str::uuid()
 
             ],
             [
@@ -44,9 +42,8 @@ class UserSeeder extends Seeder
                 'email' => 'jake.kolk@example.com',
                 'password' => Hash::make('jake'),
                 'DateHired' => '2012-05-20',
-                'RegistrationStatus' => 'created',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 3,
-                'RegistrationToken' => (string) Str::uuid()
 
             ],
             [
@@ -55,9 +52,8 @@ class UserSeeder extends Seeder
                 'email' => 'Rutger.Pronk@example.com',
                 'password' => Hash::make('rutgerrr'),
                 'DateHired' => '2023-09-20',
-                'RegistrationStatus' => 'created',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 4,
-                'RegistrationToken' => (string) Str::uuid()
 
             ],
             [
@@ -66,9 +62,8 @@ class UserSeeder extends Seeder
                 'email' => 'bob.bobbers@example.com',
                 'password' => Hash::make('bobbiebobbob'),
                 'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'created',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 5,
-                'RegistrationToken' => (string) Str::uuid()
 
             ],
             [
@@ -77,9 +72,8 @@ class UserSeeder extends Seeder
                 'email' => 'ceo@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'created',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 1,
-                'RegistrationToken' => (string) Str::uuid()
 
             ],
             [
@@ -88,9 +82,8 @@ class UserSeeder extends Seeder
                 'email' => 'employee@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'created',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 2,
-                'RegistrationToken' => (string) Str::uuid()
 
             ],
             [
@@ -99,9 +92,8 @@ class UserSeeder extends Seeder
                 'email' => 'admin@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'created',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 3,
-                'RegistrationToken' => (string) Str::uuid()
 
             ],
             [
@@ -110,9 +102,8 @@ class UserSeeder extends Seeder
                 'email' => 'sectionmanager@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'created',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 4,
-                'RegistrationToken' => (string) Str::uuid()
 
             ],
             [
@@ -121,9 +112,8 @@ class UserSeeder extends Seeder
                 'email' => 'projectmanager@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'created',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 5,
-                'RegistrationToken' => (string) Str::uuid()
 
             ],
         ]);

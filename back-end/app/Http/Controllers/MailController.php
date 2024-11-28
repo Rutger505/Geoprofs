@@ -86,6 +86,6 @@ class MailController extends Controller
         // Store the token in the cache
         Cache::put($token, true, Carbon::now()->addMinutes(30));
 
-        Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email, $request->firstName, $request->lastName));
+        Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email));
     }
 }
