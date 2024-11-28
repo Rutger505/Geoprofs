@@ -12,7 +12,7 @@ class VerlofController extends Controller
 
     /**
      * @OA\Post(
-     *     path="api/leave/request",
+     *     path="api/leave",
      *     tags={"Leave Management"},
      *     summary="Store Leave Request",
      *     description="Submit a leave request for approval by an admin.",
@@ -66,7 +66,7 @@ class VerlofController extends Controller
      *                 property="message",
      *                 type="string",
      *                 example="The <field-name> field is required"
-     *             )
+     *             ),
      *             @OA\Property(
      *                 property="errors",
      *                 type="string[]",
