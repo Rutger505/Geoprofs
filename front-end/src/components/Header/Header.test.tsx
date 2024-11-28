@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { Header, Navigation } from "./Header";
 
 export const navigation: Navigation[] = [
@@ -57,11 +57,13 @@ describe("Header", () => {
         mobileNavigationButton.click();
       });
 
-      navigation.forEach((item) => {
-        const link = screen.getByRole("link", { name: item.name });
-        expect(link).toBeInTheDocument();
-        expect(link).toHaveTextContent(item.name);
-        expect(link).toHaveAttribute("href", item.href);
+      await waitFor(() => {
+        navigation.forEach((item) => {
+          const link = screen.getByRole("link", { name: item.name });
+          expect(link).toBeInTheDocument();
+          expect(link).toHaveTextContent(item.name);
+          expect(link).toHaveAttribute("href", item.href);
+        });
       });
     });
   });
