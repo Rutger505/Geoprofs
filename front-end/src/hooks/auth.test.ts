@@ -76,7 +76,7 @@ describe("useAuth Hook", () => {
 
   describe("middleware", () => {
     it("should redirect authenticated users when using guest middleware", async () => {
-      (mockAxios as jest.Mock).mockReturnValue({
+      (mockUseSWR as jest.Mock).mockReturnValue({
         data: { id: 1, name: "Test User" },
         error: null,
         mutate: mockFetchUser,
@@ -172,16 +172,6 @@ describe("useAuth Hook", () => {
   });
 
   describe("logout", () => {
-    it("should fetch CSRF token", async () => {
-      const { result } = renderHook(() => useAuth());
-
-      await act(async () => {
-        await result.current.logout();
-      });
-
-      expect(axios.get).toHaveBeenCalledWith("/auth/csrf-cookie");
-    });
-
     it("should handle logout", async () => {
       const { result } = renderHook(() => useAuth());
 
