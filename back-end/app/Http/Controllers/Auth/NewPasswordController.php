@@ -79,17 +79,6 @@ class NewPasswordController extends Controller
      *                 }
      *             )
      *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Unprocessable Entity - Invalid Token",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="message",
-     *                 type="string",
-     *                 example="The password reset token is invalid or expired."
-     *             )
-     *         )
      *     )
      * )
      */

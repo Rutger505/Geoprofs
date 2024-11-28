@@ -58,17 +58,6 @@ class PasswordResetLinkController extends Controller
      *                 }
      *             )
      *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Unprocessable Entity - Invalid Email",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="message",
-     *                 type="string",
-     *                 example="We couldn't find a user with that email address."
-     *             )
-     *         )
      *     )
      * )
      */
