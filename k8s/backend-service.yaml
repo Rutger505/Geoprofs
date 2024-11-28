@@ -5,7 +5,7 @@ metadata:
   namespace: ${NAMESPACE}
 spec:
   selector:
-    app: geoprofs-deployment
+    app: geoprofs-backend-deployment
   ports:
     - protocol: TCP
       port: 80
