@@ -11,9 +11,53 @@ use Illuminate\Support\Facades\Auth;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Handle an incoming authentication request.
+     * @OA\Post(
+     *     path="api/auth/login",
+     *     tags={"Authentication"},
+     *     summary="Login",
+     *     description="Authenticate a user and start a session",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="email",
+     *                 type="string",
+     *                 format="email",
+     *                 example="user@example.com"
+     *             ),
+     *             @OA\Property(
+     *                 property="password",
+     *                 type="string",
+     *                 format="password",
+     *                 example="password123"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Login successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="successful"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Invalid credentials."
+     *             )
+     *         )
+     *     )
+     * )
      */
-    public function store(LoginRequest $request): Response
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
 
@@ -22,10 +66,27 @@ class AuthenticatedSessionController extends Controller
         return response()->noContent();
     }
 
+
     /**
-     * Destroy an authenticated session.
+     * @OA\Post(
+     *     path="api/auth/logout",
+     *     tags={"Authentication"},
+     *     summary="Logout",
+     *     description="Log out the authenticated user and destroy the session",
+     *     @OA\Response(
+     *         response=204,
+     *         description="Logout successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="successful"
+     *             )
+     *         )
+     *     )
+     * )
      */
-    public function destroy(Request $request): Response
+    public function destroy(Request $request)
     {
         Auth::guard('web')->logout();
 
