@@ -56,17 +56,10 @@ class NewPasswordController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Password reset successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="string",
-     *                 example="Password reset successfully."
-     *             )
-     *         )
+     *         description="Password reset successfull"
      *     ),
      *     @OA\Response(
-     *         response=400,
+     *         response=422,
      *         description="Bad Request - Validation Error",
      *         @OA\JsonContent(
      *             @OA\Property(
@@ -84,17 +77,6 @@ class NewPasswordController extends Controller
      *                         example={"This field is required."}
      *                     )
      *                 }
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Unprocessable Entity - Invalid Token",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 property="message",
-     *                 type="string",
-     *                 example="The password reset token is invalid or expired."
      *             )
      *         )
      *     )
@@ -129,6 +111,6 @@ class NewPasswordController extends Controller
             ]);
         }
 
-        return response()->json(['status' => __($status), 200]);
+        return response()->json(['status' => __($status)]);
     }
 }
