@@ -10,7 +10,7 @@ interface Props {
   href: string;
 }
 
-export function HeaderLink({ name, href }: Props) {
+export function HeaderLink({ name, href }: Readonly<Props>) {
   const pathname = usePathname();
   const [currentPage, setCurrentPage] = useState(false);
 
