@@ -108,8 +108,6 @@ class VerlofController extends Controller
             'Status' => 'pending',
             'LeaveCategory' => $request->category,
             'UserID' =>  $user->UserID
-
-
         ]);
 
         return response()->json(['message' => 'Leave request made'], 200);
