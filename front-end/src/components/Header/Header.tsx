@@ -1,6 +1,5 @@
 import { HeaderLink } from "@/components/Header/HeaderLink";
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import { Menu } from "lucide-react";
+import { MobileNavigation } from "@/components/Header/MobileNavigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -29,20 +28,9 @@ export function Header() {
           ))}
         </div>
 
-        <Popover className="relative hidden">
-          <PopoverButton>
-            <Menu />
-          </PopoverButton>
-          <PopoverPanel
-            anchor="bottom"
-            transition
-            className="flex origin-top flex-col transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
-          >
-            {navigation.map((item) => (
-              <HeaderLink name={item.name} href={item.href} key={item.name} />
-            ))}
-          </PopoverPanel>
-        </Popover>
+        <div className="relative hidden">
+          <MobileNavigation navigation={navigation} />
+        </div>
       </header>
     </div>
   );

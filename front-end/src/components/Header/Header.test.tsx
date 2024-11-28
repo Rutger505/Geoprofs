@@ -16,19 +16,24 @@ describe("Header", () => {
     expect(logo).toHaveAttribute("height", "42");
   });
 
-  it("renders navigation links", () => {
+  it("renders navigation links for normal header responsive header", () => {
     render(<Header />);
 
     navigation.forEach((item) => {
-      const link = screen.getByRole("link", { name: item.name });
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute("href", item.href);
+      const links = screen.getAllByRole("link", { name: item.name });
+      expect(links).toHaveLength(2); // One for desktop and one for mobile
+
+      expect(links[0]).toHaveTextContent(item.name);
+      expect(links[0]).toHaveAttribute("href", item.href);
+      expect(links[1]).toHaveTextContent(item.name);
+      expect(links[1]).toHaveAttribute("href", item.href);
     });
   });
 
   it("renders correct number of navigation items", () => {
     render(<Header />);
+
     const links = screen.getAllByRole("link");
-    expect(links).toHaveLength(navigation.length);
+    expect(links).toHaveLength(navigation.length * 2 + 1); // normal and responsive header + logo
   });
 });
