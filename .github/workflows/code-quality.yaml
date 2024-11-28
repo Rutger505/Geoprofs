@@ -1,4 +1,4 @@
-name: Test and run SonarCloud Analysis
+name: Code Quality
 
 on:
   pull_request:
