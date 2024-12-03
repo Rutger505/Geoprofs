@@ -33,7 +33,7 @@ Route::prefix('auth')->group(function (): void {
 
     Route::post('/register', [RegistrationController::class, 'adminRegister']);
 
-    Route::put('/register/confirm/{token}', [RegistrationController::class, 'register'])
+    Route::put('/register/complete/{token}', [RegistrationController::class, 'register'])
         ->name('register.confirm');
 
     Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
