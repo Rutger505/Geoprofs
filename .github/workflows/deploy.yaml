@@ -5,7 +5,7 @@ on:
     tags:
       - '*'
     branches:
-      - fix-staging-environment
+      - development
   pull_request:
     branches:
       - '*'
@@ -115,7 +115,7 @@ jobs:
     strategy:
       matrix:
         environment:
-          - ${{ startsWith(github.ref, 'refs/tags/') && 'production' || (github.ref == 'refs/heads/fix-staging-environment' && 'staging' || format('pr-{0}', github.event.pull_request.number)) }}
+          - ${{ startsWith(github.ref, 'refs/tags/') && 'production' || (github.ref == 'refs/heads/development' && 'staging' || format('pr-{0}', github.event.pull_request.number)) }}
     environment:
       name: ${{ matrix.environment }}
       url: https://${{ steps.config.outputs.ingress_host }}
@@ -134,7 +134,7 @@ jobs:
             LARAVEL_APP_ENV=production
             LARAVEL_APP_DEBUG=false
             LARAVEL_LOG_LEVEL=warn
-          elif [[ $GITHUB_REF == refs/heads/fix-staging-environment ]]; then
+          elif [[ $GITHUB_REF == refs/heads/development ]]; then
             INGRESS_HOST=staging.${{ vars.BASE_DOMAIN }}
             CLUSTER_ISSUER_NAME=letsencrypt-production
             POSTGRES_NAMESPACE=postgres-test
