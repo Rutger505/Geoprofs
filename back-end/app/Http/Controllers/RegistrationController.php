@@ -220,7 +220,6 @@ class RegistrationController extends Controller
 
         return response()->json([
             'message' => 'user successfully created',
-            'token' => $token
         ], 200);
     }
 }
