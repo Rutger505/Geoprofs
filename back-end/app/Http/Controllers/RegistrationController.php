@@ -198,7 +198,7 @@ class RegistrationController extends Controller
         // Create a signed URL
         $signedUrl = URL::temporarySignedRoute(
             'register.confirm',
-            Carbon::now()->addMinutes(1),
+            Carbon::now()->addDay(),
             ['token' => $token] // Pass the string version of the token
         );
 
