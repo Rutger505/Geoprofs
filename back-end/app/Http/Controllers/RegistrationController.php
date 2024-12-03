@@ -103,7 +103,83 @@ class RegistrationController extends Controller
         ], 200);
     }
 
-
+    /**
+     * @OA\Post(
+     *     path="api/auth/create-user",
+     *     tags={"Authentication"},
+     *     summary="create user",
+     *     description="Register a new user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="firstName",
+     *                 type="string",
+     *                 example="John"
+     *             ),
+     *             @OA\Property(
+     *                 property="lastName",
+     *                 type="string",
+     *                 example="Doe"
+     *             ),
+     *             @OA\Property(
+     *                 property="email",
+     *                 type="string",
+     *                 format="email",
+     *                 example="admin@example.com"
+     *             ),
+     *             @OA\Property(
+     *                 property="dateHired",
+     *                 type="string",
+     *                 format="date",
+     *                 example="2023-12-01"
+     *             ),
+     *             @OA\Property(
+     *                 property="role",
+     *                 type="integer",
+     *                 example=1
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User successfully created",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="user successfully created"
+     *             ),
+     *             @OA\Property(
+     *                 property="token",
+     *                 type="string",
+     *                 example="random string token"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Email already has an account",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="email already has an account"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="The given data was invalid."
+     *             )
+     *         )
+     *     )
+     * )*/
     public function adminRegister(Request $request)
     {
         $request->validate([
