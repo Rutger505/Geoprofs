@@ -7,11 +7,13 @@ const mockRouter = {
 };
 
 const mockUseRouter = jest.fn(() => mockRouter);
+const mockRedirect = jest.fn();
 const mockUsePathname = jest.fn(() => "/");
 const mockUseParams = jest.fn(() => ({}));
 const mockUseSearchParams = jest.fn(() => new URLSearchParams());
 
 jest.mock("next/navigation", () => ({
+  redirect: mockRedirect,
   useRouter: mockUseRouter,
   usePathname: mockUsePathname,
   useParams: mockUseParams,
@@ -19,6 +21,7 @@ jest.mock("next/navigation", () => ({
 }));
 
 export {
+  mockRedirect,
   mockRouter,
   mockUseParams,
   mockUsePathname,

@@ -4,7 +4,7 @@ import axios from "@/lib/axios";
 import { AxiosError } from "axios";
 import { redirect } from "next/navigation";
 
-interface ApiUser {
+export interface ApiUser {
   UserID: number;
   UserFirstName: string;
   UserLastName: string;
@@ -14,7 +14,7 @@ interface ApiUser {
   created_at: string | null;
   updated_at: string | null;
 }
-interface User {
+export interface User {
   id: number;
   firstName: string;
   lastName: string;
@@ -25,28 +25,27 @@ interface User {
 
 const csrf = () => axios.get("/auth/csrf-cookie");
 
-export async function user() {
-  return async (): Promise<User | null> => {
-    await csrf();
+export async function authentication(): Promise<User | null> {
+  await csrf();
 
-    try {
-      const apiUser: ApiUser = await axios.get("/auth/user");
+  try {
+    const userResponse = await axios.get<ApiUser>("/auth/user");
+    const apiUser = userResponse.data;
 
-      return {
-        id: apiUser.UserID,
-        firstName: apiUser.UserFirstName,
-        lastName: apiUser.UserLastName,
-        email: apiUser.email,
-        dateHired: new Date(apiUser.DateHired),
-        roleId: apiUser.UserRoleID,
-      };
-    } catch (error) {
-      if (error instanceof AxiosError && error.response?.status !== 401)
-        throw error;
+    return {
+      id: apiUser.UserID,
+      firstName: apiUser.UserFirstName,
+      lastName: apiUser.UserLastName,
+      email: apiUser.email,
+      dateHired: new Date(apiUser.DateHired),
+      roleId: apiUser.UserRoleID,
+    };
+  } catch (error) {
+    if (!(error instanceof AxiosError) || error.response?.status !== 401)
+      throw error;
 
-      return null;
-    }
-  };
+    return null;
+  }
 }
 
 export interface LoginErrors {
@@ -57,19 +56,19 @@ export interface LoginErrors {
 export async function login(
   email: string,
   password: string,
-  setErrors: (errors: LoginErrors) => void,
-) {
+): Promise<null | LoginErrors> {
   await csrf();
 
   try {
     await axios.post("/auth/login", { email, password });
+
+    return null;
   } catch (error) {
     if (!(error instanceof AxiosError) || error.response?.status !== 422) {
       throw error;
     }
 
-    const data = error.response.data;
-    setErrors(data.errors);
+    return error.response.data.errors as LoginErrors;
   }
 }
 
