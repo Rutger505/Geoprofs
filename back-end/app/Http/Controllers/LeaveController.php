@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contracts;
 use Illuminate\Http\Request;
 use App\Models\Leave;
+use App\Models\UserContract;
 use Illuminate\Support\Facades\Auth;
 
 class LeaveController extends Controller
@@ -122,6 +124,12 @@ class LeaveController extends Controller
     {
         $user = Auth::user();
 
-        return response()->json(['message' => 'Leave request made'], 200);
+        $contract = Contracts::join('UserContracts', 'Contracts.ContractID', '=', 'UserContracts.ContractID')
+            ->where('UserContracts.UserID', $user->UserID)
+            ->select('Contracts.*')
+            ->first();
+
+
+        return response()->json(['message' => $contract->ContractTotalLeaveHours], 200);
     }
 }
