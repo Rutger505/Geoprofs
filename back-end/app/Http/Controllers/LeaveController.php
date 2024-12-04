@@ -117,4 +117,11 @@ class LeaveController extends Controller
 
         return response()->json(['message' => 'Leave request made'], 200);
     }
+
+    public function getLeaveHours()
+    {
+        $user = Auth::user();
+
+        return response()->json(['message' => 'Leave request made'], 200);
+    }
 }
