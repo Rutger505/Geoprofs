@@ -1,6 +1,6 @@
 "use client";
 
-import { LoginErrors, useAuth } from "@/hooks/auth";
+import { LoginErrors, useAuth } from "@/hooks/useAuth";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import { FormEvent, useState } from "react";
 

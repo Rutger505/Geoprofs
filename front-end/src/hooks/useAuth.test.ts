@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/auth";
+import { useAuth } from "@/hooks/useAuth";
 import { mockAxios } from "@/tests/mocks/axios";
 import { mockRouter, mockUseParams } from "@/tests/mocks/next";
 import { mockUseSWR } from "@/tests/mocks/swr";
