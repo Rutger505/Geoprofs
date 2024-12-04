@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -14,7 +15,9 @@ class User extends Authenticatable
         'email',
         'password',
         'DateHired',
-        'UserRoleID'
+        'UserRoleID',
+        'RegistrationStatus',
+        'RegistrationToken'
     ];
 
     protected $hidden = [
@@ -34,7 +37,7 @@ class User extends Authenticatable
             'DateHired' => 'datetime',
         ];
     }
-    public function passwordHasing($value): void
+    public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
     }
