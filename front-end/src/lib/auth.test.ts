@@ -7,8 +7,6 @@ import { AxiosError } from "axios";
 import { when } from "jest-when";
 
 describe("server side authentication", () => {
-  const mockSetErrors = jest.fn();
-
   beforeEach(() => {
     jest.clearAllMocks();
     mockAxios.get.mockResolvedValue({ data: {} });
