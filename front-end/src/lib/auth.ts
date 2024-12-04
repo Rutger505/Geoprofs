@@ -1,8 +1,8 @@
 "use server";
 
-import { LoginErrors } from "@/hooks/useAuth";
 import axios from "@/lib/axios";
 import { AxiosError } from "axios";
+import { redirect } from "next/navigation";
 
 interface ApiUser {
   UserID: number;
@@ -14,7 +14,6 @@ interface ApiUser {
   created_at: string | null;
   updated_at: string | null;
 }
-
 interface User {
   id: number;
   firstName: string;
@@ -65,7 +64,17 @@ export async function login(
   try {
     await axios.post("/auth/login", { email, password });
   } catch (error) {
-    if (error instanceof AxiosError && error.response?.status !== 422)
+    if (!(error instanceof AxiosError) || error.response?.status !== 422) {
       throw error;
+    }
+
+    const data = error.response.data;
+    setErrors(data.errors);
   }
+}
+
+export async function logout() {
+  await axios.post("/auth/logout");
+
+  redirect("/login");
 }
