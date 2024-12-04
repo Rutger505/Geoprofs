@@ -1,34 +1,34 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\RegistrationController;
 
 class RegistrationTest extends TestCase
 {
+
     /**
-     * A basic feature test example.
+     * @test
      */
-    public function Registration_Test(): void
+    public function CreateUserTest(): void
     {
 
-        $request = new LoginRequest([
-            'email' => 'john.doe@example.com',
+        $request = new Request([
+            'email' => 'vandekolkjake@gmail.com',
             'password' => 'should be invalid'
         ]);
 
-        $mockedController = $this->getMockBuilder(AuthenticatedSessionController::class)
-            ->onlyMethods(['store'])
+        $mockedController = $this->getMockBuilder(RegistrationController::class)
+            ->onlyMethods(['adminRegister'])
             ->getMock();
 
         $mockedController->expects($this->once())
-            ->method('store')
+            ->method('adminRegister')
             ->with($this->equalTo($request));
 
-        $mockedController->store($request);
+        $mockedController->adminRegister($request);
     }
 }
