@@ -2,6 +2,7 @@
 
 import axios from "@/lib/axios";
 import { AxiosError } from "axios";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export interface ApiUser {
@@ -73,7 +74,14 @@ export async function login(
 }
 
 export async function logout() {
-  await axios.post("/auth/logout");
+  const cookiesList = await cookies();
+  const cookie = cookiesList.get("geoprofs_back_end_session");
 
-  redirect("/login");
+  await axios.post("/auth/logout", null, {
+    headers: {
+      Cookie: `geoprofs_back_end_session=${cookie?.value}`,
+    },
+  });
+
+  redirect("/");
 }

@@ -20,6 +20,9 @@ services:
     build:
       context: ./front-end
       target: development
+    environment:
+      NEXT_PUBLIC_BACKEND_URL: https://localhost/api
+      BACKEND_URL: http://back-end/api
     develop:
       watch:
         - action: sync
