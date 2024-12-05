@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($value);
     }
+
+    public function isAdmin(): bool
+    {
+        return Roles::where('RoleID', $this->UserRoleID)->first()->RoleName === 'Admin';
+    }
 }

@@ -76,14 +76,13 @@ class RegistrationController extends Controller
      */
     public function register(Request $request, string $token): JsonResponse
     {
-
         // Find the user with the given register token
         $user = User::where('RegistrationToken', $token)->first();
 
         if (!$user) {
             return response()->json([
                 'message' => 'Invalid or expired token',
-            ], 404);
+            ], 422);
         }
 
         // Validate the incoming request

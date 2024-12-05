@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\HealthController;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MailController;
@@ -31,7 +32,9 @@ Route::prefix('auth')->group(function (): void {
         ->middleware('auth')
         ->name('logout');
 
-    Route::post('/register', [RegistrationController::class, 'adminRegister']);
+    Route::post('/register', [RegistrationController::class, 'adminRegister'])
+        ->middleware(EnsureUserIsAdmin::class);
+
 
     Route::put('/register/complete/{token}', [RegistrationController::class, 'register'])
         ->name('register.confirm');
