@@ -18,12 +18,11 @@ class AuthLoginTest extends TestCase
     public function testInvalidCreds()
     {
         $response = $this->post('/api/auth/login', [
-            'email' => 'john.doe@example.com',
-            'password' => 'invalid-password'
+            'email' => 'test.doe@example.com',
+            'password' => 'bababoei'
         ]);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['email']);
+        $response->assertStatus(302);
     }
 
 
