@@ -120,6 +120,34 @@ class LeaveController extends Controller
         return response()->json(['message' => 'Leave request made'], 200);
     }
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/leave-hours",
+     *     tags={"Leave Management"},
+     *     summary="Get total leave hours",
+     *     description="Retrieve the total leave hours for the authenticated user.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="The total leave hours for the user",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="integer",
+     *                 example=120
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error"
+     *     ),
+     * )
+     */
     public function getLeaveHours()
     {
         $user = Auth::user();
