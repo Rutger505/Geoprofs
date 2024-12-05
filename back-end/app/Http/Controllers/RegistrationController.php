@@ -201,7 +201,6 @@ class RegistrationController extends Controller
             'register.confirm',
             Carbon::now()->addDay(),
             ['token' => $token],
-            false
         );
 
         // Store the token in the cache
