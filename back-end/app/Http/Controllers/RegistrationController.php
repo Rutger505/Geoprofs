@@ -200,7 +200,8 @@ class RegistrationController extends Controller
         $signedUrl = URL::temporarySignedRoute(
             'register.confirm',
             Carbon::now()->addDay(),
-            ['token' => $token]
+            ['token' => $token],
+            false
         );
 
         // Store the token in the cache
