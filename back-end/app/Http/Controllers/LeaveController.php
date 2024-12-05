@@ -160,4 +160,14 @@ class LeaveController extends Controller
 
         return response()->json(['hours' => $contract->ContractTotalLeaveHours], 200);
     }
+
+    public function getLeaveStatus()
+    {
+
+        $user = Auth::user();
+
+        $leave = Leave::where('UserID', $user->UserID)->get();
+
+        return response()->json(['leave requests' => $leave]);
+    }
 }

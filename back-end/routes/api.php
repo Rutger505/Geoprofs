@@ -41,6 +41,8 @@ Route::prefix('auth')->group(function (): void {
     });
 });
 
+
+Route::get('/leave/leave-status', [LeaveController::class, 'getLeaveStatus'])->middleware('auth');
 Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');
 
 Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
