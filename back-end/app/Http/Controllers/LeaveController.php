@@ -158,6 +158,6 @@ class LeaveController extends Controller
             ->first();
 
 
-        return response()->json(['message' => $contract->ContractTotalLeaveHours], 200);
+        return response()->json(['hours' => $contract->ContractTotalLeaveHours], 200);
     }
 }
