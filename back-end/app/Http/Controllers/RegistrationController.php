@@ -194,18 +194,19 @@ class RegistrationController extends Controller
             return response()->json(['message' => 'email already has a account'], 403);
         }
 
-        $token = (string) Str::uuid(); // Convert the UUID object to a string
+        $token = (string) Str::uuid();
+
         // Create a signed URL
         $signedUrl = URL::temporarySignedRoute(
             'register.confirm',
             Carbon::now()->addDay(),
-            ['token' => $token] // Pass the string version of the token
+            ['token' => $token]
         );
 
         // Store the token in the cache
-        Cache::put($token, true, Carbon::now()->addMinutes(30));
+        Cache::put($token, true, Carbon::now()->addDay());
 
-        $user  = User::create([
+        User::create([
             'UserFirstName' => $request->firstName,
             'UserLastName' => $request->lastName,
             'email' => $request->email,
