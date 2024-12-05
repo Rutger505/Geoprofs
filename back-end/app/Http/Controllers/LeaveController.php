@@ -124,9 +124,9 @@ class LeaveController extends Controller
     {
         $user = Auth::user();
 
-        $contract = Contracts::join('UserContracts', 'Contracts.ContractID', '=', 'UserContracts.ContractID')
-            ->where('UserContracts.UserID', $user->UserID)
-            ->select('Contracts.*')
+        $contract = Contracts::join('user_contract', 'contracts.ContractID', '=', 'user_contract.ContractID')
+            ->where('user_contract.UserID', $user->UserID)
+            ->select('contracts.*')
             ->first();
 
 
