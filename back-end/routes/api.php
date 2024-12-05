@@ -38,8 +38,6 @@ Route::prefix('auth')->group(function (): void {
         $userArray['RoleName'] = $role ? $role->RoleName : null;
 
         return $userArray;
-        //return [$request->user(),$role->RoleName];
-
     });
 });
 
