@@ -8,7 +8,7 @@ on:
       - development
   pull_request:
     branches:
-      - '*'
+      - development
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -37,8 +37,6 @@ jobs:
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             TAG=$GITHUB_REF_NAME
-          elif [[ $GITHUB_REF == refs/heads/development ]]; then
-            TAG=staging
           else
             TAG=$GITHUB_SHA
           fi
@@ -68,8 +66,6 @@ jobs:
   build-back-end-docker-image:
     name: Build back-end Docker image
     runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.config.outputs.tag }}
 
     steps:
       - name: Checkout repository
@@ -83,8 +79,6 @@ jobs:
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             TAG=$GITHUB_REF_NAME
-          elif [[ $GITHUB_REF == refs/heads/development ]]; then
-            TAG=staging
           else
             TAG=$GITHUB_SHA
           fi
@@ -122,7 +116,6 @@ jobs:
       matrix:
         environment:
           - ${{ startsWith(github.ref, 'refs/tags/') && 'production' || (github.ref == 'refs/heads/development' && 'staging' || format('pr-{0}', github.event.pull_request.number)) }}
-
     environment:
       name: ${{ matrix.environment }}
       url: https://${{ steps.config.outputs.ingress_host }}
@@ -143,7 +136,7 @@ jobs:
             LARAVEL_LOG_LEVEL=warn
           elif [[ $GITHUB_REF == refs/heads/development ]]; then
             INGRESS_HOST=staging.${{ vars.BASE_DOMAIN }}
-            CLUSTER_ISSUER_NAME=letsencrypt-staging
+            CLUSTER_ISSUER_NAME=letsencrypt-production
             POSTGRES_NAMESPACE=postgres-test
             LARAVEL_APP_ENV=staging
             LARAVEL_APP_DEBUG=true

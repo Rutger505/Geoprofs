@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contracts;
 use Illuminate\Http\Request;
 use App\Models\Leave;
+use App\Models\UserContract;
 use Illuminate\Support\Facades\Auth;
 
 class LeaveController extends Controller
@@ -116,5 +118,46 @@ class LeaveController extends Controller
         ]);
 
         return response()->json(['message' => 'Leave request made'], 200);
+    }
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/leave-hours",
+     *     tags={"Leave Management"},
+     *     summary="Get total leave hours",
+     *     description="Retrieve the total leave hours for the authenticated user.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="The total leave hours for the user",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="integer",
+     *                 example=120
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error"
+     *     ),
+     * )
+     */
+    public function getLeaveHours()
+    {
+        $user = Auth::user();
+
+        $contract = Contracts::join('user_contract', 'contracts.ContractID', '=', 'user_contract.ContractID')
+            ->where('user_contract.UserID', $user->UserID)
+            ->select('contracts.*')
+            ->first();
+
+
+        return response()->json(['hours' => $contract->ContractTotalLeaveHours], 200);
     }
 }

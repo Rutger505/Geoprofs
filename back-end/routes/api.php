@@ -8,9 +8,9 @@ use App\Http\Controllers\HealthController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\LeaveController;
+use App\Models\Roles;
 
 
 Route::get('/health', [HealthController::class, 'index']);
@@ -40,7 +40,16 @@ Route::prefix('auth')->group(function (): void {
         ->name('register.confirm');
 
     Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-        return $request->user();
+
+        $role = Roles::where('RoleID', $request->user()->UserRoleID)->first();
+
+        $userArray = $request->user()->toArray();
+        $userArray['RoleName'] = $role ? $role->RoleName : null;
+
+        return $userArray;
     });
 });
+
+Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');
+
 Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
