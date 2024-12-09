@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Leave;
 use App\Models\UserContract;
 use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\isEmpty;
 
 class LeaveController extends Controller
 {
@@ -232,6 +233,10 @@ class LeaveController extends Controller
 
         $leave = Leave::where('UserID', $user->UserID)->get();
 
-        return response()->json(['leave requests' => $leave]);
+        if (count($leave) === 0) {
+            return response()->json(['message' => 'no leave requests found'], 204);
+        }
+
+        return response()->json(['leave requests' => $leave], 200);
     }
 }
