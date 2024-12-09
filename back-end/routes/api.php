@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\ContractController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
@@ -39,6 +40,11 @@ Route::prefix('auth')->group(function (): void {
 
         return $userArray;
     });
+});
+
+Route::prefix('contract')->group(function () {
+
+    Route::post('/store', [ContractController::class, '']);
 });
 
 Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');
