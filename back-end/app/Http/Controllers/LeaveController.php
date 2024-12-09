@@ -124,7 +124,7 @@ class LeaveController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/leave-hours",
+     *     path="/api/leave/leave-hours",
      *     tags={"Leave Management"},
      *     summary="Get total leave hours",
      *     description="Retrieve the total leave hours for the authenticated user.",
@@ -215,6 +215,10 @@ class LeaveController extends Controller
      *                 )
      *             )
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="no leave requests found"
      *     ),
      *     @OA\Response(
      *         response=401,
