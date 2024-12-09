@@ -10,6 +10,7 @@ use App\Http\Controllers\LeaveController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Roles;
+use App\Http\Middleware\EnsureUserIsAdmin;
 
 
 Route::get('/health', [HealthController::class, 'index']);
@@ -42,9 +43,10 @@ Route::prefix('auth')->group(function (): void {
     });
 });
 
+
 Route::prefix('contract')->group(function () {
 
-    Route::post('/store', [ContractController::class, '']);
+    Route::post('/store', [ContractController::class, ''])->middleware(EnsureUserIsAdmin::class);
 });
 
 Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');

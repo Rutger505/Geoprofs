@@ -20,8 +20,9 @@ class EnsureUserIsAdmin
     {
         $user = Auth::user();
 
-        $user_role = Roles::where('RoleID', $user['RoleID'])->get();
-
+        if ($user['RoleID'] == 3) {
+            return null;
+        }
 
         return $next($request);
     }
