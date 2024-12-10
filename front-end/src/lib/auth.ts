@@ -16,7 +16,7 @@ export interface ApiUser {
   updated_at: string | null;
 }
 export interface User {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -24,30 +24,7 @@ export interface User {
   roleId: number;
 }
 
-const csrf = () => axios.get("/auth/csrf-cookie");
-
-export async function authentication(): Promise<User | null> {
-  await csrf();
-
-  try {
-    const userResponse = await axios.get<ApiUser>("/auth/user");
-    const apiUser = userResponse.data;
-
-    return {
-      id: apiUser.UserID,
-      firstName: apiUser.UserFirstName,
-      lastName: apiUser.UserLastName,
-      email: apiUser.email,
-      dateHired: new Date(apiUser.DateHired),
-      roleId: apiUser.UserRoleID,
-    };
-  } catch (error) {
-    if (!(error instanceof AxiosError) || error.response?.status !== 401)
-      throw error;
-
-    return null;
-  }
-}
+export const csrf = () => axios.get("/auth/csrf-cookie");
 
 export interface LoginErrors {
   email?: string;

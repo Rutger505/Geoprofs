@@ -1,8 +1,6 @@
 import { env } from "@/lib/env";
 import Axios from "axios";
 
-import { setupServer } from "@/lib/axiosServerInterceptor";
-
 const isServer = typeof window === "undefined";
 
 const axios = Axios.create({
@@ -13,9 +11,5 @@ const axios = Axios.create({
   withCredentials: true,
   withXSRFToken: true,
 });
-
-if (isServer) {
-  setupServer();
-}
 
 export default axios;
