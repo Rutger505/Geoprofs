@@ -67,8 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             });
           }
 
-          const userResponse = await axios.get<ApiUser>("/auth/user");
-          const apiUser = userResponse.data;
+          const apiUser = loginResponse.data;
 
           return {
             id: apiUser.UserID.toString(),
