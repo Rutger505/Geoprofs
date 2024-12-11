@@ -1,6 +1,6 @@
 "use client";
 
-import { login, logout } from "@/lib/authActions";
+import { login } from "@/lib/authActions";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import { useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
@@ -25,15 +25,6 @@ export function LoginForm() {
   return (
     <div className="w-full max-w-md space-y-10 p-8">
       <h1 className="text-center text-4xl font-bold text-gray-900">Inloggen</h1>
-
-      {JSON.stringify(session)}
-
-      <button
-        className="flex items-center justify-center"
-        onClick={() => logout()}
-      >
-        logout
-      </button>
 
       <form onSubmit={onSubmit} className="space-y-6">
         <Field>
