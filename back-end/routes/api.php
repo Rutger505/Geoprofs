@@ -8,6 +8,7 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Roles;
 
 
 Route::get('/health', [HealthController::class, 'index']);
@@ -30,8 +31,16 @@ Route::prefix('auth')->group(function (): void {
         ->name('logout');
 
     Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-        return $request->user();
+
+        $role = Roles::where('RoleID', $request->user()->UserRoleID)->first();
+
+        $userArray = $request->user()->toArray();
+        $userArray['RoleName'] = $role ? $role->RoleName : null;
+
+        return $userArray;
     });
 });
+
+Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');
 
 Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
