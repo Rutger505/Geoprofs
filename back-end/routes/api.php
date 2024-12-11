@@ -46,6 +46,8 @@ Route::prefix('auth')->group(function (): void {
 
 Route::prefix('contract')->group(function () {
     Route::post('/store',  [ContractController::class, 'store'])->middleware('auth', EnsureUserIsAdmin::class);
+    Route::get('/show', [ContractController::class, 'show'])->middleware('auth', EnsureUserIsAdmin::class);
+    Route::delete('/delete', [ContractController::class, 'delete'])->middleware('auth', EnsureUserIsAdmin::class);
 });
 
 Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');

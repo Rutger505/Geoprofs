@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contracts;
+use App\Models\UserContract;
 use Illuminate\Http\Request;
 
 class ContractController extends Controller
@@ -86,5 +87,32 @@ class ContractController extends Controller
         ]);
 
         return response()->json(['message' => 'Contract created'], 200);
+    }
+
+    public function show()
+    {
+        $existsInUserContract = Contracts::join('user_contract', 'contracts.ContractID', '=', 'user_contract.ContractID')
+            ->select('contracts.*')
+            ->get();
+
+        $notExistsInUserContract = Contracts::whereNotIn('ContractID', function ($query) {
+            $query->select('ContractID')->from('user_contract');
+        })->get();
+
+        return response()->json([
+            'existsInUserContract' => $existsInUserContract,
+            'notExistsInUserContract' => $notExistsInUserContract,
+        ], 200);
+    }
+
+    public function delete(Request $request)
+    {
+        $request->validate(
+            ['id' => 'int']
+        );
+
+        if (Contracts::join('user_contract', 'contracts.ContractID', '=', 'user_contract.ContractID')->select('contracts.*'))
+
+            Contracts::destroy($request->id);
     }
 }
