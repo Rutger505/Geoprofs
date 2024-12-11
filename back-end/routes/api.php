@@ -35,7 +35,12 @@ Route::prefix('auth')->group(function (): void {
         $role = Roles::where('RoleID', $request->user()->UserRoleID)->first();
 
         $userArray = $request->user()->toArray();
-        $userArray['RoleName'] = $role ? $role->RoleName : null;
+        $userArray['RoleName'] = $role;
+
+
+        if ($role['RoleName'] == null || trim($role['RoleName']) == "") {
+            return response()->json(['message' => "user doesn't have a role"], 424);
+        }
 
         return $userArray;
     });
