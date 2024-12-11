@@ -1,4 +1,4 @@
-import { authentication } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { ReactNode } from "react";
 
 export default async function AdminLayout({
@@ -6,9 +6,9 @@ export default async function AdminLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const user = await authentication();
+  const session = await auth();
 
-  console.log(user);
+  console.log(session);
 
   return children;
 }

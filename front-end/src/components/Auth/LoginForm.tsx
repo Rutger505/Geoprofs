@@ -1,7 +1,7 @@
 "use client";
 
 import { LoginErrors } from "@/hooks/useAuth";
-import { login } from "@/lib/auth";
+import { login } from "@/lib/authActions";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import { useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
@@ -16,7 +16,7 @@ export function LoginForm() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    await login(email, password);
+    console.log(await login(email, password));
   }
 
   return (

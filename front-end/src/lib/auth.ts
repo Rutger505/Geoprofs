@@ -1,9 +1,7 @@
-"use server";
-
-import { signIn } from "@/auth";
 import axios from "@/lib/axios";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import Credentials from "@auth/core/providers/credentials";
+import { AxiosError } from "axios";
+import NextAuth from "next-auth";
 
 export interface ApiUser {
   UserID: number;
@@ -15,6 +13,7 @@ export interface ApiUser {
   created_at: string | null;
   updated_at: string | null;
 }
+
 export interface User {
   id: string;
   firstName: string;
@@ -24,31 +23,76 @@ export interface User {
   roleId: number;
 }
 
-export const csrf = async (): Promise<void> => {
-  await axios.get("/auth/csrf-cookie");
-};
-
 export interface LoginErrors {
   email?: string;
   password?: string;
 }
 
-export async function login(
-  email: string,
-  password: string,
-): Promise<null | LoginErrors> {
-  return signIn("credentials", { email, password });
-}
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [
+    Credentials({
+      credentials: {
+        email: {
+          type: "email",
+        },
+        password: {
+          type: "password",
+        },
+      },
+      authorize: async (credentials) => {
+        try {
+          const loginResponse = await axios.post<ApiUser>(
+            "/auth/login",
+            credentials,
+          );
+          console.log(loginResponse.status);
 
-export async function logout() {
-  const cookiesList = await cookies();
-  const cookie = cookiesList.get("geoprofs_back_end_session");
+          const cookies = loginResponse.headers["set-cookie"];
+          console.log(cookies);
 
-  await axios.post("/auth/logout", null, {
-    headers: {
-      Cookie: `geoprofs_back_end_session=${cookie?.value}`,
+          const userResponse = await axios.get<ApiUser>("/auth/user", {
+            headers: {
+              Cookie: cookies?.join("; "),
+            },
+          });
+          console.log(userResponse.status);
+          const apiUser = userResponse.data;
+          console.log(apiUser);
+
+          return {
+            id: apiUser.UserID.toString(),
+            firstName: apiUser.UserFirstName,
+            lastName: apiUser.UserLastName,
+            email: apiUser.email,
+            dateHired: new Date(apiUser.DateHired),
+            roleId: apiUser.UserRoleID,
+          };
+        } catch (error) {
+          console.log(error);
+          if (
+            !(error instanceof AxiosError) /*|| error.response?.status !== 422*/
+          )
+            throw error;
+
+          if (error.response?.status === 401) {
+            console.log(error.request);
+          }
+
+          return error.response.data.errors;
+        }
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
     },
-  });
-
-  redirect("/");
-}
+    async session({ session, token }) {
+      session.user = token.user as User;
+      return session;
+    },
+  },
+});

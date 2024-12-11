@@ -1,6 +1,14 @@
-import { logout } from "@/lib/auth";
+"use client";
 
-export default async function Page() {
-  await logout();
-  return <main className="flex items-center justify-center"> logout</main>;
+import { logout } from "@/lib/authActions";
+
+export default function Page() {
+  return (
+    <button
+      className="flex items-center justify-center"
+      onClick={() => logout()}
+    >
+      logout
+    </button>
+  );
 }
