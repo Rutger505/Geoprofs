@@ -2,24 +2,23 @@
 
 import { login } from "@/lib/authActions";
 import { Button, Field, Input, Label } from "@headlessui/react";
-import { useSession } from "next-auth/react";
+import { useMutation } from "@tanstack/react-query";
+import clsx from "clsx";
+import { isRedirectError } from "next/dist/client/components/redirect";
+import {} from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export function LoginForm() {
-  const { data: session } = useSession();
-
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: () => login(email, password),
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState("");
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    try {
-      await login(email, password);
-    } catch (error) {
-      setErrors("Invalid credentials");
-    }
+    mutate();
   }
 
   return (
@@ -49,12 +48,17 @@ export function LoginForm() {
         <div className="space-y-4">
           <Button
             type="submit"
-            className="w-full rounded-md bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className={clsx(
+              "w-full rounded-md bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+              isPending && "cursor-not-allowed opacity-50",
+            )}
           >
-            Inloggen
+            {isPending ? "Inloggen..." : "Inloggen"}
           </Button>
         </div>
-        {errors && <p className="mt-1 text-sm text-red-600">{errors}</p>}
+        {error && !isRedirectError(error) && (
+          <p className="mt-1 text-sm text-red-600">Invalid credentials</p>
+        )}
       </form>
     </div>
   );
