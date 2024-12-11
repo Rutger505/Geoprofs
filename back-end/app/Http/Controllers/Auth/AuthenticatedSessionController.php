@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Roles;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -63,7 +64,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return response()->noContent();
+
+        $user = Auth::user();
+
+        $role = Roles::where('RoleID', $request->user()->UserRoleID)->first();
+
+        $userArray = $request->user()->toArray();
+        $userArray['RoleName'] = $role ? $role->RoleName : null;
+
+        return response()->json([
+            'user' => $userArray
+        ], 200);
     }
 
 
