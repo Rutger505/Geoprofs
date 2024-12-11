@@ -9,8 +9,7 @@ export default async function AdminLayout({
 }>) {
   const session = await auth();
 
-  // TODO validate role === "admin"
-  if (!session) {
+  if (!session || session.user.roleName !== "Admin") {
     redirect("/");
   }
 
