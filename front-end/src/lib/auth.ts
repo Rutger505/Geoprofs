@@ -2,6 +2,7 @@ import axios from "@/lib/axios";
 import Credentials from "@auth/core/providers/credentials";
 import { AxiosError } from "axios";
 import NextAuth from "next-auth";
+import { cookies } from "next/headers";
 
 export interface ApiUser {
   UserID: number;
@@ -46,14 +47,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             credentials,
           );
 
-          const cookies = loginResponse.headers["set-cookie"];
-          console.log(cookies);
+          const responseCookies = loginResponse.headers["set-cookie"];
+          console.log("Login response cookies", responseCookies);
 
-          const userResponse = await axios.get<ApiUser>("/auth/user", {
-            headers: {
-              Cookie: cookies?.join("; "),
-            },
-          });
+          if (responseCookies) {
+            // Parse and set each cookie
+            for (const cookie of responseCookies) {
+              const [cookieName, ...rest] = cookie.split("=");
+              const cookieValue = rest.join("=").split(";")[0];
+
+              (await cookies()).set(cookieName, cookieValue);
+            }
+          }
+
+          axios.defaults.headers.common["Cookie"] = responseCookies?.join("; ");
+
+          const userResponse = await axios.get<ApiUser>("/auth/user");
           const apiUser = userResponse.data;
 
           return {
@@ -75,7 +84,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   events: {
     async signOut() {
-      // console.log("hi");
+      await axios.post("/auth/logout");
     },
   },
   callbacks: {
