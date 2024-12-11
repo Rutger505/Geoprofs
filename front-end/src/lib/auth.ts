@@ -48,21 +48,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
 
           const responseCookies = loginResponse.headers["set-cookie"];
-          console.log("Login response cookies", responseCookies);
-
-          if (responseCookies) {
-            // Parse and set each cookie
-            for (const cookie of responseCookies) {
-              const [cookieName, ...rest] = cookie.split("=");
-              const cookieValue = rest.join("=").split(";")[0];
-
-              (await cookies()).set(cookieName, cookieValue, {
-                sameSite: "lax",
-              });
-            }
+          if (!responseCookies) {
+            throw new Error("No session cookies in response");
           }
 
-          axios.defaults.headers.common["Cookie"] = responseCookies?.join("; ");
+          // Parse and set each cookie in the browser to allow future requests
+          for (const cookie of responseCookies) {
+            axios.defaults.headers.common["Cookie"] =
+              responseCookies.join("; ");
+
+            const [cookieName, ...rest] = cookie.split("=");
+            const cookieValue = rest.join("=").split(";")[0];
+
+            (await cookies()).set(cookieName, cookieValue, {
+              sameSite: "lax",
+            });
+          }
 
           const userResponse = await axios.get<ApiUser>("/auth/user");
           const apiUser = userResponse.data;
