@@ -3,12 +3,14 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\ContractController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Roles;
+use App\Http\Middleware\EnsureUserIsAdmin;
 
 
 Route::get('/health', [HealthController::class, 'index']);
@@ -39,6 +41,11 @@ Route::prefix('auth')->group(function (): void {
 
         return $userArray;
     });
+});
+
+
+Route::prefix('contract')->group(function () {
+    Route::post('/store',  [ContractController::class, 'store'])->middleware('auth', EnsureUserIsAdmin::class);
 });
 
 Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');
