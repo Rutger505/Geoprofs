@@ -211,4 +211,19 @@ class ContractController extends Controller
 
         return response()->json(['message' => 'Contract deleted'], 200);
     }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer',
+            'contract_name' => 'required|string',
+            'contract_leave_hours' => 'required|integer'
+        ]);
+
+        if (UserContract::where('ContractID', $request->id)->exists()) {
+            return response()->json(['message' => 'The contract has a assigned user'], 403);
+        }
+
+        return response()->json(['message' => 'Contract updated'], 200);
+    }
 }
