@@ -56,7 +56,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               const [cookieName, ...rest] = cookie.split("=");
               const cookieValue = rest.join("=").split(";")[0];
 
-              (await cookies()).set(cookieName, cookieValue);
+              (await cookies()).set(cookieName, cookieValue, {
+                sameSite: "lax",
+              });
             }
           }
 
