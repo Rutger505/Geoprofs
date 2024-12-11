@@ -1,7 +1,6 @@
 "use client";
 
-import { LoginErrors } from "@/hooks/useAuth";
-import { login } from "@/lib/authActions";
+import { login, logout } from "@/lib/authActions";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import { useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
@@ -11,12 +10,16 @@ export function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<LoginErrors>({});
+  const [errors, setErrors] = useState("");
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    console.log(await login(email, password));
+    try {
+      await login(email, password);
+    } catch (error) {
+      setErrors("Invalid credentials");
+    }
   }
 
   return (
@@ -25,16 +28,21 @@ export function LoginForm() {
 
       {JSON.stringify(session)}
 
+      <button
+        className="flex items-center justify-center"
+        onClick={() => logout()}
+      >
+        logout
+      </button>
+
       <form onSubmit={onSubmit} className="space-y-6">
         <Field>
           <Label className={"block"}>Email</Label>
           <Input
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
             onChange={(event) => setEmail(event.target.value)}
+            required
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-          )}
         </Field>
 
         <Field>
@@ -43,10 +51,8 @@ export function LoginForm() {
             type="password"
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
             onChange={(event) => setPassword(event.target.value)}
+            required
           />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-          )}
         </Field>
 
         <div className="space-y-4">
@@ -57,6 +63,7 @@ export function LoginForm() {
             Inloggen
           </Button>
         </div>
+        {errors && <p className="mt-1 text-sm text-red-600">{errors}</p>}
       </form>
     </div>
   );

@@ -45,7 +45,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             "/auth/login",
             credentials,
           );
-          console.log(loginResponse.status);
 
           const cookies = loginResponse.headers["set-cookie"];
           console.log(cookies);
@@ -55,9 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               Cookie: cookies?.join("; "),
             },
           });
-          console.log(userResponse.status);
           const apiUser = userResponse.data;
-          console.log(apiUser);
 
           return {
             id: apiUser.UserID.toString(),
@@ -68,21 +65,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             roleId: apiUser.UserRoleID,
           };
         } catch (error) {
-          console.log(error);
-          if (
-            !(error instanceof AxiosError) /*|| error.response?.status !== 422*/
-          )
+          if (!(error instanceof AxiosError) || error.response?.status !== 422)
             throw error;
 
-          if (error.response?.status === 401) {
-            console.log(error.request);
-          }
-
-          return error.response.data.errors;
+          return null;
         }
       },
     }),
   ],
+  events: {
+    async signOut() {
+      // console.log("hi");
+    },
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
