@@ -5,7 +5,6 @@ import { Button, Field, Input, Label } from "@headlessui/react";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import { isRedirectError } from "next/dist/client/components/redirect";
-import {} from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export function LoginForm() {

@@ -11,6 +11,7 @@ export interface ApiUser {
   email: string;
   DateHired: Date;
   UserRoleID: number;
+  RoleName: string;
   created_at: string | null;
   updated_at: string | null;
 }
@@ -22,6 +23,7 @@ export interface User {
   email: string;
   dateHired: Date;
   roleId: number;
+  roleName: string;
 }
 
 export interface LoginErrors {
@@ -75,6 +77,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email: apiUser.email,
             dateHired: new Date(apiUser.DateHired),
             roleId: apiUser.UserRoleID,
+            roleName: apiUser.RoleName,
           };
         } catch (error) {
           if (!(error instanceof AxiosError) || error.response?.status !== 422)
