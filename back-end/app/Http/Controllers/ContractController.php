@@ -107,12 +107,16 @@ class ContractController extends Controller
 
     public function delete(Request $request)
     {
-        $request->validate(
-            ['id' => 'int']
-        );
+        $request->validate([
+            'id' => 'required|integer|exists:contracts,ContractID',
+        ]);
 
-        if (Contracts::join('user_contract', 'contracts.ContractID', '=', 'user_contract.ContractID')->select('contracts.*'))
+        if (UserContract::where('ContractID', $request->id)->exists()) {
+            return response()->json(['message' => 'The contract has a assigned user'], 403);
+        }
 
-            Contracts::destroy($request->id);
+        Contracts::destroy($request->id);
+
+        return response()->json(['message' => 'Contract deleted'], 200);
     }
 }
