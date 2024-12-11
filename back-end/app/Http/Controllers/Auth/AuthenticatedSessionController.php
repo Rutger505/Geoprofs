@@ -64,9 +64,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-
-        $user = Auth::user();
-
         $role = Roles::where('RoleID', $request->user()->UserRoleID)->first();
 
         $userArray = $request->user()->toArray();
