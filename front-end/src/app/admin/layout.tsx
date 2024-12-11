@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
 export default async function AdminLayout({
@@ -8,7 +9,10 @@ export default async function AdminLayout({
 }>) {
   const session = await auth();
 
-  console.log(session);
+  // TODO validate role === "admin"
+  if (!session) {
+    redirect("/");
+  }
 
   return children;
 }
