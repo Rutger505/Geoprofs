@@ -1,4 +1,4 @@
-import { ApiUser, csrf } from "@/lib/auth";
+import { ApiUser, User } from "@/lib/auth";
 import axios from "@/lib/axios";
 import Credentials from "@auth/core/providers/credentials";
 import { AxiosError } from "axios";
@@ -16,15 +16,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       },
       authorize: async (credentials) => {
-        if (!credentials.email || !credentials.password) {
-          throw new Error("Missing credentials.");
-        }
-
-        await csrf();
-
         try {
-          const userResponse = await axios.get<ApiUser>("/auth/user");
+          const loginResponse = await axios.post<ApiUser>(
+            "/auth/login",
+            credentials,
+          );
+          console.log(loginResponse.status);
+
+          const cookies = loginResponse.headers["set-cookie"];
+          console.log(cookies);
+
+          const userResponse = await axios.get<ApiUser>("/auth/user", {
+            headers: {
+              Cookie: cookies?.join("; "),
+            },
+          });
+          console.log(userResponse.status);
           const apiUser = userResponse.data;
+          console.log(apiUser);
 
           return {
             id: apiUser.UserID.toString(),
@@ -35,12 +44,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             roleId: apiUser.UserRoleID,
           };
         } catch (error) {
-          if (!(error instanceof AxiosError) || error.response?.status !== 401)
+          console.log(error);
+          if (
+            !(error instanceof AxiosError) /*|| error.response?.status !== 422*/
+          )
             throw error;
 
-          return null;
+          if (error.response?.status === 401) {
+            console.log(error.request);
+          }
+
+          return error.response.data.errors;
         }
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user = token.user as User;
+      return session;
+    },
+  },
 });

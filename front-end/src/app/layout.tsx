@@ -1,11 +1,9 @@
 import { Header } from "@/components/Header";
 import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
-import clsx from "clsx";
 import "./globals.css";
-
-
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,14 +19,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={clsx(
-          "min-h-screen grid grid-rows-[auto_1fr]",
-          inter.className,
-        )}
-      >
-        <Header />
-        {children}
+      <body className={inter.className}>
+        <SessionProvider basePath={"/auth"}>
+          <div className={"grid min-h-screen grid-rows-[auto_1fr]"}>
+            <Header />
+            {children}
+          </div>
+        </SessionProvider>
       </body>
     </html>
   );

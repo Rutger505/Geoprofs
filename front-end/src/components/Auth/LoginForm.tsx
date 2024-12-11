@@ -1,37 +1,29 @@
 "use client";
 
-import { LoginErrors, useAuth } from "@/hooks/useAuth";
+import { LoginErrors } from "@/hooks/useAuth";
+import { login } from "@/lib/auth";
 import { Button, Field, Input, Label } from "@headlessui/react";
+import { useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
 
-interface LoginInputs {
-  email: string;
-  password: string;
-}
-
 export function LoginForm() {
-  const { login } = useAuth({
-    middleware: "guest",
-    redirectIfAuthenticated: "/dashboard",
-  });
+  const { data: session } = useSession();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginErrors>({});
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    login({
-      email,
-      password,
-      setErrors,
-    });
+    await login(email, password);
   }
 
   return (
     <div className="w-full max-w-md space-y-10 p-8">
       <h1 className="text-center text-4xl font-bold text-gray-900">Inloggen</h1>
+
+      {JSON.stringify(session)}
 
       <form onSubmit={onSubmit} className="space-y-6">
         <Field>

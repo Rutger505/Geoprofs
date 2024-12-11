@@ -20,6 +20,8 @@ services:
     build:
       context: ./front-end
       target: development
+    env_file:
+      - ./front-end/.env
     environment:
       NEXT_PUBLIC_BACKEND_URL: https://localhost/api
       BACKEND_URL: http://back-end/api

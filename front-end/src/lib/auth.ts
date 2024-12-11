@@ -1,7 +1,7 @@
 "use server";
 
+import { signIn } from "@/auth";
 import axios from "@/lib/axios";
-import { AxiosError } from "axios";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -24,7 +24,9 @@ export interface User {
   roleId: number;
 }
 
-export const csrf = () => axios.get("/auth/csrf-cookie");
+export const csrf = async (): Promise<void> => {
+  await axios.get("/auth/csrf-cookie");
+};
 
 export interface LoginErrors {
   email?: string;
@@ -35,19 +37,7 @@ export async function login(
   email: string,
   password: string,
 ): Promise<null | LoginErrors> {
-  await csrf();
-
-  try {
-    await axios.post("/auth/login", { email, password });
-
-    return null;
-  } catch (error) {
-    if (!(error instanceof AxiosError) || error.response?.status !== 422) {
-      throw error;
-    }
-
-    return error.response.data.errors as LoginErrors;
-  }
+  return signIn("credentials", { email, password });
 }
 
 export async function logout() {
