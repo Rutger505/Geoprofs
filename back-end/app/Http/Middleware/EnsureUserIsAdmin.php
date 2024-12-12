@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
 class EnsureUserIsAdmin
 {
     /**
@@ -17,6 +18,7 @@ class EnsureUserIsAdmin
     {
         if (!$request->user() || !$request->user()->isAdmin()) {
             abort(403, 'Unauthorized action.');
+
         }
 
         return $next($request);
