@@ -1,11 +1,8 @@
 "use server";
 
-import { LoginErrors, signIn, signOut } from "@/lib/auth";
+import { signIn, signOut } from "@/lib/auth";
 
-export async function login(
-  email: string,
-  password: string,
-): Promise<null | LoginErrors> {
+export async function login(email: string, password: string) {
   return signIn("credentials", {
     email,
     password,
