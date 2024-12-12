@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -22,6 +23,7 @@ class UserSeeder extends Seeder
                 'email' => 'john.doe@example.com',
                 'password' => Hash::make('password5'),
                 'DateHired' => '2020-01-15',
+                'RegistrationStatus' => 'pending',
                 'UserRoleID' => 1,
             ],
             [
@@ -30,7 +32,9 @@ class UserSeeder extends Seeder
                 'email' => 'jane.smith@example.com',
                 'password' => Hash::make('password123'),
                 'DateHired' => '2019-05-20',
+                'RegistrationStatus' => 'pending',
                 'UserRoleID' => 2,
+
             ],
             [
                 'UserFirstName' => 'Jake',
@@ -38,7 +42,9 @@ class UserSeeder extends Seeder
                 'email' => 'jake.kolk@example.com',
                 'password' => Hash::make('jake'),
                 'DateHired' => '2012-05-20',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 3,
+
             ],
             [
                 'UserFirstName' => 'Rutger',
@@ -46,7 +52,9 @@ class UserSeeder extends Seeder
                 'email' => 'Rutger.Pronk@example.com',
                 'password' => Hash::make('rutgerrr'),
                 'DateHired' => '2023-09-20',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 4,
+
             ],
             [
                 'UserFirstName' => 'Bob',
@@ -54,7 +62,9 @@ class UserSeeder extends Seeder
                 'email' => 'bob.bobbers@example.com',
                 'password' => Hash::make('bobbiebobbob'),
                 'DateHired' => '2015-02-01',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 5,
+
             ],
             [
                 'UserFirstName' => 'CEO',
@@ -62,15 +72,9 @@ class UserSeeder extends Seeder
                 'email' => 'ceo@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 1,
-            ],
-            [
-                'UserFirstName' => 'CEO',
-                'UserLastName' => 'Example',
-                'email' => 'ceo@example.com',
-                'password' => Hash::make('secret'),
-                'DateHired' => '2015-02-01',
-                'UserRoleID' => 1,
+
             ],
             [
                 'UserFirstName' => 'Employee',
@@ -78,7 +82,9 @@ class UserSeeder extends Seeder
                 'email' => 'employee@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 2,
+
             ],
             [
                 'UserFirstName' => 'Admin',
@@ -86,7 +92,9 @@ class UserSeeder extends Seeder
                 'email' => 'admin@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 3,
+
             ],
             [
                 'UserFirstName' => 'SectionManager',
@@ -94,7 +102,9 @@ class UserSeeder extends Seeder
                 'email' => 'sectionmanager@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 4,
+
             ],
             [
                 'UserFirstName' => 'ProjectManager',
@@ -102,7 +112,9 @@ class UserSeeder extends Seeder
                 'email' => 'projectmanager@example.com',
                 'password' => Hash::make('secret'),
                 'DateHired' => '2015-02-01',
+                'RegistrationStatus' => 'completed',
                 'UserRoleID' => 5,
+
             ],
         ]);
     }

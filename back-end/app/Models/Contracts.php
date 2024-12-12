@@ -11,7 +11,10 @@ class Contracts extends Model
     protected $primaryKey = 'ContractID';
 
 
-
+    protected $fillable = [
+        'ContractName',
+        'ContractTotalLeaveHours'
+    ];
 
     use HasFactory;
 }
