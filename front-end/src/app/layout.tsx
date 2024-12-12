@@ -1,6 +1,5 @@
 import { Header } from "@/components/Header";
 import { TanstackQueryProvider } from "@/components/Providers/TanstackQueryProvider";
-import { QueryClient } from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
@@ -13,8 +12,6 @@ export const metadata: Metadata = {
   title: "Geoprofs Verlofsysteem",
   description: "Geoprofs verlofsysteem",
 };
-
-const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
