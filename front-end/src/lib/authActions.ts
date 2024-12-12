@@ -2,15 +2,6 @@
 
 import { LoginErrors, signIn, signOut } from "@/lib/auth";
 
-export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  dateHired: Date;
-  roleId: number;
-}
-
 export async function login(
   email: string,
   password: string,
