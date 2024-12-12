@@ -14,13 +14,3 @@ declare module "next-auth/jwt" {
     user: GoodUser;
   }
 }
-
-declare module "@auth/core/types" {
-  interface Session {
-    user: GoodUser;
-  }
-
-  interface JWT {
-    user: GoodUser;
-  }
-}

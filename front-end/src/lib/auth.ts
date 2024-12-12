@@ -1,7 +1,8 @@
 import axios from "@/lib/axios";
+import { JWT } from "@auth/core/jwt";
 import Credentials from "@auth/core/providers/credentials";
 import { AxiosError } from "axios";
-import NextAuth from "next-auth";
+import NextAuth, { Session } from "next-auth";
 import { cookies } from "next/headers";
 
 export interface ApiUser {
@@ -94,7 +95,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       session.user = token.user as User;
       return session;
     },
