@@ -24,46 +24,28 @@ jobs:
         run: npm ci
 
       - name: Run tests with coverage
-        id: test
-        continue-on-error: true
         working-directory: ./front-end
         run: npm run test:coverage
 
       - uses: actions/upload-artifact@v4
-        if: steps.test.outcome == 'success'
         with:
           name: coverage
           path: front-end/coverage
 
   sonar:
     needs: [test-front-end]
+    if: always()
     name: SonarCloud Analysis
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for better relevancy of analysis
 
       - name: Download coverage artifact
-        id: coverage
-        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: coverage
           path: front-end/coverage
-
-      - name: Create empty coverage if needed
-        if: steps.coverage.outcome != 'success'
-        run: |
-          mkdir -p front-end/coverage
-          echo "TN:
-          SF:
-          LF:0
-          LH:0
-          BRF:0
-          BRH:0
-          end_of_record" > front-end/coverage/lcov.info
 
       - name: Run SonarCloud Analysis
         uses: SonarSource/sonarcloud-github-action@master
