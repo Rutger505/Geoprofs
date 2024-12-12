@@ -39,7 +39,9 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(): void
     {
+
         $this->ensureIsNotRateLimited();
+
 
         if (!Auth::attempt([
             'email' => $this->email,

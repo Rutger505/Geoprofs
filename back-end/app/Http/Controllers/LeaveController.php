@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Leave;
 use App\Models\UserContract;
 use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\isEmpty;
 
 class LeaveController extends Controller
 {
@@ -123,7 +124,7 @@ class LeaveController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/leave-hours",
+     *     path="/api/leave/leave-hours",
      *     tags={"Leave Management"},
      *     summary="Get total leave hours",
      *     description="Retrieve the total leave hours for the authenticated user.",
@@ -159,5 +160,87 @@ class LeaveController extends Controller
 
 
         return response()->json(['hours' => $contract->ContractTotalLeaveHours], 200);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/leave/leave-status",
+     *     tags={"Leave Management"},
+     *     summary="Retrieve leave status",
+     *     description="Retrieve all leave requests for the authenticated user.",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="A list of leave requests for the authenticated user",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="integer",
+     *                     description="Leave request ID",
+     *                     example=1
+     *                 ),
+     *                 @OA\Property(
+     *                     property="userId",
+     *                     type="integer",
+     *                     description="User ID of the requester",
+     *                     example=101
+     *                 ),
+     *                 @OA\Property(
+     *                     property="hours",
+     *                     type="integer",
+     *                     description="Total leave hours requested",
+     *                     example=8
+     *                 ),
+     *                 @OA\Property(
+     *                     property="status",
+     *                     type="string",
+     *                     description="Status of the leave request",
+     *                     example="Approved"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="created_at",
+     *                     type="string",
+     *                     format="date-time",
+     *                     description="Request creation date and time",
+     *                     example="2024-12-01T12:34:56Z"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="updated_at",
+     *                     type="string",
+     *                     format="date-time",
+     *                     description="Request update date and time",
+     *                     example="2024-12-03T14:56:78Z"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="no leave requests found"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error"
+     *     )
+     * )
+     */
+    public function getLeaveStatus()
+    {
+
+        $user = Auth::user();
+
+        $leave = Leave::where('UserID', $user->UserID)->get();
+
+        if (count($leave) === 0) {
+            return response()->json(['message' => 'no leave requests found'], 204);
+        }
+
+        return response()->json(['leave requests' => $leave], 200);
     }
 }
