@@ -5,6 +5,10 @@ import { AxiosError } from "axios";
 import NextAuth, { Session } from "next-auth";
 import { cookies } from "next/headers";
 
+interface ApiLoginResponse {
+  user: ApiUser;
+}
+
 export interface ApiUser {
   UserID: number;
   UserFirstName: string;
@@ -40,7 +44,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
-          const loginResponse = await axios.post<ApiUser>(
+          const loginResponse = await axios.post<ApiLoginResponse>(
             "/auth/login",
             credentials,
           );
@@ -63,7 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             });
           }
 
-          const apiUser = loginResponse.data;
+          const apiUser = loginResponse.data.user;
 
           return {
             id: apiUser.UserID.toString(),
@@ -78,7 +82,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (!(error instanceof AxiosError) || error.response?.status !== 422)
             throw error;
 
-          return null;
+          return new Error("Shut yo bitch ass up");
         }
       },
     }),
