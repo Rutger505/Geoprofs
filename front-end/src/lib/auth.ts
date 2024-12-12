@@ -26,11 +26,6 @@ export interface User {
   roleName: string;
 }
 
-export interface LoginErrors {
-  email?: string;
-  password?: string;
-}
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
