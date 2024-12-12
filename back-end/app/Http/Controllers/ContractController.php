@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class ContractController extends Controller
 {
-    //
 
     /**
      * @OA\Post(
@@ -155,14 +154,18 @@ class ContractController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/contract/delete",
+     *     path="/api/contract/delete/{id}",
      *     tags={"Contracts"},
      *     summary="Delete a contract",
      *     description="Delete a contract by its ID if it does not have an assigned user in the user_contract table.",
-     *     @OA\RequestBody(
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
      *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="id", type="integer", description="The ID of the contract to be deleted", example=1)
+     *         description="ID of the contract to delete",
+     *         @OA\Schema(
+     *             type="integer",
+     *             example=1
      *         )
      *     ),
      *     @OA\Response(
@@ -213,6 +216,94 @@ class ContractController extends Controller
         return response()->json(['message' => 'Contract deleted'], 200);
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/contract/update/{id}",
+     *     tags={"Contracts"},
+     *     summary="Update an existing contract",
+     *     description="Updates the contract details for a specific contract ID. Requires admin privileges.",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="The ID of the contract to update.",
+     *         @OA\Schema(
+     *             type="integer",
+     *             example=1
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="contract_name",
+     *                 type="string",
+     *                 example="Part-Time Employee",
+     *                 description="The new name of the contract."
+     *             ),
+     *             @OA\Property(
+     *                 property="contract_leave_hours",
+     *                 type="integer",
+     *                 example=80,
+     *                 description="The updated total leave hours allowed for this contract."
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Contract updated successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Contract updated"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden: Contract does not exist or has assigned users.",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="The contract doesn't exist or the contract has an assigned user."
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="The given data was invalid."
+     *             ),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 example={
+     *                     "contract_name": {"The contract name field is required."},
+     *                     "contract_leave_hours": {"The contract leave hours field must be an integer."}
+     *                 }
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized access.",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Unauthenticated."
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function update(Request $request, $id)
     {
         $request->validate([
