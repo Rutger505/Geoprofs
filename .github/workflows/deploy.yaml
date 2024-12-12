@@ -199,6 +199,8 @@ jobs:
           LARAVEL_APP_KEY: ${{ secrets.LARAVEL_APP_KEY }}
           LARAVEL_APP_ENV: ${{ steps.config.outputs.laravel_app_env }}
           LARAVEL_APP_DEBUG: ${{ steps.config.outputs.laravel_app_debug }}
+          LARAVEL_MAIL_ADDRESS: ${{ secrets.LARAVEL_MAIL_ADDRESS }}
+          LARAVEL_MAIL_PASSWORD: ${{ secrets.LARAVEL_MAIL_PASSWORD }}
         run: |
           FILES=$(ls k8s/*.yaml | tr '\n' ' ')
           

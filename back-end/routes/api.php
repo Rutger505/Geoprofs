@@ -4,13 +4,13 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\ContractController;
-use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Models\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Roles;
-use App\Http\Middleware\EnsureUserIsAdmin;
 
 
 Route::get('/health', [HealthController::class, 'index']);
@@ -31,6 +31,13 @@ Route::prefix('auth')->group(function (): void {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->middleware('auth')
         ->name('logout');
+
+    Route::post('/register', [RegistrationController::class, 'adminRegister'])
+        ->middleware(EnsureUserIsAdmin::class);
+
+
+    Route::put('/register/complete/{token}', [RegistrationController::class, 'register'])
+        ->name('register.confirm');
 
     Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
