@@ -233,7 +233,7 @@ class ContractController extends Controller
 
 
         $contract->ContractName = $request['contract_name'];
-        $contract->ContractName = $request['contract_leave_hours'];
+        $contract->ContractTotalLeaveHours = $request['contract_leave_hours'];
 
         $contract->save();
 
