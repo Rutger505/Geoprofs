@@ -197,32 +197,46 @@ class ContractController extends Controller
      *     security={{"bearerAuth":{}}},
      * )
      */
-    public function delete(Request $request)
+    public function delete($id)
     {
-        $request->validate([
-            'id' => 'required|integer|exists:contracts,ContractID',
-        ]);
 
-        if (UserContract::where('ContractID', $request->id)->exists()) {
+        if (!Contracts::where('ContractID', $id)->exists()) {
+            return (response()->json(['message' => "The contract doesn't exist"], 403));
+        }
+
+        if (UserContract::where('ContractID', $id)->exists()) {
             return response()->json(['message' => 'The contract has a assigned user'], 403);
         }
 
-        Contracts::destroy($request->id);
+        Contracts::destroy($id);
 
         return response()->json(['message' => 'Contract deleted'], 200);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'id' => 'required|integer',
             'contract_name' => 'required|string',
             'contract_leave_hours' => 'required|integer'
         ]);
 
-        if (UserContract::where('ContractID', $request->id)->exists()) {
+        if (!Contracts::where('ContractID', $id)->exists()) {
+            return (response()->json(['message' => "The contract doesn't exist"], 403));
+        }
+
+        if (UserContract::where('ContractID', $id)->exists()) {
             return response()->json(['message' => 'The contract has a assigned user'], 403);
         }
+
+
+        $contract = Contracts::find($id);
+
+
+        $contract->ContractName = $request['contract_name'];
+        $contract->ContractName = $request['contract_leave_hours'];
+
+        $contract->save();
+
 
         return response()->json(['message' => 'Contract updated'], 200);
     }
