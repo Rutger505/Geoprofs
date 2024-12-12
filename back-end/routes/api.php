@@ -7,6 +7,7 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\RolesController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Models\Roles;
 use Illuminate\Http\Request;
@@ -55,6 +56,7 @@ Route::prefix('auth')->group(function (): void {
     });
 });
 
+Route::get('/roles/show', [RolesController::class, 'show'])->middleware(EnsureUserIsAdmin::class);
 
 Route::get('/leave/leave-requests',  [LeaveController::class, 'getLeaveStatus'])->middleware('auth');
 Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');
