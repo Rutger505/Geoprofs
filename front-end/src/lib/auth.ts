@@ -2,7 +2,7 @@ import axios from "@/lib/axios";
 import { JWT } from "@auth/core/jwt";
 import Credentials from "@auth/core/providers/credentials";
 import { AxiosError } from "axios";
-import NextAuth, { Session } from "next-auth";
+import NextAuth, { NextAuthConfig, Session } from "next-auth";
 import { cookies } from "next/headers";
 
 interface ApiLoginResponse {
@@ -31,7 +31,7 @@ export interface User {
   roleName: string;
 }
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const authOptions: NextAuthConfig = {
   providers: [
     Credentials({
       credentials: {
@@ -43,6 +43,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       },
       authorize: async (credentials) => {
+        console.log("hi");
+
         try {
           const loginResponse = await axios.post<ApiLoginResponse>(
             "/auth/login",
@@ -104,4 +106,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
-});
+};
+
+export const { handlers, signIn, signOut, auth } = NextAuth(authOptions);

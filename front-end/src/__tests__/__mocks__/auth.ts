@@ -2,7 +2,7 @@ const signIn = jest.fn();
 const signOut = jest.fn();
 const handlers = jest.fn();
 
-const mockNextAuth = {
+const mockAuth = {
   signIn,
   signOut,
   handlers,
@@ -16,7 +16,7 @@ const mockNextAuth = {
 
 jest.mock("next-auth", () => ({
   __esModule: true,
-  ...mockNextAuth,
+  ...mockAuth,
 }));
 
-export { mockNextAuth };
+export { mockAuth };
