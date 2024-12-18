@@ -1,9 +1,9 @@
 "use server";
 
 import { signIn, signOut } from "@/lib/auth";
-import { ApiResponseError } from "@/lib/errors";
 import axios from "@/lib/axios";
 import { redirect } from "next/navigation";
+import { ApiResponseError } from "@/lib/errors";
 
 const MIN_PASSWORD_LENGTH = 8;
 
