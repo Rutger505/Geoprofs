@@ -9,7 +9,18 @@ import { FormEvent, useState } from "react";
 
 export function LoginForm() {
   const { mutate, isPending, error } = useMutation({
-    mutationFn: () => login(email, password),
+    mutationFn: async () => {
+      try {
+        await login(email, password);
+      } catch (error) {
+        return "errors";
+        // if (error instanceof SignInError) {
+        //   console.log("error", error.message);
+        // }
+        // console.log("error", error);
+        // throw error;
+      }
+    },
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,7 +67,10 @@ export function LoginForm() {
           </Button>
         </div>
         {error && !isRedirectError(error) && (
-          <p className="mt-1 text-sm text-red-600">Invalid credentials</p>
+          <>
+            <p className="mt-1 text-sm text-red-600">Invalid credentials</p>
+            <p className="mt-1 text-sm text-red-600">{JSON.stringify(error)}</p>
+          </>
         )}
       </form>
     </div>

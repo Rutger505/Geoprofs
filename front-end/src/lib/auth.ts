@@ -1,4 +1,5 @@
 import axios from "@/lib/axios";
+import { SignInError } from "@/lib/errors";
 import { JWT } from "@auth/core/jwt";
 import Credentials from "@auth/core/providers/credentials";
 import { AxiosError } from "axios";
@@ -81,10 +82,15 @@ export const authOptions: NextAuthConfig = {
             roleName: apiUser.RoleName,
           };
         } catch (error) {
-          if (!(error instanceof AxiosError) || error.response?.status !== 422)
-            throw error;
+          if (
+            !(error instanceof AxiosError) ||
+            error.response?.status !== 422
+          ) {
+            return null; // Return null to display the default error message
+          }
 
-          return new Error("Shut yo bitch ass up"); // TODO see if the tghe error message can be read in the caller.
+          // In this case the error contains user-friendly error messages
+          throw new SignInError(error.response.data.message); // TODO see if the tghe error message can be read in the caller.
         }
       },
     }),
