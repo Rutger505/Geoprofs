@@ -14,4 +14,5 @@ export const env = createEnv({
     BACKEND_URL: process.env.BACKEND_URL,
     NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
   },
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });

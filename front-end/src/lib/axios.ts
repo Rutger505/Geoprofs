@@ -1,4 +1,4 @@
-import { env } from "@/lib/env";
+import { env } from "@/env";
 import Axios from "axios";
 
 const isServer = typeof window === "undefined";
