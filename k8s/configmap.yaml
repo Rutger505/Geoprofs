@@ -17,3 +17,5 @@ data:
   MAIL_PORT: "465"
   MAIL_ENCRYPTION: "tls"
   MAIL_FROM_NAME: "Geoprofs verlofsysteem"
+  NEXT_PUBLIC_BACKEND_URL: "https://${INGRESS_HOST}/api"
+  BACKEND_URL: "http://geoprofs-backend-service.${NAMESPACE}.svc.cluster.local/api"
