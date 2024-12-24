@@ -19,3 +19,4 @@ data:
   MAIL_FROM_NAME: "Geoprofs verlofsysteem"
   NEXT_PUBLIC_BACKEND_URL: "https://${INGRESS_HOST}/api"
   BACKEND_URL: "http://geoprofs-backend-service.${NAMESPACE}.svc.cluster.local/api"
+  AUTH_TRUST_HOST: "true"
