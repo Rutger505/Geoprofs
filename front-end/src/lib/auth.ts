@@ -84,7 +84,7 @@ export const authOptions: NextAuthConfig = {
           if (!(error instanceof AxiosError) || error.response?.status !== 422)
             throw error;
 
-          return new Error("Shut yo bitch ass up");
+          return new Error("Shut yo bitch ass up"); // TODO see if the tghe error message can be read in the caller.
         }
       },
     }),
@@ -106,6 +106,7 @@ export const authOptions: NextAuthConfig = {
       return session;
     },
   },
+  basePath: "/auth",
 };
 
 export const { handlers, signIn, signOut, auth } = NextAuth(authOptions);
