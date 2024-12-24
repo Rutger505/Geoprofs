@@ -3,13 +3,12 @@
 import { signIn, signOut } from "@/lib/auth";
 
 export async function login(email: string, password: string) {
-  const result = await signIn("credentials", {
+  await signIn("credentials", {
     email,
     password,
-    redirect: false,
+    redirect: true,
+    redirectTo: "/dashboard",
   });
-
-  if (result.error) console.log(result.error);
 }
 
 export async function logout(): Promise<void> {
