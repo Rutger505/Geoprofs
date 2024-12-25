@@ -1,8 +1,7 @@
 "use server";
 
 import { signIn, signOut } from "@/lib/auth";
-import { SignInError } from "@/lib/errors";
-import { CallbackRouteError } from "@auth/core/errors";
+import { ApiResponseError } from "@/lib/errors";
 import { isRedirectError } from "next/dist/client/components/redirect";
 
 export async function login(email: string, password: string) {
@@ -17,15 +16,8 @@ export async function login(email: string, password: string) {
     // Expected behavior. Throw to continue the redirect.
     if (isRedirectError(error)) throw error;
 
-    console.log("error");
-
-    if (
-      error instanceof CallbackRouteError &&
-      error.cause?.err instanceof SignInError
-    ) {
-      console.log("errormessage", error.cause.err.message);
-    } else {
-      console.log("not error");
+    if (error instanceof ApiResponseError) {
+      console.log("error message2", error.message);
     }
   }
 }

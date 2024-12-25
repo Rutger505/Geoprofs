@@ -1,5 +1,5 @@
 import axios from "@/lib/axios";
-import { SignInError } from "@/lib/errors";
+import { ApiResponseError } from "@/lib/errors";
 import { JWT } from "@auth/core/jwt";
 import Credentials from "@auth/core/providers/credentials";
 import { AxiosError } from "axios";
@@ -44,8 +44,6 @@ export const authOptions: NextAuthConfig = {
         },
       },
       authorize: async (credentials) => {
-        console.log("hi");
-
         try {
           const loginResponse = await axios.post<ApiLoginResponse>(
             "/auth/login",
@@ -90,7 +88,7 @@ export const authOptions: NextAuthConfig = {
           }
 
           // In this case the error contains user-friendly error messages
-          throw new SignInError(error.response.data.message); // TODO see if the tghe error message can be read in the caller.
+          throw new ApiResponseError(error.response.data.message);
         }
       },
     }),
