@@ -10,15 +10,12 @@ import { FormEvent, useState } from "react";
 export function LoginForm() {
   const { mutate, isPending, error } = useMutation({
     mutationFn: async () => {
-      try {
-        await login(email, password);
-      } catch (error) {
-        return "errors";
-        // if (error instanceof SignInError) {
-        //   console.log("error", error.message);
-        // }
-        // console.log("error", error);
-        // throw error;
+      const result = await login(email, password);
+
+      console.log(result);
+
+      if (result?.error) {
+        throw new Error(result.error);
       }
     },
   });
@@ -66,11 +63,12 @@ export function LoginForm() {
             {isPending ? "Inloggen..." : "Inloggen"}
           </Button>
         </div>
-        {error && !isRedirectError(error) && (
-          <>
-            <p className="mt-1 text-sm text-red-600">Invalid credentials</p>
-            <p className="mt-1 text-sm text-red-600">{JSON.stringify(error)}</p>
-          </>
+        {error && !isRedirectError(error) ? (
+          <p className="mt-1 text-sm text-red-600">{error.message}</p>
+        ) : (
+          <p className="invisible mt-1 text-sm text-red-600" aria-hidden="true">
+            spacer
+          </p>
         )}
       </form>
     </div>
