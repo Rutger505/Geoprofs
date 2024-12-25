@@ -2,7 +2,6 @@
 
 import { signIn, signOut } from "@/lib/auth";
 import { ApiResponseError } from "@/lib/errors";
-import { isRedirectError } from "next/dist/client/components/redirect";
 
 export async function login(email: string, password: string) {
   try {
@@ -13,12 +12,11 @@ export async function login(email: string, password: string) {
       redirectTo: "/dashboard",
     });
   } catch (error) {
-    // Expected behavior. Throw to continue the redirect.
-    if (isRedirectError(error)) throw error;
-
     if (error instanceof ApiResponseError) {
-      console.log("error message2", error.message);
+      return { error: error.message };
     }
+
+    // throw error; TODO
   }
 }
 
