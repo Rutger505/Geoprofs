@@ -1,4 +1,4 @@
-import { User as GoodUser } from "@/lib/auth";
+import { User as GoodUser } from "@/types/user";
 import "next-auth";
 
 declare module "next-auth" {
