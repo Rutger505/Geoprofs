@@ -9,8 +9,9 @@ export default async function Dashboard() {
 
   return (
     <main className="flex items-center justify-center">
-      <h1>Welcome, {session.user.firstName}</h1>
-      <p>{JSON.stringify(session)}</p>
+      <h1>
+        Welcome {session.user.firstName} {session.user.lastName}!
+      </h1>
     </main>
   );
 }
