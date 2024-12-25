@@ -16,7 +16,7 @@ export async function login(email: string, password: string) {
       return { error: error.message };
     }
 
-    // throw error; TODO
+    throw error;
   }
 }
 
