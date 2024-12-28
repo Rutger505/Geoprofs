@@ -5,6 +5,9 @@ import { Header, Navigation } from "./Header";
 jest.mock("@/components/Auth/server", () => ({
   SignOutButton: () => <button>Uitloggen</button>,
 }));
+jest.mock("@/components/Auth/client", () => ({
+  SignOutButton: () => <button>Uitloggen</button>,
+}));
 
 export const navigation: Navigation[] = [
   { name: "Dashboard", href: "#" },
