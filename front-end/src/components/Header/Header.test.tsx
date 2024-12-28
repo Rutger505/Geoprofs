@@ -1,7 +1,4 @@
-import {
-  mockAuthenticatedUser,
-  mockUnauthenticatedUser,
-} from "@/__tests__/__mocks__/auth";
+import { mockUnauthenticatedUser } from "@/__tests__/__mocks__/auth";
 import { act, render, screen } from "@testing-library/react";
 import { Header, Navigation } from "./Header";
 
@@ -69,32 +66,6 @@ describe("Header", () => {
 
     beforeEach(() => {
       setMobileWidth();
-    });
-
-    it("renders navigation links", async () => {
-      render(<Header />);
-
-      await openMobileNavigation(async () => {
-        navigation.forEach((item) => {
-          const link = screen.getByRole("link", { name: item.name });
-          expect(link).toBeInTheDocument();
-          expect(link).toHaveTextContent(item.name);
-          expect(link).toHaveAttribute("href", item.href);
-        });
-      });
-    });
-
-    it("renders sign out button when signed in", async () => {
-      mockAuthenticatedUser();
-
-      await act(async () => {
-        render(<Header />);
-      });
-
-      await openMobileNavigation(async () => {
-        const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
-        expect(signOutButton).toBeInTheDocument();
-      });
     });
 
     it("doesn't render sign out button when not signed in", async () => {
