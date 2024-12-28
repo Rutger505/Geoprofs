@@ -1,6 +1,6 @@
 "use client";
 
-import { SignOutButton } from "@/components/Auth/SignOutButton";
+import { SignOutButton } from "@/components/Auth/client";
 import { Navigation } from "@/components/Header/Header";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import clsx from "clsx";
@@ -48,7 +48,7 @@ export function MobileNavigation({ navigation }: Readonly<Props>) {
             ))}
 
             <SignOutButton className="px-4 py-2 hover:bg-gray-100">
-              Sign Out
+              Uitloggen
             </SignOutButton>
           </PopoverPanel>
         </>
