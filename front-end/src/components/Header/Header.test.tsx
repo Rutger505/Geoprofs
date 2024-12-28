@@ -35,10 +35,17 @@ describe("Header", () => {
         expect(link).toHaveAttribute("href", item.href);
       });
     });
+
+    it("renders sign out button", () => {
+      render(<Header />);
+
+      const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
+      expect(signOutButton).toBeInTheDocument();
+    });
   });
 
   describe("Mobile navigation", () => {
-    it("renders navigation links for responsive header", async () => {
+    it("renders navigation links", async () => {
       render(<Header />);
 
       Object.defineProperty(window, "innerWidth", {
@@ -61,6 +68,28 @@ describe("Header", () => {
           expect(link).toHaveTextContent(item.name);
           expect(link).toHaveAttribute("href", item.href);
         });
+      });
+    });
+
+    it("renders sign out button", async () => {
+      render(<Header />);
+
+      Object.defineProperty(window, "innerWidth", {
+        writable: true,
+        configurable: true,
+        value: 375, // Mobile device width
+      });
+      window.dispatchEvent(new Event("resize"));
+
+      const mobileNavigationButton = screen.getByRole("button", {
+        name: "Open navigation",
+      });
+      expect(mobileNavigationButton).toBeInTheDocument();
+
+      await act(async () => {
+        mobileNavigationButton.click();
+        const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
+        expect(signOutButton).toBeInTheDocument();
       });
     });
   });
