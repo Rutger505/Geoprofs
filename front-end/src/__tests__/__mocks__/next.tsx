@@ -27,6 +27,10 @@ jest.mock("next/navigation", () => ({
   useParams: mockUseParams,
   useSearchParams: mockUseSearchParams,
 }));
+jest.mock("next/image", () => ({
+  __esModule: true,
+  default: (props: any) => <img {...props} />,
+}));
 
 export {
   mockCookies,

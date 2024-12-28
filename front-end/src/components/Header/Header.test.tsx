@@ -5,16 +5,16 @@ import {
 import { act, render, screen } from "@testing-library/react";
 import { Header, Navigation } from "./Header";
 
+// This component is async and is not supported by testing-library. This will be end to end tested as suggested by next.js.
+jest.mock("@/components/Auth/server", () => ({
+  SignOutButton: () => <button>Uitloggen</button>,
+}));
+
 export const navigation: Navigation[] = [
   { name: "Dashboard", href: "#" },
   { name: "Aanvragen", href: "#" },
   { name: "Verlofsaldo", href: "#" },
 ];
-
-jest.mock("next/image", () => ({
-  __esModule: true,
-  default: (props: any) => <img {...props} />,
-}));
 
 describe("Header", () => {
   it("renders logo", () => {
@@ -40,23 +40,7 @@ describe("Header", () => {
       });
     });
 
-    it("renders sign out button when signed in", () => {
-      mockAuthenticatedUser();
-
-      render(<Header />);
-
-      const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
-      expect(signOutButton).toBeInTheDocument();
-    });
-
-    it("doesn't render sign out button when not signed in", () => {
-      mockUnauthenticatedUser();
-
-      render(<Header />);
-
-      const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
-      expect(signOutButton).toBeInTheDocument();
-    });
+    // The sign out button is for desktop is async and must be tested with end to end testing.
   });
 
   describe("Mobile navigation", () => {
@@ -64,7 +48,7 @@ describe("Header", () => {
       Object.defineProperty(window, "innerWidth", {
         writable: true,
         configurable: true,
-        value: 375, // Mobile device width
+        value: 375,
       });
       window.dispatchEvent(new Event("resize"));
     }
@@ -103,7 +87,9 @@ describe("Header", () => {
     it("renders sign out button when signed in", async () => {
       mockAuthenticatedUser();
 
-      render(<Header />);
+      await act(async () => {
+        render(<Header />);
+      });
 
       await openMobileNavigation(async () => {
         const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
@@ -114,11 +100,15 @@ describe("Header", () => {
     it("doesn't render sign out button when not signed in", async () => {
       mockUnauthenticatedUser();
 
-      render(<Header />);
+      await act(async () => {
+        render(<Header />);
+      });
 
       await openMobileNavigation(async () => {
-        const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
-        expect(signOutButton).toBeInTheDocument();
+        const signOutButton = screen.queryByRole("button", {
+          name: "Uitloggen",
+        });
+        expect(signOutButton).not.toBeInTheDocument();
       });
     });
   });
