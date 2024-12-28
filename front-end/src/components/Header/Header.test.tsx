@@ -1,3 +1,7 @@
+import {
+  mockAuthenticatedUser,
+  mockUnauthenticatedUser,
+} from "@/__tests__/__mocks__/auth";
 import { act, render, screen } from "@testing-library/react";
 import { Header, Navigation } from "./Header";
 
@@ -36,7 +40,18 @@ describe("Header", () => {
       });
     });
 
-    it("renders sign out button", () => {
+    it("renders sign out button when signed in", () => {
+      mockAuthenticatedUser();
+
+      render(<Header />);
+
+      const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
+      expect(signOutButton).toBeInTheDocument();
+    });
+
+    it("doesn't render sign out button when not signed in", () => {
+      mockUnauthenticatedUser();
+
       render(<Header />);
 
       const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
@@ -45,16 +60,18 @@ describe("Header", () => {
   });
 
   describe("Mobile navigation", () => {
-    it("renders navigation links", async () => {
-      render(<Header />);
-
+    function setMobileWidth() {
       Object.defineProperty(window, "innerWidth", {
         writable: true,
         configurable: true,
         value: 375, // Mobile device width
       });
       window.dispatchEvent(new Event("resize"));
+    }
 
+    async function openMobileNavigation(
+      postOpenNavigation: () => void | Promise<void>,
+    ) {
       const mobileNavigationButton = screen.getByRole("button", {
         name: "Open navigation",
       });
@@ -62,6 +79,18 @@ describe("Header", () => {
 
       await act(async () => {
         mobileNavigationButton.click();
+        await postOpenNavigation();
+      });
+    }
+
+    beforeEach(() => {
+      setMobileWidth();
+    });
+
+    it("renders navigation links", async () => {
+      render(<Header />);
+
+      await openMobileNavigation(async () => {
         navigation.forEach((item) => {
           const link = screen.getByRole("link", { name: item.name });
           expect(link).toBeInTheDocument();
@@ -71,23 +100,23 @@ describe("Header", () => {
       });
     });
 
-    it("renders sign out button", async () => {
+    it("renders sign out button when signed in", async () => {
+      mockAuthenticatedUser();
+
       render(<Header />);
 
-      Object.defineProperty(window, "innerWidth", {
-        writable: true,
-        configurable: true,
-        value: 375, // Mobile device width
+      await openMobileNavigation(async () => {
+        const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
+        expect(signOutButton).toBeInTheDocument();
       });
-      window.dispatchEvent(new Event("resize"));
+    });
 
-      const mobileNavigationButton = screen.getByRole("button", {
-        name: "Open navigation",
-      });
-      expect(mobileNavigationButton).toBeInTheDocument();
+    it("doesn't render sign out button when not signed in", async () => {
+      mockUnauthenticatedUser();
 
-      await act(async () => {
-        mobileNavigationButton.click();
+      render(<Header />);
+
+      await openMobileNavigation(async () => {
         const signOutButton = screen.getByRole("button", { name: "Uitloggen" });
         expect(signOutButton).toBeInTheDocument();
       });
