@@ -1,3 +1,5 @@
+import { AuthError } from "next-auth";
+
 import user from "@/__tests__/__fixtures__/user.json";
 
 const signIn = jest.fn();
@@ -14,6 +16,7 @@ const mockAuth = {
     handlers,
   })),
   auth: jest.fn(),
+  AuthError,
 };
 
 jest.mock("next-auth", () => ({
