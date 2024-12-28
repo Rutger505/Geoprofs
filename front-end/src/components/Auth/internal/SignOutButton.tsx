@@ -1,3 +1,5 @@
+"use client";
+
 import { logout } from "@/lib/authActions";
 import { HTMLAttributes } from "react";
 
@@ -6,7 +8,7 @@ interface Props extends HTMLAttributes<HTMLButtonElement> {}
 /**
  * Headless sign-out button. always renders.
  */
-export async function SignOutButton({
+export function SignOutButton({
   children,
   onClick,
   ...props

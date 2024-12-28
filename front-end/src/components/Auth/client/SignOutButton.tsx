@@ -1,3 +1,5 @@
+"use client";
+
 import { SignOutButton as HeadlessSignOutButton } from "@/components/Auth/internal/SignOutButton";
 import { useSession } from "next-auth/react";
 import { HTMLAttributes } from "react";
