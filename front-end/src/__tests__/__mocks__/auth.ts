@@ -1,35 +1,34 @@
-import { AuthError } from "next-auth";
-
 import user from "@/__tests__/__fixtures__/user.json";
 
-const signIn = jest.fn();
-const signOut = jest.fn();
-const handlers = jest.fn();
-
-const mockAuth = {
-  signIn,
-  signOut,
-  handlers,
-  default: jest.fn(() => ({
-    signIn,
-    signOut,
-    handlers,
-  })),
-  auth: jest.fn(),
-  AuthError,
-};
+const mockSignIn = jest.fn();
+const mockSignOut = jest.fn();
+const mockHandlers = jest.fn();
+const mockAuthFn = jest.fn();
 
 jest.mock("next-auth", () => ({
   __esModule: true,
-  ...mockAuth,
+  signIn: mockSignIn,
+  signOut: mockSignOut,
+  handlers: mockHandlers,
+  auth: mockAuthFn,
+  default: jest.fn(() => ({
+    signIn: mockSignIn,
+    signOut: mockSignOut,
+    handlers: mockHandlers,
+    auth: mockAuthFn,
+  })),
+  AuthError: class MockAuthError extends Error {
+    constructor(message: string) {
+      super(message);
+      this.name = "AuthError";
+    }
+  },
 }));
 
 export function mockAuthenticatedUser() {
-  mockAuth.auth.mockReturnValueOnce(Promise.resolve(user));
+  mockAuthFn.mockReturnValueOnce(Promise.resolve(user));
 }
 
 export function mockUnauthenticatedUser() {
-  mockAuth.auth.mockReturnValueOnce(Promise.resolve(null));
+  mockAuthFn.mockReturnValueOnce(Promise.resolve(null));
 }
-
-export { mockAuth };
