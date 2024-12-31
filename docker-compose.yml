@@ -43,6 +43,10 @@ services:
     build:
       context: ./back-end
       target: development
+    entrypoint: >
+      /bin/sh -c "
+      php artisan migrate --force &&
+      apache2-foreground"
     environment:
       DB_HOST: db
     env_file:
