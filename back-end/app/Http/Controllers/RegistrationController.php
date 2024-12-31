@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegisterMail;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Cache;
-use App\Mail\RegisterMail;
+use Illuminate\Support\Str;
 
 
 class RegistrationController extends Controller
@@ -201,6 +199,7 @@ class RegistrationController extends Controller
             Carbon::now()->addDay(),
             ['token' => $token],
         );
+        $verifyURL = str_replace('api/auth/register/complete', 'complete', $signedUrl);
 
         // Store the token in the cache
         Cache::put($token, true, Carbon::now()->addDay());
@@ -216,7 +215,7 @@ class RegistrationController extends Controller
 
         ]);
 
-        Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email));
+        Mail::to($request->email)->send(new RegisterMail($verifyURL, $request->email));
 
         return response()->json([
             'message' => 'user successfully created',
