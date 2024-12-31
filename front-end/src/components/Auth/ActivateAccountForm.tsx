@@ -7,11 +7,15 @@ import clsx from "clsx";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { FormEvent, useState } from "react";
 
-export function ActivateAccountForm() {
+interface Props {
+  token: string;
+}
+
+export function ActivateAccountForm({ token }: Readonly<Props>) {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const { mutate, isPending, error } = useMutation({
-    mutationFn: () => activateAccount(password, repeatPassword),
+    mutationFn: () => activateAccount(password, repeatPassword, token),
   });
 
   async function handleSubmit(e: FormEvent) {

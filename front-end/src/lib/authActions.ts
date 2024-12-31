@@ -2,8 +2,8 @@
 
 import { signIn, signOut } from "@/lib/auth";
 import axios from "@/lib/axios";
-import { redirect } from "next/navigation";
 import { ApiResponseError } from "@/lib/errors";
+import { redirect } from "next/navigation";
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -31,6 +31,7 @@ export async function logout(): Promise<void> {
 export async function activateAccount(
   password: string,
   repeatPassword: string,
+  token: string,
 ) {
   if (password !== repeatPassword) {
     throw new Error("Passwords do not match");
@@ -41,7 +42,7 @@ export async function activateAccount(
   }
 
   try {
-    await axios.post("/api/auth/activate", {
+    await axios.put(`/auth/register/complete/${token}`, {
       password,
     });
   } catch (e) {

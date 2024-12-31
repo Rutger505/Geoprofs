@@ -193,13 +193,7 @@ class RegistrationController extends Controller
 
         $token = (string) Str::uuid();
 
-        // Create a signed URL
-        $signedUrl = URL::temporarySignedRoute(
-            'register.confirm',
-            Carbon::now()->addDay(),
-            ['token' => $token],
-        );
-        $verifyURL = str_replace('api/auth/register/complete', 'complete', $signedUrl);
+        $url = URL::to('/').'/complete/'.$token;
 
         // Store the token in the cache
         Cache::put($token, true, Carbon::now()->addDay());
@@ -215,7 +209,7 @@ class RegistrationController extends Controller
 
         ]);
 
-        Mail::to($request->email)->send(new RegisterMail($verifyURL, $request->email));
+        Mail::to($request->email)->send(new RegisterMail($url, $request->email));
 
         return response()->json([
             'message' => 'user successfully created',
