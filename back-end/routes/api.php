@@ -33,6 +33,10 @@ Route::prefix('auth')->group(function (): void {
         ->middleware(EnsureUserIsAdmin::class);
 
 
+    Route::get('/register/pending/{token}', [RegistrationController::class, 'getPendingUser'])
+        ->name('register.confirm.info');
+
+
     Route::put('/register/complete/{token}', [RegistrationController::class, 'register'])
         ->name('register.confirm');
 

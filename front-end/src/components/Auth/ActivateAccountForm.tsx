@@ -9,13 +9,14 @@ import { FormEvent, useState } from "react";
 
 interface Props {
   token: string;
+  email: string;
 }
 
-export function ActivateAccountForm({ token }: Readonly<Props>) {
+export function ActivateAccountForm({ token, email }: Readonly<Props>) {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const { mutate, isPending, error } = useMutation({
-    mutationFn: () => activateAccount(password, repeatPassword, token),
+    mutationFn: () => activateAccount(password, repeatPassword, token, email),
   });
 
   async function handleSubmit(e: FormEvent) {

@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return Roles::where('RoleID', $this->UserRoleID)->first()->RoleName === 'Admin';
     }
+
+    public function setRoleName(): void
+    {
+       $this->RoleName = Roles::where('RoleID', $this->UserRoleID)->first()->RoleName;
+    }
 }
