@@ -8,8 +8,10 @@ export default function Page() {
   ];
 
   return (
-    <main className="flex items-center justify-center">
-      <h1>Register employee</h1>
+    <main className="flex flex-col items-center justify-center gap-20">
+      <h1 className={"text-center text-3xl font-semibold"}>
+        Registreer nieuwe medewerker
+      </h1>
 
       <RegisterEmployeeForm roles={roles} defaultRole={roles[1]} />
     </main>
