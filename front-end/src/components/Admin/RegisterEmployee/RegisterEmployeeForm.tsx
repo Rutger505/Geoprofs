@@ -37,23 +37,25 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
       }}
       className="space-y-6"
     >
-      <Field>
-        <Label className={"block"}>Voornaam</Label>
-        <Input
-          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onChange={(event) => setFirstName(event.target.value)}
-          required
-        />
-      </Field>
+      <div className="flex max-w-sm gap-5">
+        <Field>
+          <Label className={"block"}>Voornaam</Label>
+          <Input
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(event) => setFirstName(event.target.value)}
+            required
+          />
+        </Field>
 
-      <Field>
-        <Label className={"block"}>Achternaam</Label>
-        <Input
-          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onChange={(event) => setLastName(event.target.value)}
-          required
-        />
-      </Field>
+        <Field>
+          <Label className={"block"}>Achternaam</Label>
+          <Input
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(event) => setLastName(event.target.value)}
+            required
+          />
+        </Field>
+      </div>
 
       <Field>
         <Label className={"block"}>Email</Label>
@@ -77,7 +79,7 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
       <Field>
         <Label className={"block"}>Rol</Label>
         <Select
-          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(event) =>
             setRole(roles.find((role) => role.id === +event.target.value)!)
           }
