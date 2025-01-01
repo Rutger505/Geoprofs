@@ -8,7 +8,6 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Middleware\EnsureUserIsAdmin;
-use App\Models\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,17 +37,10 @@ Route::prefix('auth')->group(function (): void {
 
     Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
-        $role = Roles::where('RoleID', $request->user()->UserRoleID)->first();
+        $user = $request->user();
+        $user->setRoleName();
 
-        $userArray = $request->user()->toArray();
-        $userArray['RoleName'] = $role;
-
-
-        if ($role['RoleName'] == null || trim($role['RoleName']) == "") {
-            return response()->json(['message' => "user doesn't have a role"], 424);
-        }
-
-        return $userArray;
+        return response()->json($user);
     });
 });
 
