@@ -49,6 +49,8 @@ class User extends Authenticatable
             $this->setRoleName();
         }
 
+        var_dump($this->RoleName);
+
         return $this->RoleName === 'Admin';
     }
 

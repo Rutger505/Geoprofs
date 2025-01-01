@@ -1,5 +1,6 @@
 "use client";
 
+import { register } from "@/lib/authActions";
 import { Button, Field, Input, Label, Select } from "@headlessui/react";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -19,14 +20,22 @@ interface Props {
 export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
   const { mutate, isPending, error } = useMutation({
     mutationFn: async () => {
-      console.error("Not implemented");
-      throw new Error("Not implemented");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const date = new Date(dateHired);
+      if (isNaN(date.getTime())) {
+        throw new Error("Please enter a valid date");
+      }
+
+      await register(firstName, lastName, email, date, role.id);
     },
   });
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [dateHired, setDateHired] = useState("");
+  const [dateHired, setDateHired] = useState(
+    new Date().toISOString().split("T")[0],
+  );
   const [role, setRole] = useState<Role>(defaultRole);
 
   return (
@@ -62,6 +71,7 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
         <Input
           className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(event) => setEmail(event.target.value)}
+          type="email"
           required
         />
       </Field>
@@ -71,6 +81,7 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
         <Input
           className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(event) => setDateHired(event.target.value)}
+          value={dateHired}
           type="date"
           required
         />
@@ -101,7 +112,7 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
             isPending && "cursor-not-allowed opacity-50",
           )}
         >
-          {isPending ? "Inloggen..." : "Inloggen"}
+          Registreer{isPending && "..."}
         </Button>
       </div>
 
