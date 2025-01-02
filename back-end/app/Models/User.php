@@ -11,7 +11,7 @@ class User extends Model
 {
     protected $hidden = [
         'password',
-        'registration_token',
+        'registrationToken',
     ];
 
     public function setPasswordAttribute($value)
@@ -21,7 +21,7 @@ class User extends Model
 
     public function role(): BelongsTo
     {
-        return $this->belongsTo(Roles::class, 'role_id', 'id');
+        return $this->belongsTo(Roles::class, 'roleId', 'id');
     }
 
     public function isAdmin(): bool
@@ -31,11 +31,11 @@ class User extends Model
 
     public function getRoleName(): string
     {
-        if ($this->role_name === null) {
+        if ($this->roleName === null) {
             $this->loadRoleName();
         }
 
-        return $this->role_name;
+        return $this->roleName;
     }
 
     public function loadRoleName(): void
@@ -46,6 +46,6 @@ class User extends Model
             throw new Exception('User does not have a valid role');
         }
 
-        $this->role_name = $role->name;
+        $this->roleName = $role->name;
     }
 }
