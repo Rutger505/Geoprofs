@@ -1,4 +1,4 @@
-accessLog: { }
+# accessLog: { }
 
 api:
   dashboard: true

@@ -1,16 +1,17 @@
-import { LoginForm } from "@/components/Auth/LoginForm";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-export default async function Home() {
+export default async function Dashboard() {
   const session = await auth();
-  if (session) {
-    redirect("/dashboard");
+  if (!session) {
+    redirect("/");
   }
 
   return (
     <main className="flex items-center justify-center">
-      <LoginForm />
+      <h1>
+        Welcome {session.user.firstName} {session.user.lastName}!
+      </h1>
     </main>
   );
 }

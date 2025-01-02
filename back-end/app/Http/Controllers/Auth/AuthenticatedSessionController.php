@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Roles;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -64,17 +62,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $role = Roles::where('RoleID', $request->user()->UserRoleID)->first();
+        $user = $request->user();
+        $user->setRoleName();
 
-        $userArray = $request->user()->toArray();
-        $userArray['RoleName'] = $role;
-
-        if ($role['RoleName'] == null || trim($role['RoleName']) == "") {
-            return response()->json(['message' => "user doesn't have a role"], 424);
-        }
 
         return response()->json([
-            'user' => $userArray
+            'user' => $user,
         ], 200);
     }
 
