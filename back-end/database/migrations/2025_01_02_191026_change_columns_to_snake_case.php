@@ -13,6 +13,8 @@ return new class extends Migration {
             $table->renameColumn('UserLastName', 'last_name');
             $table->renameColumn('DateHired', 'date_hired');
             $table->renameColumn('UserRoleID', 'role_id');
+            $table->renameColumn('RegistrationStatus', 'registration_status');
+            $table->renameColumn('RegistrationToken', 'registration_token');
         });
 
         Schema::table('roles', function (Blueprint $table) {
@@ -67,6 +69,9 @@ return new class extends Migration {
             $table->renameColumn('LeaveEndDate', 'end_date');
             $table->renameColumn('LeaveReason', 'reason');
             $table->renameColumn('LeaveCategory', 'category_id');
+            $table->renameColumn('UserID', 'user_id');
+            $table->renameColumn('Status', 'status');
+
         });
 
         Schema::table('user_contract', function (Blueprint $table) {
