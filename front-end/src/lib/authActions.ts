@@ -43,8 +43,10 @@ export async function register(
     });
   } catch (error) {
     if (!(error instanceof AxiosError) || error.response?.status !== 409) {
-      console.error(error.message);
-      console.error(error.response.data);
+      if (error instanceof AxiosError) {
+        console.error(error.message);
+        console.error(error.response?.data);
+      }
 
       throw new Error("Er is iets misgegaan");
     }
