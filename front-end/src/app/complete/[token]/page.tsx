@@ -1,7 +1,6 @@
 import { ActivateAccountForm } from "@/components/Auth/ActivateAccountForm";
 import { auth } from "@/lib/auth";
 import { getPendingAccount } from "@/lib/authActions";
-import { User } from "@/types/user";
 import { redirect } from "next/navigation";
 
 export default async function CompletePage({
@@ -16,20 +15,21 @@ export default async function CompletePage({
 
   const token = (await params).token;
 
-  let pendingUser: User | undefined;
-
-  try {
-    pendingUser = await getPendingAccount(token);
-  } catch (e) {
-    console.error(e);
-  }
-
-  if (!pendingUser) {
-    return (
-      <main className={"flex flex-col justify-center gap-20"}>
-        <p className={"text-center"}>Ongeldige token</p>
-      </main>
-    );
+  const pendingUser = await getPendingAccount(token);
+  if ("invalidToken" in pendingUser) {
+    if (pendingUser.invalidToken) {
+      return (
+        <main className={"flex flex-col justify-center gap-20"}>
+          <p className={"text-center"}>Ongeldige token</p>
+        </main>
+      );
+    } else {
+      return (
+        <main className={"flex flex-col justify-center gap-20"}>
+          <p className={"text-center"}>Er is iets misgegaan</p>
+        </main>
+      );
+    }
   }
 
   return (

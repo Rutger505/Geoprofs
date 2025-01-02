@@ -5,6 +5,7 @@ import axios from "@/lib/axios";
 import { ApiResponseError } from "@/lib/errors";
 import { ApiUser } from "@/lib/signInApi";
 import { User } from "@/types/user";
+import { AxiosError } from "axios";
 import { isRedirectError } from "next/dist/client/components/redirect";
 
 const MIN_PASSWORD_LENGTH = 8;
@@ -37,7 +38,7 @@ export async function logout() {
 
 export async function getPendingAccount(
   token: string,
-): Promise<User | ErrorResponse> {
+): Promise<User | { invalidToken: boolean }> {
   try {
     const response = await axios.get<ApiUser>(
       `/auth/register/pending/${token}`,
@@ -53,8 +54,12 @@ export async function getPendingAccount(
       roleName: apiUser.RoleName,
     };
   } catch (error) {
+    if (error instanceof AxiosError && error.response?.status === 422) {
+      return { invalidToken: true };
+    }
+
     console.error(error);
-    return { error: "Invalid token" };
+    return { invalidToken: false };
   }
 }
 
@@ -78,13 +83,21 @@ export async function activateAccount(
     await axios.put(`/auth/register/complete/${token}`, {
       password,
     });
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to activate account" };
+  }
 
+  try {
     await login(email, password);
   } catch (error) {
     // Error thrown by next redirect. Throw to continue the redirect.
     if (isRedirectError(error)) throw error;
 
     console.error(error);
-    return { error: "Failed to activate account" };
+    return {
+      error:
+        "Successfully activated account, but couldn't automatically log in. Try logging in on the home page",
+    };
   }
 }

@@ -16,7 +16,18 @@ export function ActivateAccountForm({ token, email }: Readonly<Props>) {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const { mutate, isPending, error } = useMutation({
-    mutationFn: () => activateAccount(password, repeatPassword, token, email),
+    mutationFn: async () => {
+      const result = await activateAccount(
+        password,
+        repeatPassword,
+        token,
+        email,
+      );
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+    },
   });
 
   async function handleSubmit(e: FormEvent) {
