@@ -23,7 +23,6 @@ services:
     env_file:
       - ./front-end/.env
     environment:
-      NEXT_PUBLIC_BACKEND_URL: https://localhost/api
       BACKEND_URL: http://back-end/api
     develop:
       watch:
@@ -60,9 +59,6 @@ services:
           path: ./back-end/composer.json
     depends_on:
       - db
-    labels:
-      traefik.http.routers.back-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
-      traefik.http.routers.back-end.tls: true
 
   db:
     container_name: db

@@ -1,18 +1,13 @@
 "use server";
 
-import { signIn, signOut } from "@/lib/auth";
+import { ApiUser, mapApiUserToUser, signIn, signOut } from "@/lib/auth";
 import axios from "@/lib/axios";
-import { ApiResponseError } from "@/lib/errors";
-import { ApiUser } from "@/lib/signInApi";
 import { User } from "@/types/user";
 import { AxiosError } from "axios";
+import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
 
 const MIN_PASSWORD_LENGTH = 8;
-
-interface ErrorResponse {
-  error: string;
-}
 
 export async function login(email: string, password: string) {
   try {
@@ -23,15 +18,14 @@ export async function login(email: string, password: string) {
       redirectTo: "/dashboard",
     });
   } catch (error) {
-    // Error thrown by next redirect. Throw to continue the redirect.
     if (isRedirectError(error)) throw error;
 
-    if (error instanceof ApiResponseError) {
-      return { error: error.message };
+    if (!(error instanceof AuthError) || error.type !== "CredentialsSignin") {
+      console.error(error);
+      return { error: "Something went wrong." };
     }
 
-    console.error(error);
-    return { error: "Failed to login" };
+    return { error: "Invalid credentials." };
   }
 }
 
@@ -46,16 +40,8 @@ export async function getPendingAccount(
     const response = await axios.get<ApiUser>(
       `/auth/register/pending/${token}`,
     );
-    const apiUser = response.data;
-    return {
-      id: apiUser.UserID.toString(),
-      email: apiUser.email,
-      firstName: apiUser.UserFirstName,
-      lastName: apiUser.UserLastName,
-      dateHired: apiUser.DateHired,
-      roleId: apiUser.UserRoleID,
-      roleName: apiUser.RoleName,
-    };
+
+    return mapApiUserToUser(response.data);
   } catch (error) {
     if (error instanceof AxiosError && error.response?.status === 422) {
       return { invalidToken: true };
