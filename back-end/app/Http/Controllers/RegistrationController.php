@@ -150,12 +150,12 @@ class RegistrationController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(
-     *                 property="firstName",
+     *                 property="first_name",
      *                 type="string",
      *                 example="John"
      *             ),
      *             @OA\Property(
-     *                 property="lastName",
+     *                 property="last_name",
      *                 type="string",
      *                 example="Doe"
      *             ),
@@ -166,7 +166,7 @@ class RegistrationController extends Controller
      *                 example="admin@example.com"
      *             ),
      *             @OA\Property(
-     *                 property="dateHired",
+     *                 property="date_hired",
      *                 type="string",
      *                 format="date",
      *                 example="2023-12-01"
@@ -220,10 +220,10 @@ class RegistrationController extends Controller
     public function adminRegister(Request $request)
     {
         $request->validate([
-            'firstName' => 'required|string',
-            'lastName' => 'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             'email' => 'required|email',
-            'dateHired' => 'required|date',
+            'date_hired' => 'required|date',
             'role' => 'required|int'
         ]);
 
@@ -239,10 +239,10 @@ class RegistrationController extends Controller
         Cache::put($token, true, Carbon::now()->addDay());
 
         User::create([
-            'UserFirstName' => $request->firstName,
-            'UserLastName' => $request->lastName,
+            'UserFirstName' => $request->first_name,
+            'UserLastName' => $request->last_name,
             'email' => $request->email,
-            'DateHired' => $request->dateHired,
+            'DateHired' => $request->date_hired,
             'UserRoleID' => $request->role,
             'RegistrationStatus' => 'pending',
             'RegistrationToken' => $token

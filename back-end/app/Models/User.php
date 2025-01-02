@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 
@@ -44,7 +45,22 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return Roles::where('RoleID', $this->UserRoleID)->first()->RoleName === 'Admin';
+        if ($this->RoleName === null) {
+            $this->setRoleName();
+        }
+
+        return $this->RoleName === 'Admin';
+    }
+
+    public function setRoleName(): void
+    {
+        $roleName = Roles::where('RoleID', $this->UserRoleID)->first()->RoleName;
+
+        if ($roleName === null || trim($roleName) === '') {
+            throw new Exception('User does not have a role');
+        }
+
+       $this->RoleName = $roleName;
     }
 
     public function setRoleName(): void
