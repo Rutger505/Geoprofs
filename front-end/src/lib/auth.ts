@@ -1,4 +1,3 @@
-import axios from "@/lib/axios";
 import { authorize } from "@/lib/signInApi";
 import { User } from "@/types/user";
 import { JWT } from "@auth/core/jwt";
@@ -19,11 +18,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize,
     }),
   ],
-  events: {
-    async signOut() {
-      await axios.post("/auth/logout");
-    },
-  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
