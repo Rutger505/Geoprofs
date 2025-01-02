@@ -132,7 +132,7 @@ class RegistrationController extends Controller
      *                 example="2023-12-01"
      *             ),
      *             @OA\Property(
-     *                 property="role",
+     *                 property="roleId",
      *                 type="integer",
      *                 example=1
      *             )
