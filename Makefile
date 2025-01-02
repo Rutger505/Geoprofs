@@ -3,22 +3,34 @@ include .env
 all: up
 
 up: ssl
-	docker compose up --build --detach --remove-orphans --force-recreate
+	docker compose up --watch --build --remove-orphans --force-recreate
+
+up-%: ssl
+	docker compose up --build --detach --remove-orphans --force-recreate $*
+
+restart: up # start already rebuilds and recreates the containers
+
+restart-%:
+	$(MAKE) up-$*
 
 down:
 	docker compose down --remove-orphans
 
-restart: up # start already rebuilds and recreates the containers
+down-%:
+	docker compose down --remove-orphans $*
 
 shell-%:
 	docker compose exec $* bash
 
-ssl:
-	@if not exist proxy\ssl\${DOMAIN}.pem (  \
-		cd proxy\ssl &&                      \
-		mkcert -install &&                   \
-		mkcert ${DOMAIN} &&                  \
-		echo SSL certificates generated.     \
-	) else (                                 \
-		echo SSL certificates already exist. \
+ssl: proxy/ssl/${DOMAIN}.pem
+
+proxy/ssl/%.pem:
+	-mkdir proxy\ssl
+	@if not exist proxy\ssl\$*.pem (       \
+	   cd proxy\ssl                     && \
+	   mkcert -install                  && \
+	   mkcert $*                      	&& \
+	   echo SSL certificates generated     \
+	) else (                               \
+	   echo SSL certificates already exist \
 	)

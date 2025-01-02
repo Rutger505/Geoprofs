@@ -7,7 +7,6 @@ services:
         ENVIRONMENT: ${ENVIRONMENT}
         DOMAIN: ${DOMAIN}
     container_name: "proxy"
-    restart: unless-stopped
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./proxy/ssl/:/ssl/"
@@ -20,11 +19,17 @@ services:
     container_name: front-end
     build:
       context: ./front-end
-    restart: unless-stopped
-    volumes:
-      - ./front-end:/app
+      target: development
+    develop:
+      watch:
+        - action: sync
+          path: ./front-end/src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./front-end/package.json
     labels:
-      traefik.enable: true
       traefik.http.routers.front-end.rule: Host(`${DOMAIN}`)
       traefik.http.routers.front-end.tls: true
 
@@ -32,34 +37,36 @@ services:
     container_name: back-end
     build:
       context: ./back-end
-    restart: unless-stopped
+      target: development
     environment:
-      DB_CONNECTION: pgsql
       DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: ${POSTGRES_DB}
-      DB_USERNAME: ${POSTGRES_USERNAME}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
       - ./back-end/.env
-    volumes:
-      - ./back-end:/var/www/html
+    develop:
+      watch:
+        - action: sync
+          path: ./back-end
+          target: /var/www/html
+        - action: rebuild
+          path: ./back-end/composer.json
     depends_on:
       - db
     labels:
-      traefik.enable: true
-      traefik.http.routers.backend-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
-      traefik.http.routers.backend-end.tls: true
+      traefik.http.routers.back-end.rule: Host(`${DOMAIN}`) && PathPrefix(`/api`)
+      traefik.http.routers.back-end.tls: true
 
   db:
     container_name: db
-    image: postgres
+    image: postgres:17
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - ./db/data:/var/lib/postgresql/data
+      - geoprofs_postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
+volumes:
+  geoprofs_postgres_data:
