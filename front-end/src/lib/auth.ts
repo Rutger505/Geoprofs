@@ -1,7 +1,8 @@
+import axios from "@/lib/axios";
 import { User } from "@/types/user";
 import { JWT } from "@auth/core/jwt";
 import Credentials from "@auth/core/providers/credentials";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import NextAuth, { Session } from "next-auth";
 
 export interface ApiUser {
