@@ -28,8 +28,8 @@ Route::prefix('auth')->group(function (): void {
         ->middleware('auth')
         ->name('logout');
 
-    Route::post('/register', [RegistrationController::class, 'adminRegister'])
-        ->middleware(EnsureUserIsAdmin::class);
+    Route::post('/register', [RegistrationController::class, 'adminRegister']);
+//        ->middleware(EnsureUserIsAdmin::class);
 
 
     Route::put('/register/complete/{token}', [RegistrationController::class, 'register'])

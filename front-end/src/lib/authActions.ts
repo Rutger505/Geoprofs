@@ -27,24 +27,20 @@ export async function logout(): Promise<void> {
 }
 
 export async function register(
-  firstname: string,
-  lastname: string,
+  firstName: string,
+  lastName: string,
   email: string,
   dateHired: Date,
   roleId: number,
 ) {
   try {
-    console.error(
-      (
-        await axios.post("/auth/register", {
-          firstname,
-          lastname,
-          email,
-          dateHired,
-          roleId,
-        })
-      ).data,
-    );
+    await axios.post("/auth/register", {
+      firstName,
+      lastName,
+      email,
+      dateHired,
+      roleId,
+    });
   } catch (error) {
     if (!(error instanceof AxiosError) || error.response?.status !== 409) {
       console.error(error.message);

@@ -184,7 +184,7 @@ class RegistrationController extends Controller
             'lastName' => 'required|string',
             'email' => 'required|email',
             'dateHired' => 'required|date',
-            'role' => 'required|int'
+            'roleId' => 'required|int'
         ]);
 
         if (User::where('email', $request->email)->exists()) {
@@ -208,7 +208,7 @@ class RegistrationController extends Controller
             'UserLastName' => $request->lastName,
             'email' => $request->email,
             'DateHired' => $request->dateHired,
-            'UserRoleID' => $request->role,
+            'UserRoleID' => $request->roleId,
             'RegistrationStatus' => 'pending',
             'RegistrationToken' => $token
 
