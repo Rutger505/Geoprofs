@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/health', [HealthController::class, 'index']);
 
 Route::prefix('/auth')->group(function (): void {
-    Route::post('/login', [LoginController::class, 'store']);
+    Route::post('/login', [LoginController::class, 'login']);
 
     Route::post('/register', [RegistrationController::class, 'adminRegister']);
 
