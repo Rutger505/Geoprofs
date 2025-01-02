@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,12 +14,12 @@ class ProjectUserSeeder extends Seeder
     {
         DB::table('project_user')->insert([
             [
-                'ProjectID' => 1,
-                'UserID' => 1,
+                'projectId' => 1,
+                'userId' => 1,
             ],
             [
-                'ProjectID' => 2,
-                'UserID' => 2,
+                'projectId' => 2,
+                'userId' => 2,
             ]
         ]);
     }
