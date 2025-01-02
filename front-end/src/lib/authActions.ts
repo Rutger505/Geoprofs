@@ -9,6 +9,10 @@ import { isRedirectError } from "next/dist/client/components/redirect";
 
 const MIN_PASSWORD_LENGTH = 8;
 
+interface ErrorResponse {
+  error: string;
+}
+
 export async function login(email: string, password: string) {
   try {
     await signIn("credentials", {
@@ -22,15 +26,18 @@ export async function login(email: string, password: string) {
       return { error: error.message };
     }
 
-    throw error;
+    console.error(error);
+    return { error: "Failed to login" };
   }
 }
 
-export async function logout(): Promise<void> {
+export async function logout() {
   await signOut({ redirect: true, redirectTo: "/" });
 }
 
-export async function getPendingAccount(token: string): Promise<User> {
+export async function getPendingAccount(
+  token: string,
+): Promise<User | ErrorResponse> {
   try {
     const response = await axios.get<ApiUser>(
       `/auth/register/pending/${token}`,
@@ -45,9 +52,9 @@ export async function getPendingAccount(token: string): Promise<User> {
       roleId: apiUser.UserRoleID,
       roleName: apiUser.RoleName,
     };
-  } catch (e) {
-    console.error(e);
-    throw new Error("Invalid token");
+  } catch (error) {
+    console.error(error);
+    return { error: "Invalid token" };
   }
 }
 
@@ -58,11 +65,13 @@ export async function activateAccount(
   email: string,
 ) {
   if (password !== repeatPassword) {
-    throw new Error("Passwords do not match");
+    return { error: "Passwords do not match" };
   }
 
   if (password.length < MIN_PASSWORD_LENGTH) {
-    throw new Error("Password must be at least 8 characters long");
+    return {
+      error: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`,
+    };
   }
 
   try {
@@ -71,11 +80,11 @@ export async function activateAccount(
     });
 
     await login(email, password);
-  } catch (e) {
+  } catch (error) {
     // Error thrown by next redirect. Throw to continue the redirect.
-    if (isRedirectError(e)) throw e;
+    if (isRedirectError(error)) throw error;
 
-    console.error(e);
-    throw new Error("Something went wrong");
+    console.error(error);
+    return { error: "Failed to activate account" };
   }
 }
