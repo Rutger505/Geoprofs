@@ -23,6 +23,9 @@ export async function login(email: string, password: string) {
       redirectTo: "/dashboard",
     });
   } catch (error) {
+    // Error thrown by next redirect. Throw to continue the redirect.
+    if (isRedirectError(error)) throw error;
+
     if (error instanceof ApiResponseError) {
       return { error: error.message };
     }
