@@ -35,6 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             credentials,
           );
           const apiUser = response.data;
+          console.log(apiUser);
 
           return {
             id: apiUser.UserID.toString(),

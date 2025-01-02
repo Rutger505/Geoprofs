@@ -38,14 +38,14 @@ class User extends Model
         return $this->role_name;
     }
 
-    protected function loadRoleName(): void
+    public function loadRoleName(): void
     {
         $role = $this->role()->first();
 
-        if (!$role || empty(trim($role->role_name))) {
+        if (!$role || empty(trim($role->name))) {
             throw new Exception('User does not have a valid role');
         }
 
-        $this->role_name = $role->role_name;
+        $this->role_name = $role->name;
     }
 }
