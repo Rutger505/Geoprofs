@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegisterMail;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Cache;
-use App\Mail\RegisterMail;
+use Illuminate\Support\Str;
 
 
 class RegistrationController extends Controller
@@ -112,12 +110,12 @@ class RegistrationController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(
-     *                 property="first_name",
+     *                 property="firstName",
      *                 type="string",
      *                 example="John"
      *             ),
      *             @OA\Property(
-     *                 property="last_name",
+     *                 property="lastName",
      *                 type="string",
      *                 example="Doe"
      *             ),
@@ -128,13 +126,13 @@ class RegistrationController extends Controller
      *                 example="admin@example.com"
      *             ),
      *             @OA\Property(
-     *                 property="date_hired",
+     *                 property="dateHired",
      *                 type="string",
      *                 format="date",
      *                 example="2023-12-01"
      *             ),
      *             @OA\Property(
-     *                 property="role",
+     *                 property="roleId",
      *                 type="integer",
      *                 example=1
      *             )
@@ -182,15 +180,15 @@ class RegistrationController extends Controller
     public function adminRegister(Request $request)
     {
         $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
             'email' => 'required|email',
-            'date_hired' => 'required|date',
-            'role' => 'required|int'
+            'dateHired' => 'required|date',
+            'roleId' => 'required|int'
         ]);
 
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['message' => 'email already has a account'], 403);
+            return response()->json(['message' => 'email already has a account'], 409);
         }
 
         $token = (string) Str::uuid();
@@ -206,11 +204,11 @@ class RegistrationController extends Controller
         Cache::put($token, true, Carbon::now()->addDay());
 
         User::create([
-            'UserFirstName' => $request->first_name,
-            'UserLastName' => $request->last_name,
+            'UserFirstName' => $request->firstName,
+            'UserLastName' => $request->lastName,
             'email' => $request->email,
-            'DateHired' => $request->date_hired,
-            'UserRoleID' => $request->role,
+            'DateHired' => $request->dateHired,
+            'UserRoleID' => $request->roleId,
             'RegistrationStatus' => 'pending',
             'RegistrationToken' => $token
 
