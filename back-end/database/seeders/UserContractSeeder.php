@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,36 +15,35 @@ class UserContractSeeder extends Seeder
     {
         DB::table('user_contract')->insert([
             [
-                'ContractID' => 1,
-                'UserID' => 1,
-                'ContractStartDate' => '2023-01-01',
-                'ContractEndDate' => '2025-01-01'
+                'contractId' => 1,
+                'userId' => 1,
+                'startDate' => '2023-01-01',
+                'endDate' => '2025-01-01'
             ],
             [
-                'ContractID' => 2,
-                'UserID' => 2,
-                'ContractStartDate' => '2024-01-01',
-                'ContractEndDate' => null
+                'contractId' => 2,
+                'userId' => 2,
+                'startDate' => '2024-01-01',
+                'endDate' => null
             ],
             [
-                'ContractID' => 3,
-                'UserID' => 3,
-                'ContractStartDate' => '2023-01-01',
-                'ContractEndDate' => '2025-01-01'
+                'contractId' => 3,
+                'userId' => 3,
+                'startDate' => '2023-01-01',
+                'endDate' => '2025-01-01'
             ],
             [
-                'ContractID' => 4,
-                'UserID' => 4,
-                'ContractStartDate' => '2024-01-01',
-                'ContractEndDate' => null
+                'contractId' => 4,
+                'userId' => 4,
+                'startDate' => '2024-01-01',
+                'endDate' => null
             ],
             [
-                'ContractID' => 5,
-                'UserID' => 5,
-                'ContractStartDate' => '2024-01-01',
-                'ContractEndDate' => null
+                'contractId' => 5,
+                'userId' => 5,
+                'startDate' => '2024-01-01',
+                'endDate' => null
             ],
-
         ]);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,13 +15,12 @@ class LeaveCategorySeeder extends Seeder
     {
         DB::table('leave_category')->insert([
             [
-                'LeaveCategoryName' => 'Vakantie',
-                'LeaveCategoryIsPaidLeave' => true
+                'name' => 'Vakantie',
+                'isPaidLeave' => true
             ],
             [
-                'LeaveCategoryName' => 'Ziek',
-                'LeaveCategoryIsPaidLeave' => false
-
+                'name' => 'Ziek',
+                'isPaidLeave' => false
             ]
         ]);
     }

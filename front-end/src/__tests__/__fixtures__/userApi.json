@@ -1,10 +1,11 @@
 {
-  "UserID": 1,
-  "UserFirstName": "Test",
-  "UserLastName": "User",
+  "id": 1,
+  "firstName": "Test",
+  "lastName": "User",
   "email": "test@example.com",
-  "DateHired": "2020-01-01",
-  "UserRoleID": 1,
+  "dateHired": "2020-01-01",
+  "roleId": 1,
+  "roleName": "Test",
   "created_at": "2021-07-07T20:00:00.000Z",
   "updated_at": "2021-07-07T20:00:00.000Z"
 }

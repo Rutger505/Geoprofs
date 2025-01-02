@@ -7,7 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContractDays extends Model
 {
-    protected $table = "contract_days";
-
     use HasFactory;
 }

@@ -7,6 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class LeaveCategory extends Model
 {
-    protected $table = "leave_category";
     use HasFactory;
 }
