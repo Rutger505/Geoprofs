@@ -15,34 +15,34 @@ class UserContractSeeder extends Seeder
     {
         DB::table('user_contract')->insert([
             [
-                'contract_id' => 1,
-                'user_id' => 1,
-                'start_date' => '2023-01-01',
-                'end_date' => '2025-01-01'
+                'contractId' => 1,
+                'userId' => 1,
+                'startDate' => '2023-01-01',
+                'endDate' => '2025-01-01'
             ],
             [
-                'contract_id' => 2,
-                'user_id' => 2,
-                'start_date' => '2024-01-01',
-                'end_date' => null
+                'contractId' => 2,
+                'userId' => 2,
+                'startDate' => '2024-01-01',
+                'endDate' => null
             ],
             [
-                'contract_id' => 3,
-                'user_id' => 3,
-                'start_date' => '2023-01-01',
-                'end_date' => '2025-01-01'
+                'contractId' => 3,
+                'userId' => 3,
+                'startDate' => '2023-01-01',
+                'endDate' => '2025-01-01'
             ],
             [
-                'contract_id' => 4,
-                'user_id' => 4,
-                'start_date' => '2024-01-01',
-                'end_date' => null
+                'contractId' => 4,
+                'userId' => 4,
+                'startDate' => '2024-01-01',
+                'endDate' => null
             ],
             [
-                'contract_id' => 5,
-                'user_id' => 5,
-                'start_date' => '2024-01-01',
-                'end_date' => null
+                'contractId' => 5,
+                'userId' => 5,
+                'startDate' => '2024-01-01',
+                'endDate' => null
             ],
         ]);
     }

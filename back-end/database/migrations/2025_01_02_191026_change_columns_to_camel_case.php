@@ -9,12 +9,12 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             $table->renameColumn('UserID', 'id');
-            $table->renameColumn('UserFirstName', 'first_name');
-            $table->renameColumn('UserLastName', 'last_name');
-            $table->renameColumn('DateHired', 'date_hired');
-            $table->renameColumn('UserRoleID', 'role_id');
-            $table->renameColumn('RegistrationStatus', 'registration_status');
-            $table->renameColumn('RegistrationToken', 'registration_token');
+            $table->renameColumn('UserFirstName', 'firstName');
+            $table->renameColumn('UserLastName', 'lastName');
+            $table->renameColumn('DateHired', 'dateHired');
+            $table->renameColumn('UserRoleID', 'roleId');
+            $table->renameColumn('RegistrationStatus', 'registrationStatus');
+            $table->renameColumn('RegistrationToken', 'registrationToken');
         });
 
         Schema::table('roles', function (Blueprint $table) {
@@ -28,10 +28,9 @@ return new class extends Migration {
         });
 
         Schema::table('section_user', function (Blueprint $table) {
-            $table->renameColumn('SectionID', 'section_id');
-            $table->renameColumn('UserID', 'user_id');
+            $table->renameColumn('SectionID', 'sectionId');
+            $table->renameColumn('UserID', 'userId');
         });
-
 
         Schema::table('projects', function (Blueprint $table) {
             $table->renameColumn('ProjectID', 'id');
@@ -39,54 +38,49 @@ return new class extends Migration {
         });
 
         Schema::table('project_user', function (Blueprint $table) {
-            $table->renameColumn('ProjectID', 'project_id');
-            $table->renameColumn('UserID', 'user_id');
+            $table->renameColumn('ProjectID', 'projectId');
+            $table->renameColumn('UserID', 'userId');
         });
-
 
         Schema::table('contracts', function (Blueprint $table) {
             $table->renameColumn('ContractID', 'id');
             $table->renameColumn('ContractName', 'name');
-            $table->renameColumn('ContractTotalLeaveHours', 'total_leave_hours');
+            $table->renameColumn('ContractTotalLeaveHours', 'totalLeaveHours');
         });
-
 
         Schema::table('days', function (Blueprint $table) {
             $table->renameColumn('DayID', 'id');
             $table->renameColumn('DayName', 'name');
         });
 
-
         Schema::table('leave_category', function (Blueprint $table) {
             $table->renameColumn('CategoryID', 'id');
             $table->renameColumn('LeaveCategoryName', 'name');
-            $table->renameColumn('LeaveCategoryIsPaidLeave', 'is_paid_leave');
+            $table->renameColumn('LeaveCategoryIsPaidLeave', 'isPaidLeave');
         });
 
         Schema::table('leave', function (Blueprint $table) {
             $table->renameColumn('LeaveID', 'id');
-            $table->renameColumn('LeaveStartDate', 'start_date');
-            $table->renameColumn('LeaveEndDate', 'end_date');
+            $table->renameColumn('LeaveStartDate', 'startDate');
+            $table->renameColumn('LeaveEndDate', 'endDate');
             $table->renameColumn('LeaveReason', 'reason');
-            $table->renameColumn('LeaveCategory', 'category_id');
-            $table->renameColumn('UserID', 'user_id');
+            $table->renameColumn('LeaveCategory', 'categoryId');
+            $table->renameColumn('UserID', 'userId');
             $table->renameColumn('Status', 'status');
-
         });
 
         Schema::table('user_contract', function (Blueprint $table) {
-            $table->renameColumn('ContractStartDate', 'start_date');
-            $table->renameColumn('ContractEndDate', 'end_date');
-            $table->renameColumn('ContractID', 'contract_id');
-            $table->renameColumn('UserID', 'user_id');
+            $table->renameColumn('ContractStartDate', 'startDate');
+            $table->renameColumn('ContractEndDate', 'endDate');
+            $table->renameColumn('ContractID', 'contractId');
+            $table->renameColumn('UserID', 'userId');
         });
 
         Schema::table('contract_days', function (Blueprint $table) {
-            $table->renameColumn('WorkStartHourDay', 'start_hour');
-            $table->renameColumn('WorkEndHourDay', 'end_hour');
-
-            $table->renameColumn('DayID', 'day_id');
-            $table->renameColumn('ContractID', 'contract_id');
+            $table->renameColumn('WorkStartHourDay', 'startHour');
+            $table->renameColumn('WorkEndHourDay', 'endHour');
+            $table->renameColumn('DayID', 'dayId');
+            $table->renameColumn('ContractID', 'contractId');
         });
     }
 
@@ -94,10 +88,12 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             $table->renameColumn('id', 'UserID');
-            $table->renameColumn('first_name', 'UserFirstName');
-            $table->renameColumn('last_name', 'UserLastName');
-            $table->renameColumn('date_hired', 'DateHired');
-            $table->renameColumn('role_id', 'UserRoleID');
+            $table->renameColumn('firstName', 'UserFirstName');
+            $table->renameColumn('lastName', 'UserLastName');
+            $table->renameColumn('dateHired', 'DateHired');
+            $table->renameColumn('roleId', 'UserRoleID');
+            $table->renameColumn('registrationStatus', 'RegistrationStatus');
+            $table->renameColumn('registrationToken', 'RegistrationToken');
         });
 
         Schema::table('roles', function (Blueprint $table) {
@@ -111,8 +107,8 @@ return new class extends Migration {
         });
 
         Schema::table('section_user', function (Blueprint $table) {
-            $table->renameColumn('section_id', 'SectionID');
-            $table->renameColumn('user_id', 'UserID');
+            $table->renameColumn('sectionId', 'SectionID');
+            $table->renameColumn('userId', 'UserID');
         });
 
         Schema::table('projects', function (Blueprint $table) {
@@ -121,14 +117,14 @@ return new class extends Migration {
         });
 
         Schema::table('project_user', function (Blueprint $table) {
-            $table->renameColumn('project_id', 'ProjectID');
-            $table->renameColumn('user_id', 'UserID');
+            $table->renameColumn('projectId', 'ProjectID');
+            $table->renameColumn('userId', 'UserID');
         });
 
         Schema::table('contracts', function (Blueprint $table) {
             $table->renameColumn('id', 'ContractID');
             $table->renameColumn('name', 'ContractName');
-            $table->renameColumn('total_leave_hours', 'ContractTotalLeaveHours');
+            $table->renameColumn('totalLeaveHours', 'ContractTotalLeaveHours');
         });
 
         Schema::table('days', function (Blueprint $table) {
@@ -136,35 +132,34 @@ return new class extends Migration {
             $table->renameColumn('name', 'DayName');
         });
 
-
         Schema::table('leave_category', function (Blueprint $table) {
             $table->renameColumn('id', 'CategoryID');
             $table->renameColumn('name', 'LeaveCategoryName');
-            $table->renameColumn('is_paid_leave', 'LeaveCategoryIsPaidLeave');
+            $table->renameColumn('isPaidLeave', 'LeaveCategoryIsPaidLeave');
         });
 
         Schema::table('leave', function (Blueprint $table) {
             $table->renameColumn('id', 'LeaveID');
-            $table->renameColumn('start_date', 'LeaveStartDate');
-            $table->renameColumn('end_date', 'LeaveEndDate');
+            $table->renameColumn('startDate', 'LeaveStartDate');
+            $table->renameColumn('endDate', 'LeaveEndDate');
             $table->renameColumn('reason', 'LeaveReason');
-            $table->renameColumn('category_id', 'LeaveCategory');
+            $table->renameColumn('categoryId', 'LeaveCategory');
+            $table->renameColumn('userId', 'UserID');
+            $table->renameColumn('status', 'Status');
         });
 
         Schema::table('user_contract', function (Blueprint $table) {
-            $table->renameColumn('start_date', 'ContractStartDate');
-            $table->renameColumn('end_date', 'ContractEndDate');
-            $table->renameColumn('contract_id', 'ContractID');
-            $table->renameColumn('user_id', 'UserID');
+            $table->renameColumn('startDate', 'ContractStartDate');
+            $table->renameColumn('endDate', 'ContractEndDate');
+            $table->renameColumn('contractId', 'ContractID');
+            $table->renameColumn('userId', 'UserID');
         });
 
-
         Schema::table('contract_days', function (Blueprint $table) {
-
-            $table->renameColumn('day_id', 'DayID');
-            $table->renameColumn('contract_id', 'ContractID');
-            $table->renameColumn('start_hour', 'WorkStartHourDay');
-            $table->renameColumn('end_hour', 'WorkEndHourDay');
+            $table->renameColumn('startHour', 'WorkStartHourDay');
+            $table->renameColumn('endHour', 'WorkEndHourDay');
+            $table->renameColumn('dayId', 'DayID');
+            $table->renameColumn('contractId', 'ContractID');
         });
     }
 };

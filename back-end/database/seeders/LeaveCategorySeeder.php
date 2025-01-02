@@ -16,11 +16,11 @@ class LeaveCategorySeeder extends Seeder
         DB::table('leave_category')->insert([
             [
                 'name' => 'Vakantie',
-                'is_paid_leave' => true
+                'isPaidLeave' => true
             ],
             [
                 'name' => 'Ziek',
-                'is_paid_leave' => false
+                'isPaidLeave' => false
             ]
         ]);
     }

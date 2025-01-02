@@ -14,12 +14,12 @@ class ProjectUserSeeder extends Seeder
     {
         DB::table('project_user')->insert([
             [
-                'project_id' => 1,
-                'user_id' => 1,
+                'projectId' => 1,
+                'userId' => 1,
             ],
             [
-                'project_id' => 2,
-                'user_id' => 2,
+                'projectId' => 2,
+                'userId' => 2,
             ]
         ]);
     }

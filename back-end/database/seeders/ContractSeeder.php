@@ -16,23 +16,23 @@ class ContractSeeder extends Seeder
         DB::table('contracts')->insert([
             [
                 'name' => 'Hallo Contract',
-                'total_leave_hours' => 10
+                'totalLeaveHours' => 10
             ],
             [
                 'name' => 'Goodbye Contract',
-                'total_leave_hours' => 5
+                'totalLeaveHours' => 5
             ],
             [
                 'name' => 'Jake Contract',
-                'total_leave_hours' => 999
+                'totalLeaveHours' => 999
             ],
             [
                 'name' => 'Rutger Contract',
-                'total_leave_hours' => 50
+                'totalLeaveHours' => 50
             ],
             [
                 'name' => 'BOB Contract',
-                'total_leave_hours' => 1
+                'totalLeaveHours' => 1
             ]
         ]);
     }

@@ -15,16 +15,16 @@ class ContractDaysSeeder extends Seeder
     {
         DB::table('contract_days')->insert([
             [
-                'contract_id' => 1,
-                'day_id' => 1,
-                'start_hour' => '10:00:00',
-                'end_hour' => '17:00:00'
+                'contractId' => 1,
+                'dayId' => 1,
+                'startHour' => '10:00:00',
+                'endHour' => '17:00:00'
             ],
             [
-                'contract_id' => 1,
-                'day_id' => 3,
-                'start_hour' => '09:00:00',
-                'end_hour' => '17:00:00'
+                'contractId' => 1,
+                'dayId' => 3,
+                'startHour' => '09:00:00',
+                'endHour' => '17:00:00'
             ]
         ]);
     }

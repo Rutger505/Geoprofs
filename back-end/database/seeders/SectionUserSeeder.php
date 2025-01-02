@@ -14,12 +14,12 @@ class SectionUserSeeder extends Seeder
     {
         DB::table('section_user')->insert([
             [
-                'section_id' => 1,
-                'user_id' => 1,
+                'sectionId' => 1,
+                'userId' => 1,
             ],
             [
-                'section_id' => 2,
-                'user_id' => 2,
+                'sectionId' => 2,
+                'userId' => 2,
             ]
         ]);
     }
