@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Mail\RegisterMail;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -194,11 +192,11 @@ class RegistrationController extends Controller
     public function adminRegister(Request $request)
     {
         $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
             'email' => 'required|email',
-            'date_hired' => 'required|date',
-            'role' => 'required|int'
+            'dateHired' => 'required|date',
+            'roleId' => 'required|int'
         ]);
 
         if (User::where('email', $request->email)->exists()) {
@@ -209,24 +207,20 @@ class RegistrationController extends Controller
 
         $url = URL::to('/').'/complete/'.$token;
 
-        // Store the token in the cache
-        Cache::put($token, true, Carbon::now()->addDay());
-
         User::create([
-            'UserFirstName' => $request->first_name,
-            'UserLastName' => $request->last_name,
+            'UserFirstName' => $request->firstName,
+            'UserLastName' => $request->lastName,
             'email' => $request->email,
-            'DateHired' => $request->date_hired,
-            'UserRoleID' => $request->role,
+            'DateHired' => $request->dateHired,
+            'UserRoleID' => $request->roleId,
             'RegistrationStatus' => 'pending',
             'RegistrationToken' => $token
-
         ]);
 
         Mail::to($request->email)->send(new RegisterMail($url, $request->email));
 
         return response()->json([
             'message' => 'user successfully created',
-        ], 200);
+        ]);
     }
 }
