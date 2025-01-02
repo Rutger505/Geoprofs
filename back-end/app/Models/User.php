@@ -62,9 +62,4 @@ class User extends Authenticatable
 
        $this->RoleName = $roleName;
     }
-
-    public function setRoleName(): void
-    {
-       $this->RoleName = Roles::where('RoleID', $this->UserRoleID)->first()->RoleName;
-    }
 }
