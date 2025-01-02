@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,36 +15,35 @@ class UserContractSeeder extends Seeder
     {
         DB::table('user_contract')->insert([
             [
-                'ContractID' => 1,
-                'UserID' => 1,
-                'ContractStartDate' => '2023-01-01',
-                'ContractEndDate' => '2025-01-01'
+                'contract_id' => 1,
+                'user_id' => 1,
+                'start_date' => '2023-01-01',
+                'end_date' => '2025-01-01'
             ],
             [
-                'ContractID' => 2,
-                'UserID' => 2,
-                'ContractStartDate' => '2024-01-01',
-                'ContractEndDate' => null
+                'contract_id' => 2,
+                'user_id' => 2,
+                'start_date' => '2024-01-01',
+                'end_date' => null
             ],
             [
-                'ContractID' => 3,
-                'UserID' => 3,
-                'ContractStartDate' => '2023-01-01',
-                'ContractEndDate' => '2025-01-01'
+                'contract_id' => 3,
+                'user_id' => 3,
+                'start_date' => '2023-01-01',
+                'end_date' => '2025-01-01'
             ],
             [
-                'ContractID' => 4,
-                'UserID' => 4,
-                'ContractStartDate' => '2024-01-01',
-                'ContractEndDate' => null
+                'contract_id' => 4,
+                'user_id' => 4,
+                'start_date' => '2024-01-01',
+                'end_date' => null
             ],
             [
-                'ContractID' => 5,
-                'UserID' => 5,
-                'ContractStartDate' => '2024-01-01',
-                'ContractEndDate' => null
+                'contract_id' => 5,
+                'user_id' => 5,
+                'start_date' => '2024-01-01',
+                'end_date' => null
             ],
-
         ]);
     }
 }

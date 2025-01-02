@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -18,103 +17,58 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'UserFirstName' => 'John',
-                'UserLastName' => 'Doe',
-                'email' => 'john.doe@example.com',
-                'password' => Hash::make('password5'),
-                'DateHired' => '2020-01-15',
-                'RegistrationStatus' => 'pending',
-                'UserRoleID' => 1,
-            ],
-            [
-                'UserFirstName' => 'Jane',
-                'UserLastName' => 'Smith',
-                'email' => 'jane.smith@example.com',
-                'password' => Hash::make('password123'),
-                'DateHired' => '2019-05-20',
-                'RegistrationStatus' => 'pending',
-                'UserRoleID' => 2,
-
-            ],
-            [
-                'UserFirstName' => 'Jake',
-                'UserLastName' => 'van de Kolk',
-                'email' => 'jake.kolk@example.com',
-                'password' => Hash::make('jake'),
-                'DateHired' => '2012-05-20',
-                'RegistrationStatus' => 'completed',
-                'UserRoleID' => 3,
-
-            ],
-            [
-                'UserFirstName' => 'Rutger',
-                'UserLastName' => 'Pronk',
-                'email' => 'Rutger.Pronk@example.com',
-                'password' => Hash::make('rutgerrr'),
-                'DateHired' => '2023-09-20',
-                'RegistrationStatus' => 'completed',
-                'UserRoleID' => 4,
-
-            ],
-            [
-                'UserFirstName' => 'Bob',
-                'UserLastName' => 'Bobbers',
-                'email' => 'bob.bobbers@example.com',
-                'password' => Hash::make('bobbiebobbob'),
-                'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'completed',
-                'UserRoleID' => 5,
-
-            ],
-            [
-                'UserFirstName' => 'CEO',
-                'UserLastName' => 'Example',
-                'email' => 'ceo@example.com',
-                'password' => Hash::make('secret'),
-                'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'completed',
-                'UserRoleID' => 1,
-
-            ],
-            [
-                'UserFirstName' => 'Employee',
-                'UserLastName' => 'Example',
+                'first_name' => 'Employee',
+                'last_name' => 'Example',
                 'email' => 'employee@example.com',
                 'password' => Hash::make('secret'),
-                'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'completed',
-                'UserRoleID' => 2,
-
+                'date_hired' => '2015-02-01',
+                'registration_status' => 'completed',
+                'role_id' => 2,
             ],
             [
-                'UserFirstName' => 'Admin',
-                'UserLastName' => 'Example',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('secret'),
-                'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'completed',
-                'UserRoleID' => 3,
-
-            ],
-            [
-                'UserFirstName' => 'SectionManager',
-                'UserLastName' => 'Example',
+                'first_name' => 'SectionManager',
+                'last_name' => 'Example',
                 'email' => 'sectionmanager@example.com',
                 'password' => Hash::make('secret'),
-                'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'completed',
-                'UserRoleID' => 4,
-
+                'date_hired' => '2015-02-01',
+                'registration_status' => 'completed',
+                'role_id' => 4,
             ],
             [
-                'UserFirstName' => 'ProjectManager',
-                'UserLastName' => 'Example',
+                'first_name' => 'ProjectManager',
+                'last_name' => 'Example',
                 'email' => 'projectmanager@example.com',
                 'password' => Hash::make('secret'),
-                'DateHired' => '2015-02-01',
-                'RegistrationStatus' => 'completed',
-                'UserRoleID' => 5,
-
+                'date_hired' => '2015-02-01',
+                'registration_status' => 'completed',
+                'role_id' => 5,
+            ],
+            [
+                'first_name' => 'CEO',
+                'last_name' => 'Example',
+                'email' => 'ceo@example.com',
+                'password' => Hash::make('secret'),
+                'date_hired' => '2015-02-01',
+                'registration_status' => 'completed',
+                'role_id' => 1,
+            ],
+            [
+                'first_name' => 'Admin',
+                'last_name' => 'Example',
+                'email' => 'admin@example.com',
+                'password' => Hash::make('secret'),
+                'date_hired' => '2015-02-01',
+                'registration_status' => 'completed',
+                'role_id' => 3,
+            ],
+            [
+                'first_name' => 'Jake',
+                'last_name' => 'van de Kolk',
+                'email' => 'jake.kolk@example.com',
+                'password' => Hash::make('jake'),
+                'date_hired' => '2012-05-20',
+                'registration_status' => 'completed',
+                'role_id' => 3,
             ],
         ]);
     }

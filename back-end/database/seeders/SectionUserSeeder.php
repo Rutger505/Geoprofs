@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,12 +14,12 @@ class SectionUserSeeder extends Seeder
     {
         DB::table('section_user')->insert([
             [
-                'SectionID' => 1,
-                'UserID' => 1,
+                'section_id' => 1,
+                'user_id' => 1,
             ],
             [
-                'SectionID' => 2,
-                'UserID' => 2,
+                'section_id' => 2,
+                'user_id' => 2,
             ]
         ]);
     }
