@@ -26,7 +26,7 @@ class LeaveController extends Controller
         $leaveEndDate = Carbon::createFromFormat('d-m-Y', $request->endDate)->format('Y-m-d');
 
         //make leave reqeust
-        $leaveRequest = Leave::create([
+        Leave::create([
             'startDate' => $leaveStartDate,
             'endDate' => $leaveEndDate,
             'reason' => $request->reason,
