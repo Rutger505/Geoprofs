@@ -15,32 +15,6 @@ use Illuminate\Support\Str;
 
 class RegistrationController extends Controller
 {
-
-    /**
-     * @OA\Get(
-     *     path="api/auth/pending-user/{token}",
-     *     tags={"Authentication"},
-     *     summary="Get pending user",
-     *     description="Get the user with the given register token",
-     *     @OA\Parameter(
-     *         name="token",
-     *         in="path",
-     *         description="The register token",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="User found",
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Invalid or expired token",
-     *     )
-     * )
-     */
     public function getPendingUser(string $token): JsonResponse
     {
         // Find the user with the given register token

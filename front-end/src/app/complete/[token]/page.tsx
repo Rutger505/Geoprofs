@@ -1,6 +1,7 @@
 import { ActivateAccountForm } from "@/components/Auth/ActivateAccountForm";
 import { auth } from "@/lib/auth";
 import { getPendingAccount } from "@/lib/authActions";
+import { User } from "@/types/user";
 import { redirect } from "next/navigation";
 
 export default async function CompletePage({
@@ -15,16 +16,15 @@ export default async function CompletePage({
 
   const token = (await params).token;
 
-  let email: string | undefined;
+  let pendingUser: User | undefined;
 
   try {
-    const user = await getPendingAccount(token);
-    email = user.email;
+    pendingUser = await getPendingAccount(token);
   } catch (e) {
     console.error(e);
   }
 
-  if (!email) {
+  if (!pendingUser) {
     return (
       <main className={"flex flex-col justify-center gap-20"}>
         <p className={"text-center"}>Ongeldige token</p>
@@ -38,7 +38,7 @@ export default async function CompletePage({
         Activeer je account
       </h1>
 
-      <ActivateAccountForm token={token} email={email} />
+      <ActivateAccountForm token={token} email={pendingUser.email} />
     </main>
   );
 }
