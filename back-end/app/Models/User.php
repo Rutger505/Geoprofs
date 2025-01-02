@@ -4,61 +4,48 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Model
 {
-    protected $primaryKey = 'UserID';
-
-    protected $fillable = [
-        'UserFirstName',
-        'UserLastName',
-        'email',
-        'password',
-        'DateHired',
-        'UserRoleID',
-        'RegistrationStatus',
-        'RegistrationToken'
-    ];
-
     protected $hidden = [
         'password',
+        'registration_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'password' => 'string',
-            'DateHired' => 'datetime',
-        ];
-    }
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
     }
 
-    public function isAdmin(): bool
+    public function role(): BelongsTo
     {
-        if ($this->RoleName === null) {
-            $this->setRoleName();
-        }
-
-        return $this->RoleName === 'Admin';
+        return $this->belongsTo(Roles::class, 'role_id', 'id');
     }
 
-    public function setRoleName(): void
+    public function isAdmin(): bool
     {
-        $roleName = Roles::where('RoleID', $this->UserRoleID)->first()->RoleName;
+        return $this->getRoleName() === 'Admin';
+    }
 
-        if ($roleName === null || trim($roleName) === '') {
-            throw new Exception('User does not have a role');
+    public function getRoleName(): string
+    {
+        if ($this->role_name === null) {
+            $this->loadRoleName();
         }
 
-       $this->RoleName = $roleName;
+        return $this->role_name;
+    }
+
+    protected function loadRoleName(): void
+    {
+        $role = $this->role()->first();
+
+        if (!$role || empty(trim($role->role_name))) {
+            throw new Exception('User does not have a valid role');
+        }
+
+        $this->role_name = $role->role_name;
     }
 }
