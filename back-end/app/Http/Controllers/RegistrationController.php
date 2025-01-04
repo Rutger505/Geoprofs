@@ -131,7 +131,7 @@ class RegistrationController extends Controller
 
         $token = (string)Str::uuid();
 
-        $url = URL::to('/').'/complete/'.$token;
+        $url = config('app.url') . '/complete/' . $token;
 
         User::create([
             'firstName' => $request->firstName,
