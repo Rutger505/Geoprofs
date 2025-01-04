@@ -18,16 +18,16 @@ class RegistrationController extends Controller
     public function getPendingUser(string $token): JsonResponse
     {
         // Find the user with the given register token
-        $user = User::where('RegistrationToken', $token)->first();
+        $user = User::where('registrationToken', $token)->first();
         if (!$user) {
             return response()->json([
                 'message' => 'Invalid or expired token',
             ], 422);
         }
 
-        $user->setRoleName();
+        $user->loadRoleName();
 
-        return response()->json($user, 200);
+        return response()->json($user);
     }
 
     /**
@@ -89,7 +89,6 @@ class RegistrationController extends Controller
      */
     public function register(Request $request, string $token): JsonResponse
     {
-        // Find the user with the given register token
         $user = User::where('registrationToken', $token)->first();
 
         if (!$user) {
@@ -98,12 +97,10 @@ class RegistrationController extends Controller
             ], 422);
         }
 
-        // Validate the incoming request
         $request->validate([
             'password' => 'required|string',
         ]);
 
-        // Update the user's registration status and set the password
         $user->update([
             'password' => $request->password,
             'registrationStatus' => 'completed',
