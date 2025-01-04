@@ -90,5 +90,7 @@ make shell-<container-name>
 # Access the application
 
 - Frontend: [https://localhost](https://localhost)
-- Backend: [https://localhost/api](https://localhost/api)
+
+The backend is not publicly accessible.
+But for development and test deployments, the backend API is exposed on [https://api.localhost](https://api.localhost)
 

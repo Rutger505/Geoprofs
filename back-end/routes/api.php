@@ -1,60 +1,41 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
-use App\Http\Middleware\EnsureUserIsAdmin;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/health', [HealthController::class, 'index']);
 
-Route::prefix('auth')->group(function (): void {
-    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-        ->name('login');
-
-    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-        ->name('password.email');
-
-    Route::post('/reset-password', [NewPasswordController::class, 'store'])
-        ->name('password.store');
-
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->middleware('auth')
-        ->name('logout');
+Route::prefix('/auth')->group(function (): void {
+    Route::post('/login', [LoginController::class, 'login']);
 
     Route::post('/register', [RegistrationController::class, 'adminRegister']);
-//        ->middleware(EnsureUserIsAdmin::class);
 
-
-    Route::put('/register/complete/{token}', [RegistrationController::class, 'register'])
-        ->name('register.confirm');
-
-    Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-
-        $user = $request->user();
-        $user->setRoleName();
-
-        return response()->json($user);
-    });
+    Route::put('/register/complete/{token}', [RegistrationController::class, 'register']);
 });
 
-Route::get('/roles/show', [RolesController::class, 'show'])->middleware(EnsureUserIsAdmin::class);
-
-Route::get('/leave/leave-requests',  [LeaveController::class, 'getLeaveStatus'])->middleware('auth');
-Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');
-
-Route::prefix('contract')->group(function () {
-    Route::post('/store',  [ContractController::class, 'store'])->middleware('auth', EnsureUserIsAdmin::class);
-    Route::get('/show', [ContractController::class, 'show'])->middleware('auth', EnsureUserIsAdmin::class);
-    Route::delete('/delete/{id}', [ContractController::class, 'delete'])->middleware('auth', EnsureUserIsAdmin::class);
-    Route::put('/update/{id}', [ContractController::class, 'update'])->middleware('auth', EnsureUserIsAdmin::class);
+Route::prefix('/roles')->group(function (): void {
+    Route::get('/show', [RolesController::class, 'show']);
 });
 
-Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
+Route::prefix('/leave')->group(function (): void {
+    Route::post('/', [LeaveController::class, 'storeLeaveRequest']);
+
+    Route::get('/leave-requests', [LeaveController::class, 'getLeaveStatus']);
+
+    Route::get('/leave-hours', [LeaveController::class, 'getLeaveHours']);
+});
+
+
+Route::prefix('/contract')->group(function () {
+    Route::post('/store',  [ContractController::class, 'store']);
+    Route::get('/show', [ContractController::class, 'show']);
+    Route::delete('/delete/{id}', [ContractController::class, 'delete']);
+    Route::put('/update/{id}', [ContractController::class, 'update']);
+});
+

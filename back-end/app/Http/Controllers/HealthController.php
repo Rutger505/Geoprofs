@@ -30,6 +30,6 @@ class HealthController extends Controller
      */
     public function index()
     {
-        return response()->json(['status' => 'ok'], 200);
+        return response()->json(['status' => 'ok']);
     }
 }

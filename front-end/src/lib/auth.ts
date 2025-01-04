@@ -1,9 +1,15 @@
 import axios from "@/lib/axios";
-import { authorize } from "@/lib/signInApi";
 import { User } from "@/types/user";
 import { JWT } from "@auth/core/jwt";
 import Credentials from "@auth/core/providers/credentials";
+import { AxiosError } from "axios";
 import NextAuth, { Session } from "next-auth";
+
+interface ApiUser extends Omit<User, "dateHired" | "createdAt" | "updatedAt"> {
+  dateHired: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -16,14 +22,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           type: "password",
         },
       },
-      authorize,
+      authorize: async (credentials): Promise<User | null> => {
+        try {
+          const response = await axios.post<ApiUser>(
+            "/auth/login",
+            credentials,
+          );
+          const apiUser = response.data;
+
+          return {
+            ...apiUser,
+            dateHired: new Date(apiUser.dateHired),
+          };
+        } catch (error) {
+          if (
+            !(error instanceof AxiosError) ||
+            error.response?.status !== 401
+          ) {
+            console.error(error);
+          }
+
+          return null;
+        }
+      },
     }),
   ],
-  events: {
-    async signOut() {
-      await axios.post("/auth/logout");
-    },
-  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -36,5 +59,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
-  basePath: "/auth",
 });

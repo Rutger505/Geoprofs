@@ -1,8 +1,9 @@
 "use server";
 
 import { signIn, signOut } from "@/lib/auth";
+import { AuthError } from "next-auth";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import axios from "@/lib/axios";
-import { ApiResponseError } from "@/lib/errors";
 import { AxiosError } from "axios";
 
 export async function login(email: string, password: string) {
@@ -14,11 +15,14 @@ export async function login(email: string, password: string) {
       redirectTo: "/dashboard",
     });
   } catch (error) {
-    if (error instanceof ApiResponseError) {
-      return { error: error.message };
+    if (isRedirectError(error)) throw error;
+
+    if (!(error instanceof AuthError) || error.type !== "CredentialsSignin") {
+      console.error(error);
+      return { error: "Something went wrong." };
     }
 
-    throw error;
+    return { error: "Invalid credentials." };
   }
 }
 
