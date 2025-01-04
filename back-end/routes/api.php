@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Models\Roles;
@@ -65,4 +66,8 @@ Route::prefix('contract')->group(function () {
     Route::delete('/delete', [ContractController::class, 'delete'])->middleware('auth', EnsureUserIsAdmin::class);
 });
 
+
+Route::prefix('projects')->group(function () {
+    Route::post('/store',  [ProjectController::class, 'store'])->middleware('auth', EnsureUserIsAdmin::class);
+});
 Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
