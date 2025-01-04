@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
-  const { mutate, isPending, error } = useMutation({
+  const { isSuccess, mutate, isPending, error } = useMutation({
     mutationFn: async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -27,7 +27,11 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
         throw new Error("Please enter a valid date");
       }
 
-      await register(firstName, lastName, email, date, role.id);
+      const result = await register(firstName, lastName, email, date, role.id);
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
     },
   });
   const [firstName, setFirstName] = useState("");
@@ -116,12 +120,12 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
         </Button>
       </div>
 
-      {error && !isRedirectError(error) ? (
+      {isSuccess && (
+        <p className="mt-1 text-sm text-green-600">Medewerker geregistreerd!</p>
+      )}
+
+      {error && !isRedirectError(error) && (
         <p className="mt-1 text-sm text-red-600">{error.message}</p>
-      ) : (
-        <p className="invisible mt-1 text-sm text-red-600" aria-hidden="true">
-          spacer
-        </p>
       )}
     </form>
   );

@@ -1,10 +1,10 @@
 "use server";
 
 import { signIn, signOut } from "@/lib/auth";
-import { AuthError } from "next-auth";
-import { isRedirectError } from "next/dist/client/components/redirect";
 import axios from "@/lib/axios";
 import { AxiosError } from "axios";
+import { AuthError } from "next-auth";
+import { isRedirectError } from "next/dist/client/components/redirect";
 
 export async function login(email: string, password: string) {
   try {
@@ -52,9 +52,9 @@ export async function register(
         console.error(error.response?.data);
       }
 
-      throw new Error("Er is iets misgegaan");
+      return { error: "Er is iets misgegaan" };
     }
 
-    throw new Error("Email is al in gebruik");
+    return { error: "Email is al in gebruik" };
   }
 }
