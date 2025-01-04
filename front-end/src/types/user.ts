@@ -6,4 +6,6 @@ export interface User {
   dateHired: Date;
   roleId: number;
   roleName: string;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 }
