@@ -1,15 +1,17 @@
 import { env } from "@/env";
 import Axios from "axios";
 
-const isServer = typeof window === "undefined";
+if (typeof window !== "undefined") {
+  throw new Error(
+    "This axios config is made for Laravel which is accessable from server side only.",
+  );
+}
 
 const axios = Axios.create({
-  baseURL: isServer ? env.BACKEND_URL : env.NEXT_PUBLIC_BACKEND_URL,
+  baseURL: env.BACKEND_URL,
   headers: {
     "X-Requested-With": "XMLHttpRequest",
   },
-  withCredentials: true,
-  withXSRFToken: true,
 });
 
 export default axios;

@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <TanstackQueryProvider>
-          <SessionProvider basePath={"/auth"}>
+          <SessionProvider>
             <div className={"grid min-h-screen grid-rows-[auto_1fr]"}>
               <Header />
               {children}
