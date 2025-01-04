@@ -4,9 +4,6 @@ import { ApiUser, mapApiUserToUser, signIn, signOut } from "@/lib/auth";
 import axios from "@/lib/axios";
 import { User } from "@/types/user";
 import { AxiosError } from "axios";
-import { signIn, signOut } from "@/lib/auth";
-import axios from "@/lib/axios";
-import { AxiosError } from "axios";
 import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
 
