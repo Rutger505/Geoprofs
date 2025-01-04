@@ -5,10 +5,20 @@ import Credentials from "@auth/core/providers/credentials";
 import { AxiosError } from "axios";
 import NextAuth, { Session } from "next-auth";
 
-interface ApiUser extends Omit<User, "dateHired" | "createdAt" | "updatedAt"> {
+export interface ApiUser
+  extends Omit<User, "dateHired" | "createdAt" | "updatedAt"> {
   dateHired: string;
   created_at: string | null;
   updated_at: string | null;
+}
+
+export function mapApiUserToUser(apiUser: ApiUser): User {
+  return {
+    ...apiUser,
+    dateHired: new Date(apiUser.dateHired),
+    createdAt: apiUser.created_at ? new Date(apiUser.created_at) : null,
+    updatedAt: apiUser.updated_at ? new Date(apiUser.updated_at) : null,
+  };
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -30,10 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
           const apiUser = response.data;
 
-          return {
-            ...apiUser,
-            dateHired: new Date(apiUser.dateHired),
-          };
+          return mapApiUserToUser(apiUser);
         } catch (error) {
           if (
             !(error instanceof AxiosError) ||

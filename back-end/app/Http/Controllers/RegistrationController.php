@@ -15,6 +15,21 @@ use Illuminate\Support\Str;
 
 class RegistrationController extends Controller
 {
+    public function getPendingUser(string $token): JsonResponse
+    {
+        // Find the user with the given register token
+        $user = User::where('registrationToken', $token)->first();
+        if (!$user) {
+            return response()->json([
+                'message' => 'Invalid or expired token',
+            ], 422);
+        }
+
+        $user->loadRoleName();
+
+        return response()->json($user);
+    }
+
     /**
      * @OA\Post(
      *     path="api/auth/register",
@@ -74,7 +89,6 @@ class RegistrationController extends Controller
      */
     public function register(Request $request, string $token): JsonResponse
     {
-        // Find the user with the given register token
         $user = User::where('registrationToken', $token)->first();
 
         if (!$user) {
@@ -83,12 +97,10 @@ class RegistrationController extends Controller
             ], 422);
         }
 
-        // Validate the incoming request
         $request->validate([
             'password' => 'required|string',
         ]);
 
-        // Update the user's registration status and set the password
         $user->update([
             'password' => $request->password,
             'registrationStatus' => 'completed',
@@ -116,15 +128,7 @@ class RegistrationController extends Controller
 
         $token = (string)Str::uuid();
 
-        // Create a signed URL
-        $signedUrl = URL::temporarySignedRoute(
-            'register.confirm',
-            Carbon::now()->addDay(),
-            ['token' => $token],
-        );
-
-        // Store the token in the cache
-        Cache::put($token, true, Carbon::now()->addDay());
+        $url = config('app.url') . '/complete/' . $token;
 
         User::create([
             'firstName' => $request->firstName,
@@ -136,7 +140,7 @@ class RegistrationController extends Controller
             'registrationToken' => $token,
         ]);
 
-        Mail::to($request->email)->send(new RegisterMail($signedUrl, $request->email));
+        Mail::to($request->email)->send(new RegisterMail($url, $request->email));
 
         return response()->json([
             'message' => 'user successfully created',
