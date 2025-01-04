@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Hash;
 
 class User extends Model
 {
+    protected $fillable = [
+        'firstName',
+        'lastName',
+        'email',
+        'password',
+        'dateHired',
+        'roleId',
+        'registrationStatus',
+        'registrationToken'
+    ];
+
     protected $hidden = [
         'password',
         'registrationToken',
