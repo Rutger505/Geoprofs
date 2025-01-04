@@ -58,7 +58,7 @@ Route::prefix('auth')->group(function (): void {
 
 Route::get('/leave/leave-requests',  [LeaveController::class, 'getLeaveStatus'])->middleware('auth');
 Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');
-
+Route::post('/leave/create-leave-category', [LeaveController::class, 'createLeaveCategory'])->middleware('auth', EnsureUserIsAdmin::class);
 Route::prefix('contract')->group(function () {
     Route::post('/store',  [ContractController::class, 'store'])->middleware('auth', EnsureUserIsAdmin::class);
     Route::get('/show', [ContractController::class, 'show'])->middleware('auth', EnsureUserIsAdmin::class);
@@ -66,3 +66,4 @@ Route::prefix('contract')->group(function () {
 });
 
 Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
+

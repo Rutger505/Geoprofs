@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contracts;
-use Illuminate\Http\Request;
 use App\Models\Leave;
-use App\Models\UserContract;
+use App\Models\LeaveCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use function PHPUnit\Framework\isEmpty;
 
 class LeaveController extends Controller
 {
@@ -242,5 +241,19 @@ class LeaveController extends Controller
         }
 
         return response()->json(['leave requests' => $leave], 200);
+    }
+
+    public function createLeaveCategory(Request $request){
+        $request->validate(
+            ['CategoryName' => 'required|string|max:255',
+            'IsCategoryPaid' => 'required|boolean']
+        );
+
+         LeaveCategory::create([
+            'LeaveCategoryName' => $request['CategoryName'],
+            'LeaveCategoryIsPaidLeave' => $request['IsCategoryPaid'],
+        ]);
+
+         return response()->json(['message' => 'Leave category created'], 200);
     }
 }
