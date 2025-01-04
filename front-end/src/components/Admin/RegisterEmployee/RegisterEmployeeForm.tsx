@@ -98,6 +98,7 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
           onChange={(event) =>
             setRole(roles.find((role) => role.id === +event.target.value)!)
           }
+          value={defaultRole.id}
           aria-label="Rol"
         >
           {roles.map((role) => (
