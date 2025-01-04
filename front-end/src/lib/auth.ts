@@ -5,14 +5,8 @@ import Credentials from "@auth/core/providers/credentials";
 import { AxiosError } from "axios";
 import NextAuth, { Session } from "next-auth";
 
-export interface ApiUser {
-  UserID: number;
-  UserFirstName: string;
-  UserLastName: string;
-  email: string;
-  DateHired: Date;
-  UserRoleID: number;
-  RoleName: string;
+interface ApiUser extends Omit<User, "dateHired" | "createdAt" | "updatedAt"> {
+  dateHired: string;
   created_at: string | null;
   updated_at: string | null;
 }
@@ -28,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           type: "password",
         },
       },
-      authorize: async (credentials) => {
+      authorize: async (credentials): Promise<User | null> => {
         try {
           const response = await axios.post<ApiUser>(
             "/auth/login",
@@ -37,13 +31,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const apiUser = response.data;
 
           return {
-            id: apiUser.UserID.toString(),
-            firstName: apiUser.UserFirstName,
-            lastName: apiUser.UserLastName,
-            email: apiUser.email,
-            dateHired: new Date(apiUser.DateHired),
-            roleId: apiUser.UserRoleID,
-            roleName: apiUser.RoleName,
+            ...apiUser,
+            dateHired: new Date(apiUser.dateHired),
           };
         } catch (error) {
           if (

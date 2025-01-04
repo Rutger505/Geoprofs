@@ -11,7 +11,7 @@ class LoginController extends Controller
 {
     public function login(Request $request): JsonResponse
     {
-        $request->validate( [
+        $request->validate([
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ]);
@@ -27,7 +27,7 @@ class LoginController extends Controller
             ], 401);
         }
 
-        $user->setRoleName();
+        $user->loadRoleName();
 
         return response()->json($user);
     }

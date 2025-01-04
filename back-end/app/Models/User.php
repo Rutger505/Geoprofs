@@ -4,61 +4,59 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Model
 {
-    protected $primaryKey = 'UserID';
-
     protected $fillable = [
-        'UserFirstName',
-        'UserLastName',
+        'firstName',
+        'lastName',
         'email',
         'password',
-        'DateHired',
-        'UserRoleID',
-        'RegistrationStatus',
-        'RegistrationToken'
+        'dateHired',
+        'roleId',
+        'registrationStatus',
+        'registrationToken'
     ];
 
     protected $hidden = [
         'password',
+        'registrationToken',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'password' => 'string',
-            'DateHired' => 'datetime',
-        ];
-    }
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
     }
 
-    public function isAdmin(): bool
+    public function role(): BelongsTo
     {
-        if ($this->RoleName === null) {
-            $this->setRoleName();
-        }
-
-        return $this->RoleName === 'Admin';
+        return $this->belongsTo(Roles::class, 'roleId', 'id');
     }
 
-    public function setRoleName(): void
+    public function isAdmin(): bool
     {
-        $roleName = Roles::where('RoleID', $this->UserRoleID)->first()->RoleName;
+        return $this->getRoleName() === 'Admin';
+    }
 
-        if ($roleName === null || trim($roleName) === '') {
-            throw new Exception('User does not have a role');
+    public function getRoleName(): string
+    {
+        if ($this->roleName === null) {
+            $this->loadRoleName();
         }
 
-       $this->RoleName = $roleName;
+        return $this->roleName;
+    }
+
+    public function loadRoleName(): void
+    {
+        $role = $this->role()->first();
+
+        if (!$role || empty(trim($role->name))) {
+            throw new Exception('User does not have a valid role');
+        }
+
+        $this->roleName = $role->name;
     }
 }
