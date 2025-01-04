@@ -42,6 +42,10 @@ services:
     build:
       context: ./back-end
       target: development
+    entrypoint: >
+      /bin/sh -c "
+      php artisan migrate --force &&
+      apache2-foreground"
     environment:
       DB_HOST: db
     env_file:
@@ -57,7 +61,8 @@ services:
       traefik.http.routers.back-end.rule: Host(`api.${DOMAIN}`)
       traefik.http.routers.back-end.tls: true
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     container_name: db
@@ -71,6 +76,11 @@ services:
       - geoprofs_postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USERNAME} -d ${POSTGRES_DB}" ]
+      interval: 1s
+      timeout: 5s
+      retries: 50
 
 volumes:
   geoprofs_postgres_data:
