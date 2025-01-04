@@ -7,6 +7,7 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\SectionController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Models\Roles;
 use Illuminate\Http\Request;
@@ -63,6 +64,10 @@ Route::prefix('contract')->group(function () {
     Route::post('/store',  [ContractController::class, 'store'])->middleware('auth', EnsureUserIsAdmin::class);
     Route::get('/show', [ContractController::class, 'show'])->middleware('auth', EnsureUserIsAdmin::class);
     Route::delete('/delete', [ContractController::class, 'delete'])->middleware('auth', EnsureUserIsAdmin::class);
+});
+
+Route::prefix('sections')->group(function () {
+   Route::post('/store', [SectionController::class, 'store'])->middleware('auth', EnsureUserIsAdmin::class);
 });
 
 Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
