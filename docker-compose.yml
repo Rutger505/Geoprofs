@@ -53,6 +53,9 @@ services:
           target: /var/www/html
         - action: rebuild
           path: ./back-end/composer.json
+    labels:
+      traefik.http.routers.back-end.rule: Host(`api.${DOMAIN}`)
+      traefik.http.routers.back-end.tls: true
     depends_on:
       - db
 
