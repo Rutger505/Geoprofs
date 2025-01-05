@@ -4,6 +4,7 @@ import { env } from "@/env";
 import { auth } from "@/lib/auth";
 import { Session } from "next-auth";
 import { decode, encode } from "next-auth/jwt";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 const JWT_COOKIE_NAME = "__Secure-authjs.session-token";
@@ -58,6 +59,8 @@ export async function updateUserPreferences(
       path: "/",
       maxAge: JWT_MAX_AGE,
     });
+
+    revalidatePath("/");
   } catch (error) {
     console.error("Error updating preferences:", error);
     return { error: "Failed to update preferences" };
