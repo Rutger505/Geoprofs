@@ -23,12 +23,12 @@ jobs:
 
       - name: Run tests with coverage
         id: test
-        continue-on-error: true
         working-directory: ./front-end
         run: npm run test:coverage
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: coverage
           path: front-end/coverage
