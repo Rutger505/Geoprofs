@@ -14,4 +14,19 @@ const axios = Axios.create({
   },
 });
 
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      console.error("Axios Error with response:", error.response?.data.message);
+
+      console.error("Axios Error Response:", {
+        data: error.response.data,
+      });
+    } else {
+      console.error("Axios Error without response:", error.message);
+    }
+  },
+);
+
 export default axios;
