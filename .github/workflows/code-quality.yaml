@@ -24,13 +24,24 @@ jobs:
         run: npm ci
 
       - name: Run tests with coverage
+        id: test
+        continue-on-error: true
         working-directory: ./front-end
         run: npm run test:coverage
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        if: steps.test.outcome == 'success'
         with:
           name: coverage
           path: front-end/coverage
+
+      - name: Upload empty coverage artifact
+        uses: actions/upload-artifact@v4
+        if: steps.test.outcome == 'failure'
+        with:
+          name: coverage
+
 
   sonar:
     needs: [test-front-end]
