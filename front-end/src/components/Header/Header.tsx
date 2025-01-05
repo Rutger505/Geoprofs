@@ -1,6 +1,7 @@
 import { SignOutButton } from "@/components/Auth/server";
 import { HeaderLink } from "@/components/Header/HeaderLink";
 import { MobileNavigation } from "@/components/Header/MobileNavigation";
+import { SwitchMode } from "@/components/Header/SwitchMode";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -31,6 +32,8 @@ export function Header() {
           <SignOutButton className="rounded-sm p-3 hover:opacity-90">
             Uitloggen
           </SignOutButton>
+
+          <SwitchMode />
         </div>
 
         <div className="flex items-center sm:hidden">
