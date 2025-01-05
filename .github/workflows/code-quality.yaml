@@ -1,8 +1,6 @@
 name: Code Quality
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+on: push
 
 jobs:
   test-front-end:
