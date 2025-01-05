@@ -1,5 +1,4 @@
 import { SignOutButton } from "@/components/Auth/server";
-import { HeaderLink } from "@/components/Header/HeaderLink";
 import { MobileNavigation } from "@/components/Header/MobileNavigation";
 import { SwitchMode } from "@/components/Header/SwitchMode";
 import { auth } from "@/lib/auth";
@@ -59,7 +58,13 @@ export async function Header() {
 
         <div className={"hidden gap-5 sm:flex"}>
           {navigation.map((item) => (
-            <HeaderLink name={item.name} href={item.href} key={item.name} />
+            <Link
+              key={item.name}
+              href={item.href}
+              className={"rounded-sm p-3 hover:opacity-90"}
+            >
+              {item.name}
+            </Link>
           ))}
 
           <SignOutButton className="rounded-sm p-3 hover:opacity-90">
