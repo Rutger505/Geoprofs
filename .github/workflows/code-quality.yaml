@@ -25,19 +25,10 @@ jobs:
         id: test
         continue-on-error: true
         working-directory: ./front-end
-#        run: npm run test:coverage
-        run: exit 1
+        run: npm run test:coverage
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
-        if: steps.test.outcome == 'success'
-        with:
-          name: coverage
-          path: front-end/coverage
-
-      - name: Upload empty coverage artifact
-        uses: actions/upload-artifact@v4
-        if: steps.test.outcome == 'failure'
         with:
           name: coverage
           path: front-end/coverage
