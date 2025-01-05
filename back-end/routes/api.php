@@ -16,8 +16,9 @@ Route::prefix('/auth')->group(function (): void {
 
     Route::post('/register', [RegistrationController::class, 'adminRegister']);
 
-    Route::put('/register/complete/{token}', [RegistrationController::class, 'register'])
-        ->name('register.confirm');
+    Route::get('/register/pending/{token}', [RegistrationController::class, 'getPendingUser']);
+
+    Route::put('/register/complete/{token}', [RegistrationController::class, 'register']);
 });
 
 Route::prefix('/roles')->group(function (): void {
@@ -34,7 +35,7 @@ Route::prefix('/leave')->group(function (): void {
 
 
 Route::prefix('/contract')->group(function () {
-    Route::post('/store',  [ContractController::class, 'store']);
+    Route::post('/store', [ContractController::class, 'store']);
     Route::get('/show', [ContractController::class, 'show']);
     Route::delete('/delete/{id}', [ContractController::class, 'delete']);
     Route::put('/update/{id}', [ContractController::class, 'update']);
