@@ -23,7 +23,7 @@ export async function SwitchMode() {
 
   return (
     <button className={"flex items-center gap-2"}>
-      <div className={"-space-y-1"}>
+      <div>
         {roles.map((role, index) => {
           const isActive = useAsEmployee ? index === 0 : index === 1;
 
@@ -31,14 +31,24 @@ export async function SwitchMode() {
             <span
               key={role}
               className={clsx(
-                !isActive ? "text-xs opacity-50" : "",
-                "block text-center",
+                !isActive ? "!text-xs !leading-3 opacity-50" : "",
+                "block text-center text-base leading-4 transition-all duration-100",
               )}
             >
               {role}
             </span>
           );
         })}
+
+        {roles.map((role, index) => (
+          <span
+            key={index}
+            className={"invisible block h-0"}
+            aria-hidden={true}
+          >
+            {role}
+          </span>
+        ))}
       </div>
 
       <div className="relative flex items-center">
@@ -46,7 +56,7 @@ export async function SwitchMode() {
         <div
           className={clsx(
             !useAsEmployee && "translate-x-full",
-            "absolute left-[2px] top-[2px] h-3 w-3 rounded-full bg-black transition-all duration-300",
+            "absolute left-[2px] top-[2px] h-3 w-3 rounded-full bg-black transition-all duration-100",
           )}
         ></div>
       </div>
