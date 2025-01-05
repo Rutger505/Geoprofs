@@ -1,16 +1,24 @@
 import { env } from "@/env";
-import Axios, { AxiosRequestConfig } from "axios";
+import Axios from "axios";
+
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    metadata?: {
+      startTime: Date;
+    };
+  }
+
+  export interface AxiosResponse {
+    metadata?: {
+      startTime: Date;
+    };
+  }
+}
 
 if (typeof window !== "undefined") {
   throw new Error(
     "This axios config is made for Laravel which is accessible from server side only.",
   );
-}
-
-interface TimedAxiosRequestConfig extends AxiosRequestConfig {
-  metadata?: {
-    startTime?: Date;
-  };
 }
 
 const axios = Axios.create({
@@ -20,16 +28,14 @@ const axios = Axios.create({
   },
 });
 
-axios.interceptors.request.use((config: TimedAxiosRequestConfig) => {
-  console.log("Hi");
-
+axios.interceptors.request.use((config) => {
   config.metadata = { startTime: new Date() };
   return config;
 });
 
 axios.interceptors.response.use(
   (response) => {
-    const startTime: Date | undefined = response.config?.metadata?.startTime;
+    const startTime = response.config?.metadata?.startTime;
     const endTime = new Date();
 
     const duration = startTime
