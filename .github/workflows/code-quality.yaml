@@ -25,7 +25,8 @@ jobs:
         id: test
         continue-on-error: true
         working-directory: ./front-end
-        run: npm run test:coverage
+#        run: npm run test:coverage
+        run: exit 1
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
@@ -39,6 +40,7 @@ jobs:
         if: steps.test.outcome == 'failure'
         with:
           name: coverage
+          path: front-end/coverage
 
 
   sonar:
