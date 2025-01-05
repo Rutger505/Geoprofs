@@ -33,7 +33,7 @@ jobs:
   sonar:
     needs: [test-front-end]
     if: always()
-    name: SonarCloud Analysis
+    name: SonarQube Cloud Analysis
     runs-on: ubuntu-latest
 
     steps:
@@ -46,7 +46,7 @@ jobs:
           path: front-end/coverage
 
       - name: Run SonarCloud Analysis
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
