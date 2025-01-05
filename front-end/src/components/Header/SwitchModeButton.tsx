@@ -1,5 +1,6 @@
 "use client";
 
+import { rerender } from "@/actions/rerender";
 import { updateUserPreferences } from "@/actions/updateUserPreferences";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -25,6 +26,8 @@ export function SwitchModeButton({
       if (response?.error) {
         throw new Error(response.error);
       }
+
+      await rerender();
     },
   });
 
