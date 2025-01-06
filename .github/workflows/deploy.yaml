@@ -134,6 +134,8 @@ jobs:
             LARAVEL_APP_ENV=production
             LARAVEL_APP_DEBUG=false
             LARAVEL_LOG_LEVEL=warn
+          
+            rm k8s/ingress-test.yaml
           elif [[ $GITHUB_REF == refs/heads/development ]]; then
             INGRESS_HOST=staging.${{ vars.BASE_DOMAIN }}
             CLUSTER_ISSUER_NAME=letsencrypt-production
@@ -141,6 +143,8 @@ jobs:
             LARAVEL_APP_ENV=staging
             LARAVEL_APP_DEBUG=true
             LARAVEL_LOG_LEVEL=debug
+          
+            rm k8s/ingress-test.yaml
           else
             INGRESS_HOST=${{ github.sha }}.${{ vars.BASE_DOMAIN }}
             CLUSTER_ISSUER_NAME=letsencrypt-staging
@@ -148,6 +152,8 @@ jobs:
             LARAVEL_APP_ENV=development
             LARAVEL_APP_DEBUG=true
             LARAVEL_LOG_LEVEL=debug
+          
+            rm k8s/ingress-production.yaml
           fi
           
           echo "Setting ingress host to $INGRESS_HOST"
@@ -201,6 +207,7 @@ jobs:
           LARAVEL_APP_DEBUG: ${{ steps.config.outputs.laravel_app_debug }}
           LARAVEL_MAIL_ADDRESS: ${{ secrets.LARAVEL_MAIL_ADDRESS }}
           LARAVEL_MAIL_PASSWORD: ${{ secrets.LARAVEL_MAIL_PASSWORD }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
         run: |
           FILES=$(ls k8s/*.yaml | tr '\n' ' ')
           

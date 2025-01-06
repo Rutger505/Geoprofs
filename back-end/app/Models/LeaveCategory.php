@@ -7,12 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class LeaveCategory extends Model
 {
-    protected $table = "leave_category";
 
-    protected $primaryKey = "CategoryID";
-    protected $fillable = [
-        'LeaveCategoryName',
-        'LeaveCategoryIsPaidLeave'
-    ];
     use HasFactory;
 }

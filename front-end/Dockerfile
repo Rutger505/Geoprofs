@@ -28,6 +28,8 @@ WORKDIR /app
 COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
 
+ENV SKIP_ENV_VALIDATION=true
+
 RUN npm run build
 
 
