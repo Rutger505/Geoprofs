@@ -11,11 +11,11 @@ class SectionController extends Controller
 
     public function store(Request $request){
         $request->validate([
-            'SectionName' => 'required|string',
+            'sectionName' => 'required|string',
             ]);
 
         Sections::create([
-           'SectionName' => $request['SectionName']
+           'name' => $request['sectionName']
         ]);
 
         return response()->json(["message" => "Section added successfully"], 200);
