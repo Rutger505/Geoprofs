@@ -1,9 +1,14 @@
 import { LoginForm } from "@/components/Auth/LoginForm";
+import { TanstackQueryProvider } from "@/components/Providers/TanstackQueryProvider";
 import { render, screen } from "@testing-library/react";
 
 describe("LoginForm", () => {
   it("renders login form elements", () => {
-    render(<LoginForm />);
+    render(
+      <TanstackQueryProvider>
+        <LoginForm />
+      </TanstackQueryProvider>,
+    );
 
     expect(
       screen.getByRole("heading", { name: "Inloggen" }),

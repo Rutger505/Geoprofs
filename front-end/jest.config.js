@@ -21,9 +21,11 @@ module.exports = {
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
   },
-  transformIgnorePatterns: ["/node_modules/"],
+  transformIgnorePatterns: [
+    "/node_modules/(?!(@auth/core))/", // Changed this line
+  ],
   setupFilesAfterEnv: [
     "<rootDir>/jest.setup.js",
-    "<rootDir>/src/tests/setup.ts",
+    "<rootDir>/src/__tests__/setup.ts",
   ],
 };

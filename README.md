@@ -40,7 +40,8 @@ choco install mkcert
 
 ## Frontend
 
-1. In the front-end directory, run `npm install` to install the dependencies
+1. Copy the `.env.example` file in the front-end directory to `.env` and fill in the necessary values 
+2. In the front-end directory, run `npm install` to install the dependencies
 
 ## Backend 
 
@@ -89,5 +90,7 @@ make shell-<container-name>
 # Access the application
 
 - Frontend: [https://localhost](https://localhost)
-- Backend: [https://localhost/api](https://localhost/api)
+
+The backend is not publicly accessible.
+But for development and test deployments, the backend API is exposed on [https://api.localhost](https://api.localhost)
 
