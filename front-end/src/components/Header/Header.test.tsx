@@ -1,16 +1,19 @@
 import { act, render, screen } from "@testing-library/react";
 import { Header, Navigation } from "./Header";
 
+// This component is async and is not supported by testing-library. This will be end to end tested as suggested by next.js.
+jest.mock("@/components/Auth/server", () => ({
+  SignOutButton: () => <button>Uitloggen</button>,
+}));
+jest.mock("@/components/Auth/client", () => ({
+  SignOutButton: () => <button>Uitloggen</button>,
+}));
+
 export const navigation: Navigation[] = [
   { name: "Dashboard", href: "#" },
   { name: "Aanvragen", href: "#" },
   { name: "Verlofsaldo", href: "#" },
 ];
-
-jest.mock("next/image", () => ({
-  __esModule: true,
-  default: (props: any) => <img {...props} />,
-}));
 
 describe("Header", () => {
   it("renders logo", () => {
@@ -35,19 +38,23 @@ describe("Header", () => {
         expect(link).toHaveAttribute("href", item.href);
       });
     });
+
+    // The sign out button is for desktop is async and must be tested with end to end testing.
   });
 
   describe("Mobile navigation", () => {
-    it("renders navigation links for responsive header", async () => {
-      render(<Header />);
-
+    function setMobileWidth() {
       Object.defineProperty(window, "innerWidth", {
         writable: true,
         configurable: true,
-        value: 375, // Mobile device width
+        value: 375,
       });
       window.dispatchEvent(new Event("resize"));
+    }
 
+    async function openMobileNavigation(
+      postOpenNavigation: () => void | Promise<void>,
+    ) {
       const mobileNavigationButton = screen.getByRole("button", {
         name: "Open navigation",
       });
@@ -55,6 +62,18 @@ describe("Header", () => {
 
       await act(async () => {
         mobileNavigationButton.click();
+        await postOpenNavigation();
+      });
+    }
+
+    beforeEach(() => {
+      setMobileWidth();
+    });
+
+    it("renders navigation links", async () => {
+      render(<Header />);
+
+      await openMobileNavigation(async () => {
         navigation.forEach((item) => {
           const link = screen.getByRole("link", { name: item.name });
           expect(link).toBeInTheDocument();

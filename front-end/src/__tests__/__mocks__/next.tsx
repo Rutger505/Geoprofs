@@ -7,18 +7,34 @@ const mockRouter = {
 };
 
 const mockUseRouter = jest.fn(() => mockRouter);
+const mockRedirect = jest.fn();
 const mockUsePathname = jest.fn(() => "/");
 const mockUseParams = jest.fn(() => ({}));
 const mockUseSearchParams = jest.fn(() => new URLSearchParams());
+const mockCookies = {
+  get: jest.fn(),
+  set: jest.fn(),
+  delete: jest.fn(),
+};
 
+jest.mock("next/headers", () => ({
+  cookies: mockCookies,
+}));
 jest.mock("next/navigation", () => ({
+  redirect: mockRedirect,
   useRouter: mockUseRouter,
   usePathname: mockUsePathname,
   useParams: mockUseParams,
   useSearchParams: mockUseSearchParams,
 }));
+jest.mock("next/image", () => ({
+  __esModule: true,
+  default: (props: any) => <img {...props} />,
+}));
 
 export {
+  mockCookies,
+  mockRedirect,
   mockRouter,
   mockUseParams,
   mockUsePathname,

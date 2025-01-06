@@ -1,0 +1,8 @@
+{
+  "id": 1,
+  "firstName": "Test",
+  "lastName": "User",
+  "email": "test@example.com",
+  "dateHired": "2020-01-01",
+  "roleId": 1
+}

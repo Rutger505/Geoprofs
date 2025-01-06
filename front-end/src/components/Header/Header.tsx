@@ -1,3 +1,4 @@
+import { SignOutButton } from "@/components/Auth/server";
 import { HeaderLink } from "@/components/Header/HeaderLink";
 import { MobileNavigation } from "@/components/Header/MobileNavigation";
 import Image from "next/image";
@@ -26,6 +27,10 @@ export function Header() {
           {navigation.map((item) => (
             <HeaderLink name={item.name} href={item.href} key={item.name} />
           ))}
+
+          <SignOutButton className="rounded-sm p-3 hover:opacity-90">
+            Uitloggen
+          </SignOutButton>
         </div>
 
         <div className="flex items-center sm:hidden">

@@ -7,14 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contracts extends Model
 {
-    protected $table = "contracts";
-    protected $primaryKey = 'ContractID';
-
+    use HasFactory;
 
     protected $fillable = [
-        'ContractName',
-        'ContractTotalLeaveHours'
+        'name',
+        'totalLeaveHours',
     ];
-
-    use HasFactory;
 }
