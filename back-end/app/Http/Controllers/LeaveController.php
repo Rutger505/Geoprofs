@@ -67,13 +67,13 @@ class LeaveController extends Controller
 
     public function createLeaveCategory(Request $request){
         $request->validate(
-            ['CategoryName' => 'required|string|max:255',
-            'IsCategoryPaid' => 'required|boolean']
+            ['categoryName' => 'required|string|max:255',
+            'isCategoryPaid' => 'required|boolean']
         );
 
          LeaveCategory::create([
-            'LeaveCategoryName' => $request['CategoryName'],
-            'LeaveCategoryIsPaidLeave' => $request['IsCategoryPaid'],
+            'name' => $request['categoryName'],
+            'isPaidLeave' => $request['isCategoryPaid'],
         ]);
 
          return response()->json(['message' => 'Leave category created'], 200);

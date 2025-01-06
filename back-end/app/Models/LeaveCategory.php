@@ -8,5 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class LeaveCategory extends Model
 {
 
+    protected  $fillable = ['name', 'isPaidLeave'];
+    
     use HasFactory;
 }
