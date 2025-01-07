@@ -31,6 +31,12 @@ Route::prefix('/leave')->group(function (): void {
     Route::get('/leave-requests', [LeaveController::class, 'getLeaveStatus']);
 
     Route::get('/leave-hours', [LeaveController::class, 'getLeaveHours']);
+
+});
+
+Route::prefix('leave-category')->group(function (): void {
+    Route::post('/create', [LeaveController::class, 'createLeaveCategory']);
+
 });
 
 
@@ -40,4 +46,3 @@ Route::prefix('/contract')->group(function () {
     Route::delete('/delete/{id}', [ContractController::class, 'delete']);
     Route::put('/update/{id}', [ContractController::class, 'update']);
 });
-

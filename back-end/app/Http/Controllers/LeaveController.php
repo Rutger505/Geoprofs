@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contracts;
 use App\Models\Leave;
+use App\Models\LeaveCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -63,5 +64,19 @@ class LeaveController extends Controller
         $leaveRequests = Leave::where('userId', $request->userId)->get();
 
         return response()->json($leaveRequests);
+    }
+
+    public function createLeaveCategory(Request $request){
+        $request->validate(
+            ['categoryName' => 'required|string|max:255',
+            'isPaidLeave' => 'required|boolean']
+        );
+
+         LeaveCategory::create([
+            'name' => $request['categoryName'],
+            'isPaidLeave' => $request['isPaidLeave'],
+        ]);
+
+         return response()->json(['message' => 'Leave category created'], 200);
     }
 }
