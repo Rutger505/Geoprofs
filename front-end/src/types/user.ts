@@ -1,3 +1,10 @@
+export type UserRoleName =
+  | "Employee"
+  | "SectionManager"
+  | "ProjectManager"
+  | "CEO"
+  | "Admin";
+
 export interface User {
   id: string;
   firstName: string;
@@ -5,7 +12,7 @@ export interface User {
   email: string;
   dateHired: Date;
   roleId: number;
-  roleName: string;
+  roleName: UserRoleName;
   createdAt: Date | null;
   updatedAt: Date | null;
 }
