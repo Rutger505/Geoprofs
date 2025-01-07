@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contracts;
 use App\Models\Leave;
+use App\Models\LeaveCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
