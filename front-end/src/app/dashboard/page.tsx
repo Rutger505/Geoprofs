@@ -8,7 +8,7 @@ export default async function Dashboard() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center">
+    <main className="flex items-center justify-center">
       <h1>
         Welcome {session.user.firstName} {session.user.lastName}!
       </h1>
