@@ -31,7 +31,11 @@ Route::prefix('/leave')->group(function (): void {
 
     Route::get('/leave-hours', [LeaveController::class, 'getLeaveHours']);
 
-    Route::post('/create-leave-category', [LeaveController::class, 'createLeaveCategory']);
+});
+
+Route::prefix('leave-category')->group(function (): void {
+    Route::post('/create', [LeaveController::class, 'createLeaveCategory']);
+
 });
 
 
