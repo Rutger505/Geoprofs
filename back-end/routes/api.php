@@ -6,6 +6,7 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\SectionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -42,5 +43,5 @@ Route::prefix('/contract')->group(function () {
 });
 
 Route::prefix('sections')->group(function () {
-    Route::post('/store', [SectionController::class, 'store'])->middleware('auth', EnsureUserIsAdmin::class);
+    Route::post('/store', [SectionController::class, 'store']);
 });
