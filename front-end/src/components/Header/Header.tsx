@@ -40,14 +40,15 @@ export const navigationPerRole: NavigationPerRole = {
 
 export async function Header() {
   const session = await auth();
-  if (!session) {
-    return null;
-  }
 
-  const roleByPreference = session.preferences.useAsEmployee
-    ? "Employee"
-    : session.user.roleName;
-  const navigation = navigationPerRole[roleByPreference];
+  let navigation: Navigation[] = [];
+
+  if (session) {
+    const roleByPreference = session.preferences.useAsEmployee
+      ? "Employee"
+      : session.user.roleName;
+    navigation = navigationPerRole[roleByPreference];
+  }
 
   return (
     <div className={"flex w-full justify-center"}>

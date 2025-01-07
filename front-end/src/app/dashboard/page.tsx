@@ -12,7 +12,6 @@ export default async function Dashboard() {
       <h1>
         Welcome {session.user.firstName} {session.user.lastName}!
       </h1>
-      <p className={"max-w-xs"}>{JSON.stringify(session, null, 2)}</p>
     </main>
   );
 }

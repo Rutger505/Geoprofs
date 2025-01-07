@@ -60,14 +60,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.user = user as User;
 
         token.preferences = {
-          useAsEmployee: true,
+          useAsEmployee: false,
         };
       }
       return token;
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       session.user = token.user;
-      session.preferences = token.preferences;
+      session.preferences = token.preferences ?? {
+        useAsEmployee: false,
+      };
+
       return session;
     },
   },
