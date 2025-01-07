@@ -1,4 +1,4 @@
-type LeaveRequestStatus = "accepted" | "denied" | "pending";
+export type LeaveRequestStatus = "accepted" | "denied" | "pending";
 
 export interface LeaveRequestCategory {
   id: number;
@@ -12,6 +12,5 @@ export interface LeaveRequest {
   startDate: Date;
   endDate: Date;
   category: LeaveRequestCategory;
-  createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
 }

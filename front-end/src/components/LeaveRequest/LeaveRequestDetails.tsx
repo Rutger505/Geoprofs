@@ -1,5 +1,5 @@
 import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
-import { differenceInHours, format, isSameDay } from "date-fns";
+import { format } from "date-fns";
 import { Check, Clock, X } from "lucide-react";
 
 interface LeaveRequestProps {
@@ -34,17 +34,13 @@ const StatusText = ({
 
 export function LeaveRequest({ request }: Readonly<LeaveRequestProps>) {
   const formatDateRange = (start: Date, end: Date) => {
-    if (isSameDay(start, end)) {
-      return `${format(start, "d MMM")} ${differenceInHours(end, start)} uur`;
-    }
-
     const startDate = format(start, "d MMM");
     const endDate = format(end, "d MMM");
     return `${startDate} t/m ${endDate}`;
   };
 
   return (
-    <div className="w-full min-w-72 max-w-sm rounded-lg border">
+    <div className="w-full max-w-md">
       <div className="space-y-2 p-4">
         <div className="flex items-center justify-between">
           <span className="font-medium">{request.category.name}</span>
@@ -58,12 +54,12 @@ export function LeaveRequest({ request }: Readonly<LeaveRequestProps>) {
           {formatDateRange(request.startDate, request.endDate)}
         </div>
 
-        {/*<div className="flex items-center justify-between text-sm">*/}
-        {/*  <span className="text-gray-600">Bericht: {request.reason}</span>*/}
-        {/*  <button className="text-gray-500 hover:text-gray-700">*/}
-        {/*    Verberg bericht ∨*/}
-        {/*  </button>*/}
-        {/*</div>*/}
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-gray-600">Bericht: {request.reason}</span>
+          <button className="text-gray-500 hover:text-gray-700">
+            Verberg bericht ∨
+          </button>
+        </div>
       </div>
     </div>
   );
