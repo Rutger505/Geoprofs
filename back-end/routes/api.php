@@ -40,8 +40,6 @@ Route::prefix('/leave')->group(function (): void {
 });
 
 
-
-
 Route::prefix('/contract')->group(function () {
     Route::post('/store', [ContractController::class, 'store']);
     Route::get('/show', [ContractController::class, 'show']);
@@ -51,5 +49,9 @@ Route::prefix('/contract')->group(function () {
 
 Route::prefix('sections')->group(function () {
     Route::post('/', [SectionController::class, 'store']);
+
+    Route::prefix('/users')->group(function (): void {
+        Route::post('/', [SectionController::class, 'addUserToSection']);
+    });
 });
 
