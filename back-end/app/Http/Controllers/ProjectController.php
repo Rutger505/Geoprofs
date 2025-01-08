@@ -9,7 +9,7 @@ class ProjectController extends Controller
 {
     public function store(Request $request){
         $request->validate([
-            'projectName' => 'required|string',
+            'name' => 'required|string',
         ]);
 
         Projects::create([
