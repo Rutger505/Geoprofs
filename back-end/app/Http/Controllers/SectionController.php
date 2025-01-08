@@ -12,7 +12,7 @@ class SectionController extends Controller
     public function store(Request $request){
         $request->validate([
             'sectionName' => 'required|string',
-            ]);
+        ]);
 
         Sections::create([
            'name' => $request['sectionName']
