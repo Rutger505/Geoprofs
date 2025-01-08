@@ -43,5 +43,5 @@ Route::prefix('/contract')->group(function () {
 
 
 Route::prefix('projects')->group(function () {
-    Route::post('/store',  [ProjectController::class, 'store']);
+    Route::post('/',  [ProjectController::class, 'store']);
 });
