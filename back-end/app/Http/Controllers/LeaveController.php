@@ -64,4 +64,5 @@ class LeaveController extends Controller
 
         return response()->json($leaveRequests);
     }
+    
 }
