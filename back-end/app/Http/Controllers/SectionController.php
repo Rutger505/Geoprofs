@@ -42,7 +42,27 @@ class SectionController extends Controller
         ]);
 
         return response()->json(["message" => "User added to section successfully"], 200);
-
     }
+
+    public function getAllLeaveFromSection(Request $request)
+    {
+        $request->validate([
+            'sectionId' => 'required|int',
+        ]);
+
+        $leaveData = SectionUser::join('users', 'section_user.userId', '=', 'users.id')
+            ->join('leave', 'leave.userId', '=', 'users.id')
+            ->where('section_user.sectionId', $request->sectionId)
+            ->select(
+                'users.id as userId',
+                'users.firstName',
+                'users.lastName',
+                'leave.*'
+            )
+            ->get();
+
+        return response()->json($leaveData, 200);
+    }
+
 
 }

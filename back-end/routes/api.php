@@ -53,6 +53,7 @@ Route::prefix('sections')->group(function () {
 
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [SectionController::class, 'addUserToSection']);
+        Route::get('/get-users', [SectionController::class, 'getAllLeaveFromSection']);
     });
 });
 
