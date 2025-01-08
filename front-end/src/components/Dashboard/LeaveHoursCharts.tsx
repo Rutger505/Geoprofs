@@ -1,3 +1,5 @@
+"use client";
+
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 const data = [
@@ -33,7 +35,7 @@ export default function LeaveHoursCharts() {
         </ResponsiveContainer>
 
         {/* Center Text */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center">
+        <div className="absolute left-1/2 top-1/2 -mt-5 -translate-x-1/2 -translate-y-1/2 transform text-center">
           <div className="text-2xl font-bold">{total}</div>
           <div className="text-sm">Verlofdagen totaal</div>
         </div>
