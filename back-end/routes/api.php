@@ -43,5 +43,5 @@ Route::prefix('/contract')->group(function () {
 });
 
 Route::prefix('sections')->group(function () {
-    Route::post('/store', [SectionController::class, 'store']);
+    Route::post('/', [SectionController::class, 'store']);
 });
