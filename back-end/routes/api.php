@@ -50,5 +50,9 @@ Route::prefix('/contract')->group(function () {
 Route::prefix('sections')->group(function () {
     Route::post('/', [SectionController::class, 'store']);
     Route::get('/', [SectionController::class, 'show']);
+
+    Route::prefix('/users')->group(function (): void {
+        Route::post('/', [SectionController::class, 'addUserToSection']);
+    });
 });
 
