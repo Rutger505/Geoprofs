@@ -1,3 +1,4 @@
+import LeaveHoursCharts from "@/components/Dashboard/LeaveHoursCharts";
 import { RecentLeaveRequests } from "@/components/Dashboard/RecentLeaveRequests";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -15,6 +16,7 @@ export default async function Dashboard() {
       </h1>
 
       <RecentLeaveRequests />
+      <LeaveHoursCharts />
     </main>
   );
 }
