@@ -7,6 +7,7 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\SectionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health', [HealthController::class, 'index']);
@@ -47,3 +48,8 @@ Route::prefix('/contract')->group(function () {
     Route::delete('/delete/{id}', [ContractController::class, 'delete']);
     Route::put('/update/{id}', [ContractController::class, 'update']);
 });
+
+Route::prefix('sections')->group(function () {
+    Route::post('/', [SectionController::class, 'store']);
+});
+
