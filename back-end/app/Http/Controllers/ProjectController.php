@@ -13,7 +13,7 @@ class ProjectController extends Controller
         ]);
 
         Projects::create([
-            'name' => $request['projectName']
+            'name' => $request['name']
         ]);
 
         return response()->json(["message" => "Project added successfully"], 200);
