@@ -1,68 +1,54 @@
-import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
-import { format } from "date-fns";
-import { Check, Clock, X } from "lucide-react";
+"use client";
 
-interface LeaveRequestProps {
+import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
+import clsx from "clsx";
+import { useState } from "react";
+
+interface Props {
   request: LeaveRequestType;
 }
 
-const StatusIcon = ({
-  status,
-}: {
-  status: "accepted" | "denied" | "pending";
-}) => {
-  const icons = {
-    accepted: <Check className="h-4 w-4 text-green-500" />,
-    denied: <X className="h-4 w-4 text-red-500" />,
-    pending: <Clock className="h-4 w-4 text-yellow-500" />,
-  };
-  return icons[status];
-};
-
-const StatusText = ({
-  status,
-}: {
-  status: "accepted" | "denied" | "pending";
-}) => {
-  const statusMap = {
-    accepted: "Geaccepteerd",
-    denied: "Geweigerd",
-    pending: "In afwachting",
-  };
-  return <span>{statusMap[status]}</span>;
-};
-
-export function LeaveRequest({ request }: Readonly<LeaveRequestProps>) {
-  const formatDateRange = (start: Date, end: Date) => {
-    const startDate = format(start, "d MMM");
-    const endDate = format(end, "d MMM");
-    return `${startDate} t/m ${endDate}`;
-  };
+export function LeaveRequestDetails({ request }: Readonly<Props>) {
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="w-full max-w-md">
-      <div className="space-y-2 p-4">
-        <div className="flex items-center justify-between">
-          <span className="font-medium">{request.category.name}</span>
-          <div className="flex items-center gap-1 text-sm">
-            <StatusIcon status={request.status} />
-            <StatusText status={request.status} />
-          </div>
-        </div>
+    <div>
+      <span
+        className={clsx(
+          open && "!h-8",
+          "block h-0 overflow-hidden transition-all ease-in-out",
+        )}
+      >
+        Reden: {request.reason}
+      </span>
 
-        <div className="text-sm text-gray-600">
-          {formatDateRange(request.startDate, request.endDate)}
-        </div>
-
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-600">Bericht: {request.reason}</span>
-          <button className="text-gray-500 hover:text-gray-700">
-            Verberg bericht ∨
-          </button>
-        </div>
-      </div>
+      <button
+        className={"flex items-center text-sm opacity-50"}
+        onClick={() => setOpen(!open)}
+      >
+        {open ? "Verberg" : "Toon"} bericht
+        {open ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 -960 960 960"
+            height="20px"
+            width="20px"
+            fill="currentColor"
+          >
+            <path d="m480-538.85-189 189L253.85-387 480-613.15 706.15-387 669-349.85l-189-189Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 -960 960 960"
+            height="20px"
+            width="20px"
+            fill="currentColor"
+          >
+            <path d="M480-357.85 253.85-584 296-626.15l184 184 184-184L706.15-584 480-357.85Z" />
+          </svg>
+        )}
+      </button>
     </div>
   );
 }
-
-export default LeaveRequest;

@@ -1,3 +1,4 @@
+import { LeaveRequestDetails } from "@/components/LeaveRequest/LeaveRequestDetails";
 import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
 import { differenceInHours, format, isSameDay } from "date-fns";
 import { Check, Clock, X } from "lucide-react";
@@ -44,10 +45,11 @@ export function LeaveRequest({ request }: Readonly<LeaveRequestProps>) {
   };
 
   return (
-    <div className="w-full min-w-72 max-w-sm rounded-lg border">
+    <div className="w-80 rounded-lg border">
       <div className="space-y-2 p-4">
         <div className="flex items-center justify-between">
-          <span className="font-medium">{request.category.name}</span>
+          <span className="text-lg font-medium">{request.category.name}</span>
+
           <div className="flex items-center gap-1 text-sm">
             <StatusIcon status={request.status} />
             <StatusText status={request.status} />
@@ -58,12 +60,7 @@ export function LeaveRequest({ request }: Readonly<LeaveRequestProps>) {
           {formatDateRange(request.startDate, request.endDate)}
         </div>
 
-        {/*<div className="flex items-center justify-between text-sm">*/}
-        {/*  <span className="text-gray-600">Bericht: {request.reason}</span>*/}
-        {/*  <button className="text-gray-500 hover:text-gray-700">*/}
-        {/*    Verberg bericht ∨*/}
-        {/*  </button>*/}
-        {/*</div>*/}
+        <LeaveRequestDetails request={request} />
       </div>
     </div>
   );
