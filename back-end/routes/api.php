@@ -7,6 +7,7 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\SectionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health', [HealthController::class, 'index']);
@@ -50,5 +51,12 @@ Route::prefix('/contract')->group(function () {
 
 Route::prefix('projects')->group(function () {
     Route::post('/',  [ProjectController::class, 'store']);
-});
+  
+  });
+
+Route::prefix('sections')->group(function () {
+    Route::post('/', [SectionController::class, 'store']);
+  
+  });
+
 
