@@ -57,12 +57,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = user;
+        token.user = user as User;
+
+        token.preferences = {
+          useAsEmployee: false,
+        };
       }
       return token;
     },
     async session({ session, token }: { session: Session; token: JWT }) {
-      session.user = token.user as User;
+      session.user = token.user;
+      session.preferences = token.preferences ?? {
+        useAsEmployee: false,
+      };
+
       return session;
     },
   },

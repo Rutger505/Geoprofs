@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\LeaveCategoryController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::get('/health', [HealthController::class, 'index']);
 
@@ -31,7 +31,14 @@ Route::prefix('/leave')->group(function (): void {
     Route::get('/leave-requests', [LeaveController::class, 'getLeaveStatus']);
 
     Route::get('/leave-hours', [LeaveController::class, 'getLeaveHours']);
+
+    Route::prefix('/category')->group(function (): void {
+        Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
+        Route::get('/', [LeaveCategoryController::class, 'getLeaveCategories']);
+    });
 });
+
+
 
 
 Route::prefix('/contract')->group(function () {
@@ -41,7 +48,7 @@ Route::prefix('/contract')->group(function () {
     Route::put('/update/{id}', [ContractController::class, 'update']);
 });
 
-
 Route::prefix('projects')->group(function () {
     Route::post('/',  [ProjectController::class, 'store']);
 });
+
