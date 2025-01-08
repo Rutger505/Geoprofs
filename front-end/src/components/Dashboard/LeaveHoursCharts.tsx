@@ -8,14 +8,14 @@ const data = [
 ];
 
 // Tailwind wont generate classes with dynamic colors.
-const tailWindPossibleClasses = ["text-[#8884d8]", "text-[#82ca9d]"];
+const tailWindPossibleClasses = ["bg-[#8884d8]", "bg-[#82ca9d]"];
 
 export default function LeaveHoursCharts() {
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="w-full max-w-md">
-      <h2 className="text-2xl font-medium">Verlofuren</h2>
+    <div className="">
+      <h2 className="text-2xl font-medium">Vakantiedagen</h2>
 
       <div className={"grid h-64 grid-cols-2"}>
         <div className="relative h-64">
@@ -27,7 +27,6 @@ export default function LeaveHoursCharts() {
                 cy="50%"
                 innerRadius={60}
                 outerRadius={80}
-                fill="#8884d8"
                 paddingAngle={2}
                 dataKey="value"
               >
@@ -39,18 +38,16 @@ export default function LeaveHoursCharts() {
           </ResponsiveContainer>
 
           {/* Center Text */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center">
+          <div className="absolute left-1/2 top-1/2 max-w-[100px] -translate-x-1/2 -translate-y-1/2 transform text-center">
             <div className="text-2xl font-bold">{total}</div>
-            <div className="text-sm">Verlofdagen totaal</div>
+            <div className="text-sm">Vakantiedagen totaal</div>
           </div>
         </div>
-        <div className="flex flex-col justify-center space-x-4">
+
+        <div className="flex flex-col justify-center gap-3">
           {data.map((item) => (
-            <div
-              key={item.name}
-              className={`text-[${item.color}] flex items-center gap-4 text-center`}
-            >
-              <div className="text-2xl font-bold">{item.value}</div>
+            <div key={item.name} className={`flex items-center gap-4`}>
+              <div className={`h-3 w-3 rounded-full bg-[${item.color}]`}></div>
               <div className="text-sm">{item.name}</div>
             </div>
           ))}
