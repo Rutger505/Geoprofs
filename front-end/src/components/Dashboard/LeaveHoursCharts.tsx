@@ -35,11 +35,7 @@ export default function LeaveHoursCharts() {
         {/* Center Text */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center">
           <div className="text-2xl font-bold">{total}</div>
-          <div className="text-sm">
-            Verlofdagen
-            <br />
-            totaal
-          </div>
+          <div className="text-sm">Verlofdagen totaal</div>
         </div>
       </div>
     </div>
