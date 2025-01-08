@@ -10,12 +10,12 @@ export default async function Dashboard() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center gap-20">
+    <main className="flex flex-col items-center gap-20 pt-20">
       <h1 className={"text-3xl font-semibold"}>
         Welcome {session.user.firstName}!
       </h1>
 
-      <div className={"grid grid-rows-2 gap-5"}>
+      <div className={"grid grid-rows-2 gap-10"}>
         <RecentLeaveRequests />
         <LeaveHoursCharts />
       </div>

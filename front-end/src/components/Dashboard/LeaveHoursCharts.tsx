@@ -3,7 +3,7 @@ import VacationDaysCharts from "@/components/Dashboard/VacationDaysCharts";
 
 export default function LeaveHoursCharts() {
   return (
-    <div className={"flex gap-5"}>
+    <div className={"flex gap-14"}>
       <VacationDaysCharts />
       <LeavePerCategoryChart />
     </div>

@@ -16,9 +16,9 @@ export function Chart({ items, totalLabel }: Readonly<Props>) {
 
   return (
     <div className={"w-fit space-y-5"}>
-      <h2 className="text-2xl font-medium">{totalLabel}</h2>
+      <h2 className="text-2xl font-semibold">{totalLabel}</h2>
 
-      <div className={"inline-flex"}>
+      <div className={"flex gap-5"}>
         <div className="relative h-40 w-40">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -47,7 +47,7 @@ export function Chart({ items, totalLabel }: Readonly<Props>) {
 
         <div className="flex flex-col justify-center gap-3">
           {items.map((item) => (
-            <div key={item.name} className={`flex items-center gap-4`}>
+            <div key={item.name} className={"flex items-center gap-2"}>
               <div className={`h-3 w-3 rounded-full bg-[${item.color}]`}></div>
               <div className="text-sm">{item.name}</div>
             </div>

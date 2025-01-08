@@ -22,7 +22,7 @@ export function LeaveRequest({ request }: Readonly<Props>) {
   };
 
   return (
-    <div className="w-80 rounded-lg border">
+    <div className="h-fit max-w-sm rounded-lg border">
       <div className="space-y-2 p-4">
         <div className="flex items-center justify-between">
           <span className="text-lg font-medium">{request.category.name}</span>
