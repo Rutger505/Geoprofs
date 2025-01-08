@@ -44,8 +44,8 @@ export function RecentLeaveRequests() {
   ];
 
   return (
-    <div className={"space-y-5"}>
-      <h2 className={"text-2xl font-semibold"}>Recent requests</h2>
+    <div className={"w-fit space-y-5"}>
+      <h2 className={"text-2xl font-semibold"}>Recente verlofverzoeken</h2>
       <div className={"grid grid-cols-2 grid-rows-2 gap-3"}>
         {leaveRequests.map((request) => (
           <LeaveRequest key={request.id} request={request} />

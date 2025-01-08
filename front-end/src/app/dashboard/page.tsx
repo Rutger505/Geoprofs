@@ -15,8 +15,10 @@ export default async function Dashboard() {
         Welcome {session.user.firstName}!
       </h1>
 
-      <RecentLeaveRequests />
-      <LeaveHoursCharts />
+      <div className={"grid grid-rows-2 gap-5"}>
+        <RecentLeaveRequests />
+        <LeaveHoursCharts />
+      </div>
     </main>
   );
 }
