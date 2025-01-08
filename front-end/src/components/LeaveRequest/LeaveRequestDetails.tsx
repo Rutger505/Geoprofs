@@ -12,21 +12,16 @@ export function LeaveRequestDetails({ request }: Readonly<Props>) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div>
-      <span
-        className={clsx(
-          open && "!h-8",
-          "block h-0 overflow-hidden transition-all ease-in-out",
-        )}
-      >
-        Reden: {request.reason}
+    <div className={"space-y-2"}>
+      <span className={clsx(open ? "block" : "hidden", "text-md")}>
+        {request.reason}
       </span>
 
       <button
         className={"flex items-center text-sm opacity-50"}
         onClick={() => setOpen(!open)}
       >
-        {open ? "Verberg" : "Toon"} bericht
+        {open ? "Verberg" : "Toon"} reden
         {open ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"

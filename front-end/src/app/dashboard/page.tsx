@@ -13,7 +13,8 @@ export default async function Dashboard() {
     {
       id: 1,
       status: "accepted",
-      reason: "Vacation",
+      reason:
+        "Ik hou van lange vakanties om te kijken hoe de text wrapt in de component.",
       startDate: new Date("2024-11-01 09:00:00"),
       endDate: new Date("2024-11-05 17:00:00"),
       category: {
@@ -25,7 +26,7 @@ export default async function Dashboard() {
     {
       id: 2,
       status: "denied",
-      reason: "Sick",
+      reason: "Dit is een domme reden",
       startDate: new Date("2021-10-10 09:00:00"),
       endDate: new Date("2021-10-10 17:00:00"),
       category: {

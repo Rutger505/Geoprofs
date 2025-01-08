@@ -14,3 +14,12 @@ export interface LeaveRequest {
   category: LeaveRequestCategory;
   updatedAt: Date | null;
 }
+
+export function getStatusTranslation(status: LeaveRequestStatus) {
+  const statusMap = {
+    accepted: "Geaccepteerd",
+    denied: "Geweigerd",
+    pending: "In afwachting",
+  };
+  return statusMap[status];
+}
