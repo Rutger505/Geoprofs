@@ -50,9 +50,12 @@ Route::prefix('/contract')->group(function () {
 Route::prefix('projects')->group(function () {
     Route::post('/', [ProjectController::class, 'store']);
     Route::get('/', [ProjectController::class, 'show']);
+    Route::delete('/{projectId}', [ProjectController::class, 'delete']);
 
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [ProjectController::class, 'addUserToProject']);
+        Route::get('/{projectId}', [ProjectController::class, 'showUsers']);
+        Route::delete('/{projectId}', [ProjectController::class, 'removeUserFromProject']);
     });
 
     Route::get('/leave/{projectId}', [ProjectController::class, 'getAllLeaveFromProject']);
