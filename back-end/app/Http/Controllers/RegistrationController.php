@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Mail\RegisterMail;
+use App\Models\Contracts;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Models\UserContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 
@@ -99,6 +98,14 @@ class RegistrationController extends Controller
 
         $request->validate([
             'password' => 'required|string',
+            'contractId' => 'required|int',
+        ]);
+
+        $contract = Contracts::findOrFail($request->contractId);
+
+        UserContract::create([
+            'userId' => $user->id,
+            'contractId' => $contract->id,
         ]);
 
         $user->update([
