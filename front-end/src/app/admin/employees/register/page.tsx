@@ -1,5 +1,6 @@
 import { RegisterEmployeeForm } from "@/components/Admin/RegisterEmployee/RegisterEmployeeForm";
 import axios from "@/lib/axios";
+import { Contract, getContracts } from "@/lib/models/contract";
 
 interface ApiRolesResponse {
   roles: {
@@ -23,10 +24,21 @@ export default async function Page() {
     roles = data.roles;
     defaultRole = roles.find((role) => role.name === "Employee") ?? roles[0];
   } catch (error) {
-    console.error(error);
     return (
       <main className="flex flex-col items-center justify-center gap-20">
         <p>Er is een fout opgetreden bij het ophalen van de rollen</p>
+      </main>
+    );
+  }
+  let contracts: Contract[] | undefined;
+  try {
+    contracts = await getContracts();
+    console.log(contracts);
+  } catch (error) {
+    console.error(error);
+    return (
+      <main className="flex flex-col items-center justify-center gap-20">
+        <p>Er is een fout opgetreden bij het ophalen van de contracten</p>
       </main>
     );
   }
@@ -37,7 +49,11 @@ export default async function Page() {
         Registreer nieuwe medewerker
       </h1>
 
-      <RegisterEmployeeForm roles={roles} defaultRole={defaultRole} />
+      <RegisterEmployeeForm
+        roles={roles}
+        defaultRole={defaultRole}
+        contracts={contracts}
+      />
     </main>
   );
 }

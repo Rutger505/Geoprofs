@@ -19,6 +19,7 @@ class SectionController extends Controller
         Sections::create([
 
             'name' => $request['name']
+
         ]);
 
         return response()->json(["message" => "Section added successfully"], 200);
@@ -88,4 +89,9 @@ class SectionController extends Controller
         return response()->json([$usersWithLeave], 200);
     }
 
+
+    public function show()
+    {
+        return response()->json(Sections::all(), 200);
+    }
 }
