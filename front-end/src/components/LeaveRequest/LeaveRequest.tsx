@@ -3,7 +3,7 @@ import { StatusIcon } from "@/components/LeaveRequest/StatusIcon";
 import {
   getStatusTranslation,
   LeaveRequest as LeaveRequestType,
-} from "@/types/leaveRequest";
+} from "@/lib/models/leaveRequest";
 import { differenceInHours, format, isSameDay } from "date-fns";
 
 interface Props {

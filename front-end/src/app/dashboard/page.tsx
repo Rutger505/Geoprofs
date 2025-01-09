@@ -1,8 +1,10 @@
 import LeaveHoursCharts from "@/components/Dashboard/LeaveHoursCharts";
 import { RecentLeaveRequests } from "@/components/Dashboard/RecentLeaveRequests";
 import { auth } from "@/lib/auth";
-import { getUsersLeaveRequests } from "@/lib/models/leaveRequest";
-import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
+import {
+  getUsersLeaveRequests,
+  LeaveRequest as LeaveRequestType,
+} from "@/lib/models/leaveRequest";
 import { redirect } from "next/navigation";
 
 interface LeaveRequestResponse {
@@ -15,7 +17,6 @@ export default async function Dashboard() {
   }
 
   const leaveRequests = await getUsersLeaveRequests();
-  console.log(leaveRequests);
 
   return (
     <main className="flex flex-col items-center gap-20 pt-20">

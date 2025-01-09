@@ -22,6 +22,11 @@ Route::prefix('/auth')->group(function (): void {
     Route::put('/register/complete/{token}', [RegistrationController::class, 'register']);
 });
 
+// user route with leave hours
+Route::prefix('/user/{user}')->group(function (): void {
+    Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+});
+
 Route::prefix('/roles')->group(function (): void {
     Route::get('/show', [RolesController::class, 'show']);
 });
@@ -31,7 +36,6 @@ Route::prefix('/leave')->group(function (): void {
 
     Route::get('/leave-requests', [LeaveController::class, 'getLeaveStatus']);
 
-    Route::get('/leave-hours', [LeaveController::class, 'getLeaveHours']);
 
     Route::prefix('/category')->group(function (): void {
         Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
@@ -50,7 +54,7 @@ Route::prefix('/contract')->group(function () {
 Route::prefix('sections')->group(function () {
     Route::post('/', [SectionController::class, 'store']);
     Route::get('/', [SectionController::class, 'show']);
-  
+
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [SectionController::class, 'addUserToSection']);
     });

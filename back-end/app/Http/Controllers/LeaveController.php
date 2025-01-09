@@ -40,18 +40,10 @@ class LeaveController extends Controller
     }
 
 
-    public function getLeaveHours(Request $request)
+    public function getLeaveHours(User $user)
     {
-        $request->validate([
-            'userId' => 'required|int'
-        ]);
-
-        if (User::where('id', $request->userId)->doesntExist()) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
         $contract = Contracts::join('user_contract', 'contracts.id', '=', 'user_contract.contractId')
-            ->where('user_contract.userId', $request->userId)
+            ->where('user_contract.userId', $user->userId)
             ->select('contracts.*')
             ->first();
 

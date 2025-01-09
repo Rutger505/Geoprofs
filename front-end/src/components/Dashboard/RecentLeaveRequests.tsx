@@ -1,19 +1,12 @@
 import LeaveRequest from "@/components/LeaveRequest/LeaveRequest";
-import { auth } from "@/lib/auth";
 import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 interface Props {
   leaveRequests: LeaveRequestType[];
 }
 
 export async function RecentLeaveRequests({ leaveRequests }: Readonly<Props>) {
-  const session = await auth();
-  if (!session) {
-    redirect("/");
-  }
-
   return (
     <div className={"space-y-5"}>
       <div className={"flex items-center justify-between"}>
