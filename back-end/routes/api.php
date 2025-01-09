@@ -51,7 +51,8 @@ Route::prefix('sections')->group(function () {
     Route::post('/', [SectionController::class, 'store']);
     Route::get('/', [SectionController::class, 'show']);
     Route::delete('/{sectionId}', [SectionController::class, 'delete']);
-
+    Route::put('/{sectionId}', [SectionController::class, 'update']);
+    
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [SectionController::class, 'addUserToSection']);
         Route::delete('/{sectionId}', [SectionController::class, 'removeUserFromSection']);

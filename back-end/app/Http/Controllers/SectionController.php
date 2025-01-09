@@ -29,6 +29,18 @@ class SectionController extends Controller
         return response()->json(Sections::all(), 200);
     }
 
+    public function update(Request $request, $sectionId)
+    {
+        $request->validate([
+            'name' => 'required|string',
+        ]);
+
+        Sections::where('id', $sectionId)->update(['    name' => $request['name']]);
+
+        return response()->json(["message" => "Project updated successfully"], 200);
+    }
+
+
     public function delete($sectionId)
     {
         if (SectionUser::where('sectionId', $sectionId)->exists()) {
