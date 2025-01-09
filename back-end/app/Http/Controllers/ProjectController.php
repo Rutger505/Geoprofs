@@ -33,7 +33,7 @@ class ProjectController extends Controller
             return response()->json(["message" => "Project still has users assigned"], 400);
         }
 
-        Projects::where('projectId', $projectId)->delete();
+        Projects::where('id', $projectId)->delete();
 
         return response()->json(["message" => "Project deleted successfully"], 200);
     }
