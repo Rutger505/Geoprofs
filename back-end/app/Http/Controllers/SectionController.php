@@ -9,15 +9,21 @@ class SectionController extends Controller
 {
     //
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'sectionName' => 'required|string',
         ]);
 
         Sections::create([
-           'name' => $request['sectionName']
+            'name' => $request['sectionName']
         ]);
 
         return response()->json(["message" => "Section added successfully"], 200);
+    }
+
+    public function show()
+    {
+        return response()->json(Sections::all(), 200);
     }
 }
