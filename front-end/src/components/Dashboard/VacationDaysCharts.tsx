@@ -1,8 +1,13 @@
 "use client";
 
 import { Chart } from "@/components/Dashboard/Chart";
+import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
 
-export default function VacationDaysCharts() {
+interface Props {
+  leaveRequests: LeaveRequestType[];
+}
+
+export default function VacationDaysCharts({ leaveRequests }: Readonly<Props>) {
   const data = [
     { name: "Opgenomen (2 dagen)", value: 2, color: "#8884d8" },
     { name: "Beschikbaar (3 dagen)", value: 3, color: "#82ca9d" },
