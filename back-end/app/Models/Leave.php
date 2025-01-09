@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Leave extends Model
 {
-    use HasFactory;
-
     protected $table = 'leave';
-
     protected $fillable = [
         'startDate',
         'endDate',
@@ -19,4 +16,7 @@ class Leave extends Model
         'categoryId',
         'userId'
     ];
+
+    use HasFactory;
+
 }
