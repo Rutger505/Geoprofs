@@ -6,6 +6,7 @@ use App\Models\Sections;
 use App\Models\SectionUser;
 use Illuminate\Http\Request;
 
+
 class SectionController extends Controller
 {
     //

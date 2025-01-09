@@ -49,6 +49,11 @@ Route::prefix('/contract')->group(function () {
 
 Route::prefix('projects')->group(function () {
     Route::post('/', [ProjectController::class, 'store']);
+    Route::get('/', [ProjectController::class, 'show']);
+
+    Route::prefix('/users')->group(function (): void {
+        Route::post('/', [ProjectController::class, 'addUserToProject']);
+    });
 
     Route::get('/leave/{projectId}', [ProjectController::class, 'getAllLeaveFromProject']);
 
@@ -60,7 +65,6 @@ Route::prefix('sections')->group(function () {
 
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [SectionController::class, 'addUserToSection']);
-        Route::get('/get-users', [SectionController::class, 'getAllLeaveFromSection']);
     });
 
 

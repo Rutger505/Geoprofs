@@ -21,6 +21,27 @@ class ProjectController extends Controller
         return response()->json(["message" => "Project added successfully"], 200);
     }
 
+    public function show()
+    {
+        return response()->json(Projects::all());
+    }
+
+
+    public function addUserToProject(Request $request)
+    {
+        $request->validate([
+            'userId' => 'required|int',
+            'projectId' => 'required|int',
+        ]);
+
+        ProjectUser::create([
+            'userId' => $request['userId'],
+            'projectId' => $request['projectId']
+        ]);
+
+        return response()->json(["message" => "User added to project successfully"], 200);
+    }
+
     public function getAllLeaveFromProject(Request $request)
     {
         $request->validate([
@@ -35,4 +56,6 @@ class ProjectController extends Controller
 
         return response()->json([$usersWithLeave], 200);
     }
+
+
 }
