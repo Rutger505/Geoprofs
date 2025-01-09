@@ -50,6 +50,8 @@ Route::prefix('/contract')->group(function () {
 Route::prefix('projects')->group(function () {
     Route::post('/', [ProjectController::class, 'store']);
 
+    Route::get('/leave/{projectId}', [ProjectController::class, 'getAllLeaveFromProject']);
+
 });
 
 Route::prefix('sections')->group(function () {
