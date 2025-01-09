@@ -5,6 +5,7 @@ namespace App\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Model
@@ -58,5 +59,10 @@ class User extends Model
         }
 
         $this->roleName = $role->name;
+    }
+
+    public function leave(): hasMany
+    {
+        return $this->hasMany(Leave::class, 'userId', 'id');
     }
 }

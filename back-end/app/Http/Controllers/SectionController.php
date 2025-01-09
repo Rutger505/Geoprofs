@@ -50,19 +50,13 @@ class SectionController extends Controller
             'sectionId' => 'required|int',
         ]);
 
-        $leaveData = SectionUser::join('users', 'section_user.userId', '=', 'users.id')
-            ->join('leave', 'leave.userId', '=', 'users.id')
-            ->where('section_user.sectionId', $request->sectionId)
-            ->select(
-                'users.id as userId',
-                'users.firstName',
-                'users.lastName',
-                'leave.*'
-            )
-            ->get();
 
-        return response()->json($leaveData, 200);
+        $usersWithLeave = SectionUser::where('sectionId', $request['sectionId'])
+            ->with(['user.leave'])
+            ->get()
+            ->pluck('user');
+
+        return response()->json([$usersWithLeave], 200);
     }
-
 
 }
