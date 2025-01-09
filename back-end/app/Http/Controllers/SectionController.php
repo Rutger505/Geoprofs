@@ -24,6 +24,12 @@ class SectionController extends Controller
         return response()->json(["message" => "Section added successfully"], 200);
     }
 
+
+    public function show()
+    {
+        return response()->json(Sections::all(), 200);
+    }
+
     public function addUserToSection(Request $request)
     {
         $request->validate([
@@ -37,12 +43,23 @@ class SectionController extends Controller
         ]);
 
         return response()->json(["message" => "User added to section successfully"], 200);
-
     }
 
 
-    public function show()
+    public function getAllLeaveFromSection(Request $request)
     {
-        return response()->json(Sections::all(), 200);
+        $request->validate([
+            'sectionId' => 'required|int',
+        ]);
+
+
+        $usersWithLeave = SectionUser::where('sectionId', $request['sectionId'])
+            ->with(['user.leave'])
+            ->get()
+            ->pluck('user');
+
+        return response()->json([$usersWithLeave], 200);
     }
+
+
 }
