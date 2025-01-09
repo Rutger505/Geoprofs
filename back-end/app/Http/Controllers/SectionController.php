@@ -44,14 +44,11 @@ class SectionController extends Controller
         return response()->json(["message" => "User added to section successfully"], 200);
     }
 
-    public function getAllLeaveFromSection(Request $request)
+    public function getAllLeaveFromSection($sectionId)
     {
-        $request->validate([
-            'sectionId' => 'required|int',
-        ]);
 
 
-        $usersWithLeave = SectionUser::where('sectionId', $request['sectionId'])
+        $usersWithLeave = SectionUser::where('sectionId', $sectionId)
             ->with(['user.leave'])
             ->get()
             ->pluck('user');
