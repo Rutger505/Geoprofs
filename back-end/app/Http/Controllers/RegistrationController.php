@@ -146,6 +146,7 @@ class RegistrationController extends Controller
         UserContract::create([
             'userId' => $user->id,
             'contractId' => $request->contractId,
+            'startDate' => $request->dateHired,
         ]);
 
         $url = config('app.url') . '/complete/' . $token;

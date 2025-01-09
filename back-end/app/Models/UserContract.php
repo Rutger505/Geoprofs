@@ -11,8 +11,14 @@ class UserContract extends Model
 
     protected $table = 'user_contract';
 
+    public $incrementing = false;
+
+    protected $primaryKey = ['sectionId', 'userId'];
+
     protected $fillable = [
         'userId',
         'contractId',
+        'startDate',
+        'endDate',
     ];
 }
