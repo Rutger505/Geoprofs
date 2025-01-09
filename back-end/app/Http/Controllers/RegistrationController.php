@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Mail\RegisterMail;
+use App\Models\Contracts;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Models\UserContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 
@@ -89,6 +88,10 @@ class RegistrationController extends Controller
      */
     public function register(Request $request, string $token): JsonResponse
     {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
         $user = User::where('registrationToken', $token)->first();
 
         if (!$user) {
@@ -97,9 +100,6 @@ class RegistrationController extends Controller
             ], 422);
         }
 
-        $request->validate([
-            'password' => 'required|string',
-        ]);
 
         $user->update([
             'password' => $request->password,
@@ -119,18 +119,21 @@ class RegistrationController extends Controller
             'lastName' => 'required|string',
             'email' => 'required|email',
             'dateHired' => 'required|date',
-            'roleId' => 'required|int'
+            'roleId' => 'required|int',
+            'contractId' => 'required|int',
         ]);
 
         if (User::where('email', $request->email)->exists()) {
             return response()->json(['message' => 'email already has a account'], 409);
         }
 
+        if (Contracts::where('id', $request->contractId)->doesntExist()) {
+            return response()->json(['message' => 'contract does not exist'], 404);
+        }
+
         $token = (string)Str::uuid();
 
-        $url = config('app.url') . '/complete/' . $token;
-
-        User::create([
+        $user = User::create([
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
             'email' => $request->email,
@@ -140,6 +143,13 @@ class RegistrationController extends Controller
             'registrationToken' => $token,
         ]);
 
+        UserContract::create([
+            'userId' => $user->id,
+            'contractId' => $request->contractId,
+            'startDate' => $request->dateHired,
+        ]);
+
+        $url = config('app.url') . '/complete/' . $token;
         Mail::to($request->email)->send(new RegisterMail($url, $request->email));
 
         return response()->json([
