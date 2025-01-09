@@ -26,6 +26,17 @@ class ProjectController extends Controller
         return response()->json(Projects::all());
     }
 
+    public function update(Request $request, $projectId)
+    {
+        $request->validate([
+            'name' => 'required|string',
+        ]);
+
+        Projects::where('id', $projectId)->update(['name' => $request['name']]);
+
+        return response()->json(["message" => "Project updated successfully"], 200);
+    }
+
     public function delete($projectId)
     {
 
