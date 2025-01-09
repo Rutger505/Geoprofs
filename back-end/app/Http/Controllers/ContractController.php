@@ -26,7 +26,7 @@ class ContractController extends Controller
 
     public function show()
     {
-        $existsInUserContract = Contracts::join('user_contract', 'contracts.id', '=', 'user_contract.contactId')
+        $existsInUserContract = Contracts::join('user_contract', 'contracts.id', '=', 'user_contract.contractId')
             ->select('contracts.*')
             ->get();
 

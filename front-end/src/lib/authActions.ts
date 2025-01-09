@@ -97,6 +97,7 @@ export async function register(
   email: string,
   dateHired: Date,
   roleId: number,
+  contractId: number,
 ) {
   try {
     await axios.post("/auth/register", {
@@ -105,6 +106,7 @@ export async function register(
       email,
       dateHired,
       roleId,
+      contractId,
     });
   } catch (error) {
     if (!(error instanceof AxiosError) || error.response?.status !== 409) {

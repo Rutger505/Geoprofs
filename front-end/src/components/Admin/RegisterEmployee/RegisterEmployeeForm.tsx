@@ -1,6 +1,7 @@
 "use client";
 
 import { register } from "@/lib/authActions";
+import { Contract } from "@/lib/models/contract";
 import { Button, Field, Input, Label, Select } from "@headlessui/react";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -15,9 +16,14 @@ interface Role {
 interface Props {
   roles: Role[];
   defaultRole: Role;
+  contracts: Contract[];
 }
 
-export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
+export function RegisterEmployeeForm({
+  roles,
+  defaultRole,
+  contracts,
+}: Readonly<Props>) {
   const { isSuccess, mutate, isPending, error } = useMutation({
     mutationFn: async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -27,7 +33,18 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
         throw new Error("Please enter a valid date");
       }
 
-      const result = await register(firstName, lastName, email, date, role.id);
+      if (!contract) {
+        throw new Error("Please select a contract");
+      }
+
+      const result = await register(
+        firstName,
+        lastName,
+        email,
+        date,
+        role.id,
+        contract.id,
+      );
 
       if (result?.error) {
         throw new Error(result.error);
@@ -41,6 +58,7 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
     new Date().toISOString().split("T")[0],
   );
   const [role, setRole] = useState<Role>(defaultRole);
+  const [contract, setContract] = useState<Contract | undefined>();
 
   return (
     <form
@@ -104,6 +122,28 @@ export function RegisterEmployeeForm({ roles, defaultRole }: Readonly<Props>) {
           {roles.map((role) => (
             <option key={role.id} value={role.id}>
               {role.name}
+            </option>
+          ))}
+        </Select>
+      </Field>
+
+      <Field>
+        <Label className={"block"}>Contracten</Label>
+        <Select
+          className="w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(event) =>
+            setContract(
+              contracts.find(
+                (contract) => contract.id === +event.target.value,
+              )!,
+            )
+          }
+          aria-label="Contracten"
+        >
+          <option disabled value="" selected></option>
+          {contracts.map((contract) => (
+            <option key={contract.id} value={contract.id}>
+              {contract.name}
             </option>
           ))}
         </Select>
