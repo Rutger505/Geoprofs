@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contracts;
 use App\Models\Leave;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,10 @@ class LeaveController extends Controller
             'userId' => 'required|int'
         ]);
 
+        if (User::where('id', $request->userId)->doesntExist()) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
         $contract = Contracts::join('user_contract', 'contracts.id', '=', 'user_contract.contractId')
             ->where('user_contract.userId', $request->userId)
             ->select('contracts.*')
@@ -64,5 +69,5 @@ class LeaveController extends Controller
 
         return response()->json($leaveRequests);
     }
-    
+
 }
