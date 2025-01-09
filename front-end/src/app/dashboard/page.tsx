@@ -1,7 +1,7 @@
 import LeaveHoursCharts from "@/components/Dashboard/LeaveHoursCharts";
 import { RecentLeaveRequests } from "@/components/Dashboard/RecentLeaveRequests";
 import { auth } from "@/lib/auth";
-import axios from "@/lib/axios";
+import { getUsersLeaveRequests } from "@/lib/models/leaveRequest";
 import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
 import { redirect } from "next/navigation";
 
@@ -14,10 +14,8 @@ export default async function Dashboard() {
     redirect("/");
   }
 
-  const leaveRequestsResposne = await axios.get<LeaveRequestType[]>(
-    `/leave/leave-requests?userId=${session.user.id}`,
-  );
-  const leaveRequests = leaveRequestsResposne.data;
+  const leaveRequests = await getUsersLeaveRequests();
+  console.log(leaveRequests);
 
   return (
     <main className="flex flex-col items-center gap-20 pt-20">

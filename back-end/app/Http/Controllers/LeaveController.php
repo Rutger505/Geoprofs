@@ -65,9 +65,10 @@ class LeaveController extends Controller
             'userId' => 'required|int'
         ]);
 
-        $leaveRequests = Leave::where('userId', $request->userId)->get();
+        $leaveRequests = Leave::with('category')
+            ->where('userId', $request->userId)
+            ->get();
 
         return response()->json($leaveRequests);
     }
-
 }

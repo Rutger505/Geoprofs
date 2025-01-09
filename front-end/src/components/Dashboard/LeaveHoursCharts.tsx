@@ -1,6 +1,6 @@
 import LeavePerCategoryChart from "@/components/Dashboard/LeavePerCategoryChart";
 import VacationDaysCharts from "@/components/Dashboard/VacationDaysCharts";
-import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
+import { LeaveRequest as LeaveRequestType } from "@/lib/models/leaveRequest";
 
 interface Props {
   leaveRequests: LeaveRequestType[];

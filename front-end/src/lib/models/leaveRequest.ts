@@ -1,3 +1,6 @@
+import { auth } from "@/lib/auth";
+import axios from "@/lib/axios";
+
 export type LeaveRequestStatus = "accepted" | "denied" | "pending";
 
 export interface LeaveRequestCategory {
@@ -22,4 +25,16 @@ export function getStatusTranslation(status: LeaveRequestStatus) {
     pending: "In afwachting",
   };
   return statusMap[status];
+}
+
+export async function getUsersLeaveRequests() {
+  const session = await auth();
+  if (!session) {
+    throw new Error("User not authenticated");
+  }
+
+  const leaveRequestsResposne = await axios.get<LeaveRequest[]>(
+    `/leave/leave-requests?userId=${session.user.id}`,
+  );
+  const leaveRequests = leaveRequestsResposne.data;
 }
