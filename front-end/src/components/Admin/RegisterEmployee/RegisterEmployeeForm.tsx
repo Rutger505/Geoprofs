@@ -139,8 +139,9 @@ export function RegisterEmployeeForm({
               )!,
             )
           }
-          defaultValue=""
           aria-label="Contracten"
+          defaultValue=""
+          required
         >
           <option disabled value=""></option>
           {contracts.map((contract) => (
