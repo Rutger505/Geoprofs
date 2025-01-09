@@ -33,6 +33,7 @@ export default async function Page() {
   let contracts: Contract[] | undefined;
   try {
     contracts = await getContracts();
+    console.log(contracts);
   } catch (error) {
     console.error(error);
     return (

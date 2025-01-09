@@ -118,6 +118,7 @@ export function RegisterEmployeeForm({
           }
           value={defaultRole.id}
           aria-label="Rol"
+          required
         >
           {roles.map((role) => (
             <option key={role.id} value={role.id}>
@@ -138,9 +139,10 @@ export function RegisterEmployeeForm({
               )!,
             )
           }
+          defaultValue=""
           aria-label="Contracten"
         >
-          <option disabled value="" selected></option>
+          <option disabled value=""></option>
           {contracts.map((contract) => (
             <option key={contract.id} value={contract.id}>
               {contract.name}

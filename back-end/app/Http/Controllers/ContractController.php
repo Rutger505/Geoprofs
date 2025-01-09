@@ -28,6 +28,7 @@ class ContractController extends Controller
     {
         $existsInUserContract = Contracts::join('user_contract', 'contracts.id', '=', 'user_contract.contractId')
             ->select('contracts.*')
+            ->distinct()
             ->get();
 
         $notExistsInUserContract = Contracts::whereNotIn('id', function ($query) {
