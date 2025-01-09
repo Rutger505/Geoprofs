@@ -29,6 +29,17 @@ class SectionController extends Controller
         return response()->json(Sections::all(), 200);
     }
 
+    public function delete($sectionId)
+    {
+        if (SectionUser::where('sectionId', $sectionId)->exists()) {
+            return response()->json(["message" => "Section still has users assigned"], 400);
+        }
+
+        Sections::where('id', $sectionId)->delete();
+
+        return response()->json(["message" => "Section deleted successfully"], 200);
+    }
+
     public function addUserToSection(Request $request)
     {
         $request->validate([
@@ -44,9 +55,30 @@ class SectionController extends Controller
         return response()->json(["message" => "User added to section successfully"], 200);
     }
 
-    public function getAllLeaveFromSection($sectionId)
+
+    public function removeUserFromSection(Request $request, $sectionId)
+    {
+        $request->validate(['userId' => 'required|int']);
+
+        if (!SectionUser::where('sectionId', $sectionId)->exists() || !SectionUser::where('userId', $request['userId'])->exists()) {
+            return response()->json(["message" => "Section or users doesn't exists"], 400);
+        }
+
+        SectionUser::where('sectionId', $sectionId)->where('userId', $request['userId'])->delete();
+
+        return response()->json(["message" => "User removed successfully"], 200);
+    }
+
+    public function showUsers($sectionId)
     {
 
+        $users = SectionUser::where('sectionId', $sectionId)->with('user')->get()->pluck('user');
+
+        return response()->json($users);
+    }
+
+    public function getAllLeaveFromSection($sectionId)
+    {
 
         $usersWithLeave = SectionUser::where('sectionId', $sectionId)
             ->with(['user.leave'])
