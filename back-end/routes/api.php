@@ -4,7 +4,7 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveCategoryController;
 use App\Http\Controllers\LeaveController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SectionController;
@@ -45,6 +45,11 @@ Route::prefix('/contract')->group(function () {
     Route::get('/show', [ContractController::class, 'show']);
     Route::delete('/delete/{id}', [ContractController::class, 'delete']);
     Route::put('/update/{id}', [ContractController::class, 'update']);
+});
+
+Route::prefix('projects')->group(function () {
+    Route::post('/', [ProjectController::class, 'store']);
+
 });
 
 Route::prefix('sections')->group(function () {
