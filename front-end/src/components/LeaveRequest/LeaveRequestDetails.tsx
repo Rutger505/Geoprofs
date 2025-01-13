@@ -1,6 +1,6 @@
 "use client";
 
-import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
+import { LeaveRequest as LeaveRequestType } from "@/lib/models/leaveRequest";
 import clsx from "clsx";
 import { useState } from "react";
 

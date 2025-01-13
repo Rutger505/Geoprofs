@@ -1,5 +1,5 @@
 import LeaveRequest from "@/components/LeaveRequest/LeaveRequest";
-import { LeaveRequest as LeaveRequestType } from "@/types/leaveRequest";
+import { LeaveRequest as LeaveRequestType } from "@/lib/models/leaveRequest";
 import Link from "next/link";
 
 interface Props {
