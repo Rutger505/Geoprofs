@@ -43,7 +43,7 @@ class LeaveController extends Controller
     public function getLeaveHours(User $user)
     {
         $contract = Contracts::join('user_contract', 'contracts.id', '=', 'user_contract.contractId')
-            ->where('user_contract.userId', $user->userId)
+            ->where('user_contract.userId', $user->id)
             ->select('contracts.*')
             ->first();
 

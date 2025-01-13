@@ -22,7 +22,6 @@ Route::prefix('/auth')->group(function (): void {
     Route::put('/register/complete/{token}', [RegistrationController::class, 'register']);
 });
 
-// user route with leave hours
 Route::prefix('/user/{user}')->group(function (): void {
     Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
 });

@@ -1,6 +1,9 @@
 import { Chart } from "@/components/Dashboard/Chart";
+import { auth } from "@/lib/auth";
 import axios from "@/lib/axios";
+import { convertHoursToDays } from "@/lib/durations";
 import { LeaveRequest as LeaveRequestType } from "@/lib/models/leaveRequest";
+import { redirect } from "next/navigation";
 
 interface Props {
   leaveRequests: LeaveRequestType[];
@@ -9,25 +12,32 @@ interface Props {
 export default async function VacationDaysCharts({
   leaveRequests,
 }: Readonly<Props>) {
-  const paidLeaveRequests = leaveRequests.filter(
-    (leaveRequest) => leaveRequest.category.isPaidLeave,
-  );
+  const session = await auth();
+  if (!session) {
+    redirect("/");
+  }
 
-  const paidLeaveLeaveHours = paidLeaveRequests.reduce(
-    (acc, leaveRequest) => acc + leaveRequest.durationHours,
-    0,
-  );
+  const paidLeaveLeaveHours = leaveRequests
+    .filter((leaveRequest) => leaveRequest.category.isPaidLeave)
+    .reduce((total, leaveRequest) => total + leaveRequest.durationHours, 0);
+  const paidLeaveLeaveDays = convertHoursToDays(paidLeaveLeaveHours);
 
-  console.log(paidLeaveRequests);
-
-  const totalHoursResposne = await axios.get("/leave/leave-hours");
+  const totalHoursResposne = await axios.get(`/user/${session.user.id}/hours`);
   const totalHours = totalHoursResposne.data.hours;
+  const totalDays = convertHoursToDays(totalHours);
 
-  console.log(totalHours);
-
+  // TODO generate colors
   const data = [
-    { name: "Opgenomen (2 dagen)", value: 2, color: "#8884d8" },
-    { name: "Beschikbaar (3 dagen)", value: 3, color: "#82ca9d" },
+    {
+      name: `Opgenomen (${paidLeaveLeaveDays} dagen)`,
+      value: paidLeaveLeaveDays,
+      color: "#8884d8",
+    },
+    {
+      name: `Beschikbaar (${totalDays} dagen)`,
+      value: totalDays,
+      color: "#82ca9d",
+    },
   ];
 
   // Tailwind won't generate classes with dynamic colors.
