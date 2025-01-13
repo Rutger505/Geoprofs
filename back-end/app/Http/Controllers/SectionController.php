@@ -100,10 +100,5 @@ class SectionController extends Controller
 
         return response()->json([$usersWithLeave], 200);
     }
-
-
-    public function show()
-    {
-        return response()->json(Sections::all(), 200);
-    }
+    
 }
