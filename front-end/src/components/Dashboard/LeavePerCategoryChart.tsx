@@ -11,15 +11,23 @@ interface Props {
 export default function LeavePerCategoryChart({
   leaveRequests,
 }: Readonly<Props>) {
-  const data = [
-    { name: "Ziekte (2 dagen, betaald)", value: 2, color: colors[0] },
-    {
-      name: "Ouderverlof (3 dagen, onbetaald)",
-      value: 3,
-      color: colors[1],
+  const categories = leaveRequests.reduce(
+    (acc, leaveRequest) => {
+      if (acc[leaveRequest.category.name]) {
+        acc[leaveRequest.category.name] += leaveRequest.durationHours / 8;
+      } else {
+        acc[leaveRequest.category.name] = leaveRequest.durationHours / 8;
+      }
+
+      return acc;
     },
-  ];
-  const total = data.reduce((sum, item) => sum + item.value, 0);
+    {} as Record<string, number>,
+  );
+  const data = Object.entries(categories).map(([name, value], index) => ({
+    name,
+    value,
+    color: colors[index],
+  }));
 
   return <Chart items={data} totalLabel={"Verlofuren"} />;
 }
