@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Projects;
 use App\Models\ProjectUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -56,6 +57,11 @@ class ProjectController extends Controller
             'projectId' => 'required|int',
         ]);
 
+
+        if (!Projects::where('id', $request[$request['projectId']])->exists() || !User::where('id', $request['userId'])->exists()) {
+
+            return response()->json(["message" => "User or project doesn't exist"], 404);
+        }
 
         ProjectUser::create([
             'userId' => $request['userId'],
