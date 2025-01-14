@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CeoController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveCategoryController;
@@ -52,7 +53,7 @@ Route::prefix('sections')->group(function () {
     Route::get('/', [SectionController::class, 'show']);
     Route::delete('/{sectionId}', [SectionController::class, 'delete']);
     Route::put('/{sectionId}', [SectionController::class, 'update']);
-    
+
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [SectionController::class, 'addUserToSection']);
         Route::delete('/{sectionId}', [SectionController::class, 'removeUserFromSection']);
@@ -61,6 +62,10 @@ Route::prefix('sections')->group(function () {
 
     Route::get('/leave/{sectionId}', [SectionController::class, 'getAllLeaveFromSection']);
 
-
 });
 
+
+Route::prefix('/ceo')->group(function () {
+    //mis show project maken dan route updaten
+    Route::get('/', [CeoController::class, 'showSection']);
+});
