@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class LeaveCategoryController extends Controller
 {
-    public function createLeaveCategory(Request $request){
+    public function createLeaveCategory(Request $request)
+    {
         $request->validate(
             ['categoryName' => 'required|string|max:255',
                 'isPaidLeave' => 'required|boolean']
@@ -21,7 +22,16 @@ class LeaveCategoryController extends Controller
         return response()->json(['message' => 'Leave category created'], 200);
     }
 
-    public function getLeaveCategories(){
+    public function getLeaveCategories()
+    {
         return response()->json(LeaveCategory::all(), 200);
+    }
+
+    public function deleteLeaveCategory($leaveCategoryId)
+    {
+
+        LeaveCategory::where('id', $leaveCategoryId)->delete();
+
+        return response()->json(['message' => 'Leave category deleted'], 200);
     }
 }

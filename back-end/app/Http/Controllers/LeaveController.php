@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contracts;
 use App\Models\Leave;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -54,13 +55,14 @@ class LeaveController extends Controller
         return response()->json(['hours' => $contract->totalLeaveHours]);
     }
 
-    public function getLeaveStatus(Request $request)
+    public function getLeaveStatus($userId)
     {
-        $request->validate([
-            'userId' => 'required|int'
-        ]);
 
-        $leaveRequests = Leave::where('userId', $request->userId)->get();
+        if (!User::where('id', $userId)->exists()) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        
+        $leaveRequests = Leave::where('userId', $userId)->get();
 
         return response()->json($leaveRequests);
     }
@@ -84,6 +86,15 @@ class LeaveController extends Controller
         ]);
 
         return response()->json(['message' => 'Leave status updated']);
+    }
+
+    public function deleteLeave($leaveId)
+    {
+        Leave::where('id', $leaveId)->delete($leaveId);
+
+        return response()->json(['message' => 'Leave deleted']);
+
+
     }
 
 }
