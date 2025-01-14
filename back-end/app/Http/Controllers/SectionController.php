@@ -45,7 +45,7 @@ class SectionController extends Controller
     public function delete($sectionId)
     {
         if (SectionUser::where('sectionId', $sectionId)->exists()) {
-            return response()->json(["message" => "Section still has users assigned"], 400);
+            return response()->json(["message" => "Section still has users assigned"], 409);
         }
 
         Sections::where('id', $sectionId)->delete();
