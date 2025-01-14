@@ -2,6 +2,7 @@
 
 import { Chart } from "@/components/Dashboard/Chart";
 import { colors } from "@/lib/colors";
+import { convertHoursToDays } from "@/lib/durations";
 import { LeaveRequest as LeaveRequestType } from "@/lib/models/leaveRequest";
 
 interface Props {
@@ -14,9 +15,13 @@ export default function LeavePerCategoryChart({
   const categories = leaveRequests.reduce(
     (acc, leaveRequest) => {
       if (acc[leaveRequest.category.name]) {
-        acc[leaveRequest.category.name] += leaveRequest.durationHours / 8;
+        acc[leaveRequest.category.name] += convertHoursToDays(
+          leaveRequest.durationHours,
+        );
       } else {
-        acc[leaveRequest.category.name] = leaveRequest.durationHours / 8;
+        acc[leaveRequest.category.name] = convertHoursToDays(
+          leaveRequest.durationHours,
+        );
       }
 
       return acc;
@@ -29,5 +34,5 @@ export default function LeavePerCategoryChart({
     color: colors[index],
   }));
 
-  return <Chart items={data} totalLabel={"Verlofuren"} />;
+  return <Chart items={data} totalLabel={"Verlofdagen"} />;
 }
