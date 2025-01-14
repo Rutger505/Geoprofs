@@ -6,6 +6,7 @@ use App\Models\Sections;
 use App\Models\SectionUser;
 use Illuminate\Http\Request;
 
+
 class SectionController extends Controller
 {
     //
@@ -29,6 +30,7 @@ class SectionController extends Controller
     {
         return response()->json(Sections::all(), 200);
     }
+
 
     public function update(Request $request, $sectionId)
     {
@@ -66,6 +68,7 @@ class SectionController extends Controller
         ]);
 
         return response()->json(["message" => "User added to section successfully"], 200);
+
     }
 
 
@@ -85,6 +88,7 @@ class SectionController extends Controller
     public function showUsers($sectionId)
     {
 
+
         $users = SectionUser::where('sectionId', $sectionId)->with('user')->get()->pluck('user');
 
         return response()->json($users);
@@ -100,5 +104,6 @@ class SectionController extends Controller
 
         return response()->json([$usersWithLeave], 200);
     }
+
     
 }
