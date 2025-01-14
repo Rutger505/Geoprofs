@@ -13,12 +13,12 @@ interface Props {
 export function LeaveRequest({ request }: Readonly<Props>) {
   const formatDateRange = (start: Date, end: Date) => {
     if (isSameDay(start, end)) {
-      return `${format(start, "d MMM")} ${differenceInHours(end, start)} uur`;
+      return `${format(start, "d MMM")} ${differenceInHours(end, start)} uur ${end.getFullYear()}`;
     }
 
     const startDate = format(start, "d MMM");
     const endDate = format(end, "d MMM");
-    return `${startDate} t/m ${endDate}`;
+    return `${startDate} ${start.getFullYear()} t/m ${endDate} ${start.getFullYear()}`;
   };
 
   return (
