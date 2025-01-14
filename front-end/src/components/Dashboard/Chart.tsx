@@ -50,7 +50,10 @@ export function Chart({ items, totalLabel }: Readonly<Props>) {
         <div className="flex flex-col justify-center gap-3">
           {items.map((item) => (
             <div key={item.name} className={"flex items-center gap-2"}>
-              <div className={`h-3 w-3 rounded-full bg-[${item.color}]`}></div>
+              <div
+                style={{ backgroundColor: item.color }}
+                className={`h-3 w-3 rounded-full`}
+              ></div>
               <div className="text-sm">{item.name}</div>
             </div>
           ))}
