@@ -29,9 +29,11 @@ Route::prefix('/roles')->group(function (): void {
 Route::prefix('/leave')->group(function (): void {
     Route::post('/', [LeaveController::class, 'storeLeaveRequest']);
 
-    Route::get('/leave-requests', [LeaveController::class, 'getLeaveStatus']);
+    Route::get('/', [LeaveController::class, 'getLeaveStatus']);
 
-    Route::get('/leave-hours', [LeaveController::class, 'getLeaveHours']);
+    Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+
+    Route::put('/{leaveId}', [LeaveController::class, 'updateLeaveStatus']);
 
     Route::prefix('/category')->group(function (): void {
         Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
@@ -50,7 +52,7 @@ Route::prefix('/contract')->group(function () {
 Route::prefix('sections')->group(function () {
     Route::post('/', [SectionController::class, 'store']);
     Route::get('/', [SectionController::class, 'show']);
-  
+
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [SectionController::class, 'addUserToSection']);
     });

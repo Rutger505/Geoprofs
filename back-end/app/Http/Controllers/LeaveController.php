@@ -64,5 +64,26 @@ class LeaveController extends Controller
 
         return response()->json($leaveRequests);
     }
-    
+
+    public function updateLeaveStatus($leaveId, Request $request)
+    {
+
+        if (!Leave::where('id', $leaveId)->where('status', 'pending')->exists()) {
+            return response()->json(['message' => 'Leave request not found or request has already been accepted or denied'], 404);
+
+        }
+
+        $request->validate([
+            'status' => 'required|string|in:denied,accepted',
+        ], [
+            'status.in' => 'The status must be either denied or accepted.',
+        ]);
+
+        Leave::where('id', $leaveId)->update([
+            'status' => $request['status'],
+        ]);
+
+        return response()->json(['message' => 'Leave status updated']);
+    }
+
 }
