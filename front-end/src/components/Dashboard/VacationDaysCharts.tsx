@@ -40,8 +40,5 @@ export default async function VacationDaysCharts({
     },
   ];
 
-  // Tailwind won't generate classes with dynamic colors.
-  const tailWindPossibleClasses = ["bg-[#8884d8]", "bg-[#82ca9d]"];
-
   return <Chart items={data} totalLabel={"Vakantiedagen"} />;
 }
