@@ -17,6 +17,6 @@ class Leave extends Model
         'userId'
     ];
 
-    use HasFactory;
 
+    use HasFactory;
 }
