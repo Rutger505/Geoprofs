@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Leave;
 use App\Models\LeaveCategory;
 use Illuminate\Http\Request;
 
@@ -29,6 +30,11 @@ class LeaveCategoryController extends Controller
 
     public function deleteLeaveCategory($leaveCategoryId)
     {
+        if (Leave::where('categoryId', $leaveCategoryId)->exists()) {
+
+            return response()->json(['message' => 'Leave category cannot be deleted, this leave category is bound to a leave request'], 400);
+        }
+
 
         LeaveCategory::where('id', $leaveCategoryId)->delete();
 
