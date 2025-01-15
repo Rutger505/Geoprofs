@@ -23,6 +23,10 @@ Route::prefix('/auth')->group(function (): void {
     Route::put('/register/complete/{token}', [RegistrationController::class, 'register']);
 });
 
+Route::prefix('/user/{user}')->group(function (): void {
+    Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+});
+
 Route::prefix('/roles')->group(function (): void {
     Route::get('/show', [RolesController::class, 'show']);
 });
@@ -32,7 +36,6 @@ Route::prefix('/leave')->group(function (): void {
 
     Route::get('/leave-requests', [LeaveController::class, 'getLeaveStatus']);
 
-    Route::get('/leave-hours', [LeaveController::class, 'getLeaveHours']);
 
     Route::prefix('/category')->group(function (): void {
         Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
