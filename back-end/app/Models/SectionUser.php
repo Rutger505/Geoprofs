@@ -17,7 +17,7 @@ class SectionUser extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'sectionId', 'id');
+        return $this->belongsTo(User::class, 'userId', 'id');
     }
 
 }

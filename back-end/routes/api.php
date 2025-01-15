@@ -93,7 +93,6 @@ Route::prefix('sections')->group(function () {
 
 
 Route::prefix('/ceo')->group(function () {
-    //mis show project maken dan route updaten
     Route::get('/section', [CeoController::class, 'showSection']);
 
     Route::get('/project', [CeoController::class, 'showProject']);
