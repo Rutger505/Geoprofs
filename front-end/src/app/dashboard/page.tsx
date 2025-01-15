@@ -13,12 +13,12 @@ export default async function Dashboard() {
   const leaveRequests = await getUsersLeaveRequests();
 
   return (
-    <main className="flex flex-col items-center gap-14 py-20">
+    <main className="flex flex-col items-center gap-14 px-10 py-20">
       <h1 className={"text-3xl font-semibold"}>
         Welcome {session.user.firstName}!
       </h1>
 
-      <div className={"grid grid-rows-2 gap-10"}>
+      <div className={"flex flex-col gap-10"}>
         <RecentLeaveRequests leaveRequests={leaveRequests} />
         <LeaveHoursCharts leaveRequests={leaveRequests} />
       </div>

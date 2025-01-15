@@ -8,7 +8,11 @@ interface Props {
 
 export default function LeaveHoursCharts({ leaveRequests }: Readonly<Props>) {
   return (
-    <section className={"flex gap-14"}>
+    <section
+      className={
+        "flex flex-wrap items-center justify-center gap-14 min-[900px]:flex-nowrap"
+      }
+    >
       <VacationDaysCharts leaveRequests={leaveRequests} />
       <LeavePerCategoryChart leaveRequests={leaveRequests} />
     </section>
