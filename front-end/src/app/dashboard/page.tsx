@@ -19,7 +19,7 @@ export default async function Dashboard() {
   const leaveRequests = await getUsersLeaveRequests();
 
   return (
-    <main className="flex flex-col items-center gap-20 pt-20">
+    <main className="flex flex-col items-center gap-14 py-20">
       <h1 className={"text-3xl font-semibold"}>
         Welcome {session.user.firstName}!
       </h1>
