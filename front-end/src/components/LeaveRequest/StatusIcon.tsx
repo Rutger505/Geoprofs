@@ -1,4 +1,4 @@
-import { LeaveRequestStatus } from "@/types/leaveRequest";
+import { LeaveRequestStatus } from "@/lib/models/leaveRequest";
 import { Check, Clock, X } from "lucide-react";
 
 export function StatusIcon({ status }: { status: LeaveRequestStatus }) {
