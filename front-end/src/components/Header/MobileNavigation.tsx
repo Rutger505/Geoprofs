@@ -2,6 +2,7 @@
 
 import { SignOutButton } from "@/components/Auth/client";
 import { Navigation } from "@/components/Header/Header";
+import { SwitchMode } from "@/components/Header/client/SwitchMode";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import clsx from "clsx";
 import { Menu, X } from "lucide-react";
@@ -50,6 +51,8 @@ export function MobileNavigation({ navigation }: Readonly<Props>) {
             <SignOutButton className="px-4 py-2 hover:bg-gray-100">
               Uitloggen
             </SignOutButton>
+
+            <SwitchMode />
           </PopoverPanel>
         </>
       )}

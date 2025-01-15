@@ -1,6 +1,6 @@
 import { SignOutButton } from "@/components/Auth/server";
 import { MobileNavigation } from "@/components/Header/MobileNavigation";
-import { SwitchMode } from "@/components/Header/SwitchMode";
+import { SwitchMode } from "@/components/Header/server/SwitchMode";
 import { auth } from "@/lib/auth";
 import { UserRoleName } from "@/types/user";
 import Image from "next/image";
@@ -75,9 +75,11 @@ export async function Header() {
           <SwitchMode />
         </div>
 
-        <div className="flex items-center sm:hidden">
-          <MobileNavigation navigation={navigation} />
-        </div>
+        {!!navigation.length && (
+          <div className="flex items-center sm:hidden">
+            <MobileNavigation navigation={navigation} />
+          </div>
+        )}
       </header>
     </div>
   );
