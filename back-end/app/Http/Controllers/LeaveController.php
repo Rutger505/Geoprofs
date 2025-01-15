@@ -58,7 +58,7 @@ class LeaveController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        $leaveRequests = Leave::where('userId', $userId)->get();
+        $leaveRequests = Leave::where('userId', $userId)->with("category")->get();
 
         return response()->json($leaveRequests);
     }
@@ -89,7 +89,6 @@ class LeaveController extends Controller
         Leave::where('id', $leaveId)->delete($leaveId);
 
         return response()->json(['message' => 'Leave deleted']);
-
 
 
     }

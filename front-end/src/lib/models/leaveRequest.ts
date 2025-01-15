@@ -50,7 +50,7 @@ export async function getUsersLeaveRequests(): Promise<LeaveRequest[]> {
 
   const leaveRequestsResposne = await axios.get<
     Omit<LeaveRequest[], "durationHours">
-  >(`/leave/leave-requests?userId=${session.user.id}`);
+  >(`/leave/${session.user.id}`);
 
   return leaveRequestsResposne.data
     .map((leaveRequest) => ({
