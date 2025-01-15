@@ -4,6 +4,7 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveCategoryController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
