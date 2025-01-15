@@ -4,6 +4,7 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LeaveCategoryController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
@@ -52,7 +53,7 @@ Route::prefix('projects')->group(function () {
     Route::get('/', [ProjectController::class, 'show']);
     Route::delete('/{projectId}', [ProjectController::class, 'delete']);
     Route::put('/{projectId}', [ProjectController::class, 'update']);
-    
+
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [ProjectController::class, 'addUserToProject']);
         Route::get('/{projectId}', [ProjectController::class, 'showUsers']);
@@ -69,7 +70,7 @@ Route::prefix('sections')->group(function () {
 
     Route::delete('/{sectionId}', [SectionController::class, 'delete']);
     Route::put('/{sectionId}', [SectionController::class, 'update']);
-    
+
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [SectionController::class, 'addUserToSection']);
         Route::delete('/{sectionId}', [SectionController::class, 'removeUserFromSection']);
