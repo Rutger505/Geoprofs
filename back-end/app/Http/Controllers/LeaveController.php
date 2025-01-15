@@ -55,13 +55,13 @@ class LeaveController extends Controller
         return response()->json(['hours' => $contract->totalLeaveHours]);
     }
 
-    public function getLeaveStatus($userId)
+    public function getLeaveRequests($userId)
     {
 
         if (!User::where('id', $userId)->exists()) {
             return response()->json(['message' => 'User not found'], 404);
         }
-        
+
         $leaveRequests = Leave::where('userId', $userId)->get();
 
         return response()->json($leaveRequests);

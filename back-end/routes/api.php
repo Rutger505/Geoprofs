@@ -29,7 +29,7 @@ Route::prefix('/roles')->group(function (): void {
 Route::prefix('/leave')->group(function (): void {
     Route::post('/', [LeaveController::class, 'storeLeaveRequest']);
 
-    Route::get('/{userId}', [LeaveController::class, 'getLeaveStatus']);
+    Route::get('/{userId}', [LeaveController::class, 'getLeaveRequests']);
 
     Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
 
@@ -56,7 +56,7 @@ Route::prefix('projects')->group(function () {
     Route::get('/', [ProjectController::class, 'show']);
     Route::delete('/{projectId}', [ProjectController::class, 'delete']);
     Route::put('/{projectId}', [ProjectController::class, 'update']);
-    
+
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [ProjectController::class, 'addUserToProject']);
         Route::get('/{projectId}', [ProjectController::class, 'showUsers']);
@@ -73,7 +73,7 @@ Route::prefix('sections')->group(function () {
 
     Route::delete('/{sectionId}', [SectionController::class, 'delete']);
     Route::put('/{sectionId}', [SectionController::class, 'update']);
-    
+
     Route::prefix('/users')->group(function (): void {
         Route::post('/', [SectionController::class, 'addUserToSection']);
         Route::delete('/{sectionId}', [SectionController::class, 'removeUserFromSection']);
