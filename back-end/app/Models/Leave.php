@@ -18,6 +18,7 @@ class Leave extends Model
         'userId'
     ];
 
+
     use HasFactory;
 
     public function category(): BelongsTo

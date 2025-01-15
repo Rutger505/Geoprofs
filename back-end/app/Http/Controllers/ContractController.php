@@ -52,7 +52,7 @@ class ContractController extends Controller
         }
 
         Contracts::destroy($id);
-
+    
         return response()->json(['message' => 'Contract deleted'], 200);
     }
 
