@@ -55,7 +55,7 @@ export function Chart({ items, totalLabel }: Readonly<Props>) {
                   style={{ backgroundColor: item.color }}
                   className={`h-3 w-3 rounded-full`}
                 ></div>
-                <div className="text-sm">{item.name}</div>
+                <span className="text-sm">{item.name}</span>
               </div>
             ))}
           </div>
