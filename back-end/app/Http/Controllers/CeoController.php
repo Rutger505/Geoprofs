@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Projects;
 use App\Models\Sections;
 
 class CeoController extends Controller
@@ -14,6 +15,14 @@ class CeoController extends Controller
 
         return response()->json($leave);
 
+
+    }
+
+    public function showProject()
+    {
+        $leave = Projects::with('user.leave')->get();
+
+        return response()->json($leave);
 
     }
 }
