@@ -40,14 +40,10 @@ class LeaveController extends Controller
     }
 
 
-    public function getLeaveHours(Request $request)
+    public function getLeaveHours(User $user)
     {
-        $request->validate([
-            'userId' => 'required|int'
-        ]);
-
         $contract = Contracts::join('user_contract', 'contracts.id', '=', 'user_contract.contractId')
-            ->where('user_contract.userId', $request->userId)
+            ->where('user_contract.userId', $user->id)
             ->select('contracts.*')
             ->first();
 
@@ -93,6 +89,7 @@ class LeaveController extends Controller
         Leave::where('id', $leaveId)->delete($leaveId);
 
         return response()->json(['message' => 'Leave deleted']);
+
 
 
     }
