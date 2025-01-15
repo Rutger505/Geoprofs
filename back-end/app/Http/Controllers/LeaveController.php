@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contracts;
 use App\Models\Leave;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -39,14 +40,10 @@ class LeaveController extends Controller
     }
 
 
-    public function getLeaveHours(Request $request)
+    public function getLeaveHours(User $user)
     {
-        $request->validate([
-            'userId' => 'required|int'
-        ]);
-
         $contract = Contracts::join('user_contract', 'contracts.id', '=', 'user_contract.contractId')
-            ->where('user_contract.userId', $request->userId)
+            ->where('user_contract.userId', $user->id)
             ->select('contracts.*')
             ->first();
 
@@ -54,15 +51,47 @@ class LeaveController extends Controller
         return response()->json(['hours' => $contract->totalLeaveHours]);
     }
 
-    public function getLeaveStatus(Request $request)
+    public function getLeaveRequests($userId)
     {
-        $request->validate([
-            'userId' => 'required|int'
-        ]);
 
-        $leaveRequests = Leave::where('userId', $request->userId)->get();
+        if (!User::where('id', $userId)->exists()) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $leaveRequests = Leave::where('userId', $userId)->get();
 
         return response()->json($leaveRequests);
     }
-    
+
+    public function updateLeaveStatus($leaveId, Request $request)
+    {
+
+        if (!Leave::where('id', $leaveId)->where('status', 'pending')->exists()) {
+            return response()->json(['message' => 'Leave request not found or request has already been accepted or denied'], 404);
+
+        }
+
+        $request->validate([
+            'status' => 'required|string|in:denied,accepted',
+        ], [
+            'status.in' => 'The status must be either denied or accepted.',
+        ]);
+
+        Leave::where('id', $leaveId)->update([
+            'status' => $request['status'],
+        ]);
+
+        return response()->json(['message' => 'Leave status updated']);
+    }
+
+    public function deleteLeave($leaveId)
+    {
+        Leave::where('id', $leaveId)->delete($leaveId);
+
+        return response()->json(['message' => 'Leave deleted']);
+
+
+
+    }
+
 }
