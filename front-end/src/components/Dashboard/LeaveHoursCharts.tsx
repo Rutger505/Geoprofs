@@ -8,9 +8,9 @@ interface Props {
 
 export default function LeaveHoursCharts({ leaveRequests }: Readonly<Props>) {
   return (
-    <div className={"flex gap-14"}>
+    <section className={"flex gap-14"}>
       <VacationDaysCharts leaveRequests={leaveRequests} />
       <LeavePerCategoryChart leaveRequests={leaveRequests} />
-    </div>
+    </section>
   );
 }

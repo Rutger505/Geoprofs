@@ -17,7 +17,7 @@ export function Chart({ items, totalLabel }: Readonly<Props>) {
   const total = items.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className={"w-fit space-y-5"}>
+    <section className={"w-fit space-y-5"}>
       <h2 className="text-2xl font-semibold">{totalLabel}</h2>
 
       <div className={"flex gap-5"}>
@@ -59,6 +59,6 @@ export function Chart({ items, totalLabel }: Readonly<Props>) {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

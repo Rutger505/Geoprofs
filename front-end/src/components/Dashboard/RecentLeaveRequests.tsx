@@ -8,7 +8,7 @@ interface Props {
 
 export async function RecentLeaveRequests({ leaveRequests }: Readonly<Props>) {
   return (
-    <div className={"space-y-5"}>
+    <section className={"space-y-5"}>
       <div className={"flex items-center justify-between"}>
         <h2 className={"text-2xl font-semibold"}>Recente verlofverzoeken</h2>
         {leaveRequests.length > 4 && (
@@ -40,6 +40,6 @@ export async function RecentLeaveRequests({ leaveRequests }: Readonly<Props>) {
           <div className={"text-gray-400"}>Geen recente verlofverzoeken</div>
         )}
       </div>
-    </div>
+    </section>
   );
 }
