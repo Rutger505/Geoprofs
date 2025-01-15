@@ -51,16 +51,47 @@ class LeaveController extends Controller
         return response()->json(['hours' => $contract->totalLeaveHours]);
     }
 
-    public function getLeaveStatus(Request $request)
+    public function getLeaveRequests($userId)
     {
-        $request->validate([
-            'userId' => 'required|int'
-        ]);
 
-        $leaveRequests = Leave::with('category')
-            ->where('userId', $request->userId)
-            ->get();
+        if (!User::where('id', $userId)->exists()) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $leaveRequests = Leave::where('userId', $userId)->get();
 
         return response()->json($leaveRequests);
     }
+
+    public function updateLeaveStatus($leaveId, Request $request)
+    {
+
+        if (!Leave::where('id', $leaveId)->where('status', 'pending')->exists()) {
+            return response()->json(['message' => 'Leave request not found or request has already been accepted or denied'], 404);
+
+        }
+
+        $request->validate([
+            'status' => 'required|string|in:denied,accepted',
+        ], [
+            'status.in' => 'The status must be either denied or accepted.',
+        ]);
+
+        Leave::where('id', $leaveId)->update([
+            'status' => $request['status'],
+        ]);
+
+        return response()->json(['message' => 'Leave status updated']);
+    }
+
+    public function deleteLeave($leaveId)
+    {
+        Leave::where('id', $leaveId)->delete($leaveId);
+
+        return response()->json(['message' => 'Leave deleted']);
+
+
+
+    }
+
 }

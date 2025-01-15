@@ -34,12 +34,17 @@ Route::prefix('/roles')->group(function (): void {
 Route::prefix('/leave')->group(function (): void {
     Route::post('/', [LeaveController::class, 'storeLeaveRequest']);
 
-    Route::get('/leave-requests', [LeaveController::class, 'getLeaveStatus']);
+    Route::get('/{userId}', [LeaveController::class, 'getLeaveRequests']);
 
+    Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+
+    Route::put('/{leaveId}', [LeaveController::class, 'updateLeaveStatus']);
+    Route::delete('/{leaveId}', [LeaveController::class, 'deleteLeave']);
 
     Route::prefix('/category')->group(function (): void {
         Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
         Route::get('/', [LeaveCategoryController::class, 'getLeaveCategories']);
+        Route::delete('/{leaveCategoryId}', [LeaveCategoryController::class, 'deleteLeaveCategory']);
     });
 });
 
