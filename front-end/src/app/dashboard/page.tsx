@@ -1,15 +1,9 @@
 import LeaveHoursCharts from "@/components/Dashboard/LeaveHoursCharts";
 import { RecentLeaveRequests } from "@/components/Dashboard/RecentLeaveRequests";
 import { auth } from "@/lib/auth";
-import {
-  getUsersLeaveRequests,
-  LeaveRequest as LeaveRequestType,
-} from "@/lib/models/leaveRequest";
+import { getUsersLeaveRequests } from "@/lib/models/leaveRequest";
 import { redirect } from "next/navigation";
 
-interface LeaveRequestResponse {
-  leaveRequests: LeaveRequestType[];
-}
 export default async function Dashboard() {
   const session = await auth();
   if (!session) {
