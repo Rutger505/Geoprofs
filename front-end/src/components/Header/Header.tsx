@@ -33,7 +33,7 @@ export const navigationPerRole: NavigationPerRole = {
   Admin: [
     { name: "Werknemers", href: "/admin/employees" },
     { name: "Contracten", href: "#" },
-    { name: "Afdelingen", href: "#" },
+    { name: "Afdelingen", href: "/admin/sections" },
     { name: "Projecten", href: "#" },
   ],
 };
