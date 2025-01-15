@@ -16,7 +16,7 @@ School project, Web-application made with Next.js and Laravel for managing leave
 
 ### Install make and mkcert for windows
 
-Here are install instruction for installing make using choco.
+Installation instructions for installing make using choco:
 
 If you have not installed choco already run the following command in a powershell with administrative rights:
 ```powershell
