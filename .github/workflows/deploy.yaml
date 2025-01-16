@@ -252,7 +252,7 @@ jobs:
 
       - name: Install Playwright Browsers
         working-directory: front-end
-        run: npx playwright install --with-deps
+        run: npx playwright install --wisth-deps
 
       - name: Run Playwright tests
         working-directory: front-end

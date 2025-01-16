@@ -27,6 +27,6 @@ test.describe("Login", () => {
     await page.getByRole("button", { name: "Inloggen" }).click();
 
     // Check for error message
-    await expect(page.getByText("Ongeldige inloggegevens")).toBeVisible();
+    await expect(page.getByText("Invalid credentials.")).toBeVisible();
   });
 });
