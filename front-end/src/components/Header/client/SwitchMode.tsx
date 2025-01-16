@@ -14,16 +14,12 @@ export function SwitchMode() {
     mutationFn: async () => {
       setUseAsEmployee((prev) => !prev);
 
-      console.log("useAsEmployee", useAsEmployee);
       const response = await updateUserPreferences({
         useAsEmployee: !useAsEmployee,
       });
-      console.log("response", response);
       if (response?.error) {
         throw new Error(response.error);
       }
-
-      console.log("router", router);
 
       location.reload();
     },
