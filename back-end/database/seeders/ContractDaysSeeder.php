@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,16 +15,16 @@ class ContractDaysSeeder extends Seeder
     {
         DB::table('contract_days')->insert([
             [
-                'ContractID' => 1,
-                'DayID' => 1,
-                'WorkStartHourDay' => '10:00:00',
-                'WorkEndHourDay' => '17:00:00'
+                'contractId' => 1,
+                'dayId' => 1,
+                'startHour' => '10:00:00',
+                'endHour' => '17:00:00'
             ],
             [
-                'ContractID' => 1,
-                'DayID' => 3,
-                'WorkStartHourDay' => '09:00:00',
-                'WorkEndHourDay' => '17:00:00'
+                'contractId' => 1,
+                'dayId' => 3,
+                'startHour' => '09:00:00',
+                'endHour' => '17:00:00'
             ]
         ]);
     }

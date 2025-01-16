@@ -1,68 +1,92 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\LeaveCategoryController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
-use App\Http\Middleware\EnsureUserIsAdmin;
-use App\Models\Roles;
-use Illuminate\Http\Request;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\SectionController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::get('/health', [HealthController::class, 'index']);
 
-Route::prefix('auth')->group(function (): void {
-    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-        ->middleware('guest')
-        ->name('login');
+Route::prefix('/auth')->group(function (): void {
+    Route::post('/login', [LoginController::class, 'login']);
 
-    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-        ->middleware('guest')
-        ->name('password.email');
+    Route::post('/register', [RegistrationController::class, 'adminRegister']);
 
-    Route::post('/reset-password', [NewPasswordController::class, 'store'])
-        ->middleware('guest')
-        ->name('password.store');
+    Route::get('/register/pending/{token}', [RegistrationController::class, 'getPendingUser']);
 
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->middleware('auth')
-        ->name('logout');
+    Route::put('/register/complete/{token}', [RegistrationController::class, 'register']);
+});
 
-    Route::post('/register', [RegistrationController::class, 'adminRegister'])
-        ->middleware(EnsureUserIsAdmin::class);
+Route::prefix('/user/{user}')->group(function (): void {
+    Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+});
 
+Route::prefix('/roles')->group(function (): void {
+    Route::get('/show', [RolesController::class, 'show']);
+});
 
-    Route::put('/register/complete/{token}', [RegistrationController::class, 'register'])
-        ->name('register.confirm');
+Route::prefix('/leave')->group(function (): void {
+    Route::post('/', [LeaveController::class, 'storeLeaveRequest']);
 
-    Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    Route::get('/{userId}', [LeaveController::class, 'getLeaveRequests']);
 
-        $role = Roles::where('RoleID', $request->user()->UserRoleID)->first();
+    Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
 
-        $userArray = $request->user()->toArray();
-        $userArray['RoleName'] = $role;
+    Route::put('/{leaveId}', [LeaveController::class, 'updateLeaveStatus']);
+    Route::delete('/{leaveId}', [LeaveController::class, 'deleteLeave']);
 
-
-        if ($role['RoleName'] == null || trim($role['RoleName']) == "") {
-            return response()->json(['message' => "user doesn't have a role"], 424);
-        }
-
-        return $userArray;
+    Route::prefix('/category')->group(function (): void {
+        Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
+        Route::get('/', [LeaveCategoryController::class, 'getLeaveCategories']);
+        Route::delete('/{leaveCategoryId}', [LeaveCategoryController::class, 'deleteLeaveCategory']);
     });
 });
 
-
-Route::get('/leave/leave-requests',  [LeaveController::class, 'getLeaveStatus'])->middleware('auth');
-Route::get('/leave/leave-hours', [LeaveController::class, 'getLeaveHours'])->middleware('auth');
-
-Route::prefix('contract')->group(function () {
-    Route::post('/store',  [ContractController::class, 'store'])->middleware('auth', EnsureUserIsAdmin::class);
-    Route::get('/show', [ContractController::class, 'show'])->middleware('auth', EnsureUserIsAdmin::class);
-    Route::delete('/delete', [ContractController::class, 'delete'])->middleware('auth', EnsureUserIsAdmin::class);
+//contract moet gefixed worden
+Route::prefix('/contract')->group(function () {
+    Route::post('/store', [ContractController::class, 'store']);
+    Route::get('/show', [ContractController::class, 'show']);
+    Route::delete('/delete/{id}', [ContractController::class, 'delete']);
+    Route::put('/update/{id}', [ContractController::class, 'update']);
 });
 
-Route::middleware('auth')->post('/leave', [LeaveController::class, 'storeLeaveRequest']);
+Route::prefix('projects')->group(function () {
+    Route::post('/', [ProjectController::class, 'store']);
+    Route::get('/', [ProjectController::class, 'show']);
+    Route::delete('/{projectId}', [ProjectController::class, 'delete']);
+    Route::put('/{projectId}', [ProjectController::class, 'update']);
+
+    Route::prefix('/users')->group(function (): void {
+        Route::post('/', [ProjectController::class, 'addUserToProject']);
+        Route::get('/{projectId}', [ProjectController::class, 'showUsers']);
+        Route::delete('/{projectId}', [ProjectController::class, 'removeUserFromProject']);
+    });
+
+    Route::get('/leave/{projectId}', [ProjectController::class, 'getAllLeaveFromProject']);
+
+});
+
+Route::prefix('sections')->group(function () {
+    Route::post('/', [SectionController::class, 'store']);
+    Route::get('/', [SectionController::class, 'show']);
+    Route::delete('/{sectionId}', [SectionController::class, 'delete']);
+    Route::put('/{sectionId}', [SectionController::class, 'update']);
+
+    Route::prefix('/users')->group(function (): void {
+        Route::post('/', [SectionController::class, 'addUserToSection']);
+        Route::delete('/{sectionId}', [SectionController::class, 'removeUserFromSection']);
+        Route::get('/{sectionId}', [SectionController::class, 'showUsers']);
+    });
+
+
+    Route::get('/leave/{sectionId}', [SectionController::class, 'getAllLeaveFromSection']);
+
+
+});
+

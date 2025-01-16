@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Days;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,32 +12,14 @@ class DaysSeeder extends Seeder
      */
     public function run(): void
     {
-        if (Days::where('DayID', 1)->exists()) {
-            return;
-        }
-
         DB::table('days')->insert([
-            [
-                'DayName' => 'Monday'
-            ],
-            [
-                'DayName' => 'Tuesday'
-            ],
-            [
-                'DayName' => 'Wednesday'
-            ],
-            [
-                'DayName' => 'Thursday'
-            ],
-            [
-                'DayName' => 'Friday'
-            ],
-            [
-                'DayName' => 'Saturday'
-            ],
-            [
-                'DayName' => 'Sunday'
-            ],
+            ['name' => 'Monday'],
+            ['name' => 'Tuesday'],
+            ['name' => 'Wednesday'],
+            ['name' => 'Thursday'],
+            ['name' => 'Friday'],
+            ['name' => 'Saturday'],
+            ['name' => 'Sunday'],
         ]);
     }
 }

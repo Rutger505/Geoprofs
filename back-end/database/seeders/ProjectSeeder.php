@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,10 +15,10 @@ class ProjectSeeder extends Seeder
     {
         DB::table('projects')->insert([
             [
-                'ProjectName' => 'Rictoria'
+                'name' => 'Rictoria'
             ],
             [
-                'SectionName' => 'ProfsGeo'
+                'name' => 'ProfsGeo'
             ]
         ]);
     }
