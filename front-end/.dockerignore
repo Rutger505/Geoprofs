@@ -61,3 +61,13 @@ docs
 # Deployment
 Makefile
 k8s
+
+
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+
+tests-examples
