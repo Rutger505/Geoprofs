@@ -48,7 +48,7 @@ Route::prefix('/leave')->group(function (): void {
     });
 });
 
-
+//contract moet gefixed worden
 Route::prefix('/contract')->group(function () {
     Route::post('/store', [ContractController::class, 'store']);
     Route::get('/show', [ContractController::class, 'show']);
@@ -75,7 +75,6 @@ Route::prefix('projects')->group(function () {
 Route::prefix('sections')->group(function () {
     Route::post('/', [SectionController::class, 'store']);
     Route::get('/', [SectionController::class, 'show']);
-
     Route::delete('/{sectionId}', [SectionController::class, 'delete']);
     Route::put('/{sectionId}', [SectionController::class, 'update']);
 

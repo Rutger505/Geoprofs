@@ -38,7 +38,7 @@ class SectionController extends Controller
             'name' => 'required|string',
         ]);
 
-        Sections::where('id', $sectionId)->update(['    name' => $request['name']]);
+        Sections::where('id', $sectionId)->update(['name' => $request['name']]);
 
         return response()->json(["message" => "Project updated successfully"], 200);
     }
@@ -105,5 +105,5 @@ class SectionController extends Controller
         return response()->json([$usersWithLeave], 200);
     }
 
-    
+
 }

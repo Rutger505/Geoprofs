@@ -58,7 +58,7 @@ class ProjectController extends Controller
         ]);
 
 
-        if (!Projects::where('id', $request[$request['projectId']])->exists() || !User::where('id', $request['userId'])->exists()) {
+        if (!Projects::where('id', $request['projectId'])->exists() || !User::where('id', $request['userId'])->exists()) {
 
             return response()->json(["message" => "User or project doesn't exist"], 404);
         }
