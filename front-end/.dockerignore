@@ -69,5 +69,6 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 
-
-tests-examples
+playwright.config.ts
+jest.config.ts
+jest.setup.js
