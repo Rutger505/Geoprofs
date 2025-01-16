@@ -63,7 +63,6 @@ Route::prefix('projects')->group(function () {
     Route::put('/{projectId}', [ProjectController::class, 'update']);
 
     Route::prefix('/users')->group(function (): void {
-        //moet fixen
         Route::post('/', [ProjectController::class, 'addUserToProject']);
         Route::get('/{projectId}', [ProjectController::class, 'showUsers']);
         Route::delete('/{projectId}', [ProjectController::class, 'removeUserFromProject']);

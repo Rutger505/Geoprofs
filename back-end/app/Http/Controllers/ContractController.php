@@ -17,8 +17,8 @@ class ContractController extends Controller
         ]);
 
         Contracts::create([
-            'contractName' => $request->contractName,
-            'contractLeaveHours' => $request->contractLeaveHours,
+            'name' => $request->contractName,
+            'totalLeaveHours' => $request->contractLeaveHours,
         ]);
 
         return response()->json(['message' => 'Contract created']);
@@ -52,7 +52,7 @@ class ContractController extends Controller
         }
 
         Contracts::destroy($id);
-    
+
         return response()->json(['message' => 'Contract deleted'], 200);
     }
 
