@@ -9,6 +9,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health', [HealthController::class, 'index']);
@@ -23,8 +24,15 @@ Route::prefix('/auth')->group(function (): void {
     Route::put('/register/complete/{token}', [RegistrationController::class, 'register']);
 });
 
-Route::prefix('/user/{user}')->group(function (): void {
-    Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+Route::prefix('/users')->group(function (): void {
+    Route::get('/', [UserController::class, 'index']);
+
+    Route::prefix('/{user}')->group(function (): void {
+        Route::get('/', [UserController::class, 'show']);
+        Route::put('/', [UserController::class, 'update']);
+
+        Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+    });
 });
 
 Route::prefix('/roles')->group(function (): void {
