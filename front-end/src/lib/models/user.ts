@@ -12,3 +12,13 @@ export async function updateUserInformation({
 
   await axios.put(`/users/${id}`, data);
 }
+
+export async function updateUserSection({
+  id,
+  sectionId,
+}: {
+  id: string;
+  sectionId: string;
+}) {
+  await axios.put(`/users/${id}/section`, { sectionId });
+}
