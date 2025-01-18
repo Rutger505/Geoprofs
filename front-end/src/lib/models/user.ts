@@ -1,4 +1,5 @@
 import axios from "@/lib/axios";
+import { Project } from "@/lib/models/project";
 import { Section } from "@/lib/models/section";
 import { User } from "@/types/user";
 
