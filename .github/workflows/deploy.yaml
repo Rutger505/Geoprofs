@@ -60,7 +60,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ needs.configure.outputs.image }}
+          tags: ${{ steps.config.outputs.docker_image }}:${{ steps.config.outputs.tag }}
           cache-from: |
             type=gha,scope=${{ github.ref_name }}
             type=gha,scope=development
@@ -107,7 +107,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ needs.configure.outputs.image }}
+          tags: ${{ steps.config.outputs.docker_image }}:${{ steps.config.outputs.tag }}
           cache-from: |
             type=gha,scope=${{ github.ref_name }}
             type=gha,scope=development
