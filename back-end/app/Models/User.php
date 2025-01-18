@@ -78,4 +78,16 @@ class User extends Model
             'sectionId'
         );
     }
+
+    public function project(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Projects::class,
+            ProjectUser::class,
+            'userId',
+            'id',
+            'id',
+            'projectId'
+        );
+    }
 }

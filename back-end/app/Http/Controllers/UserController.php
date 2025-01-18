@@ -57,4 +57,11 @@ class UserController extends Controller
 
         return response()->json($user->section);
     }
+
+    public function getProject($userId)
+    {
+        $user = User::where("id", $userId)->with('project')->first();
+
+        return response()->json($user->project);
+    }
 }

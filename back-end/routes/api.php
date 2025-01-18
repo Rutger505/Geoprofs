@@ -34,6 +34,7 @@ Route::prefix('/users')->group(function (): void {
         Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
 
         Route::get('/section', [UserController::class, 'getSection']);
+        Route::get('/project', [UserController::class, 'getProject']);
     });
 });
 

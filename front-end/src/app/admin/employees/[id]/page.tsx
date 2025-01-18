@@ -1,4 +1,5 @@
 import { Information } from "@/components/Admin/Employees/Edit/Information";
+import { Project } from "@/components/Admin/Employees/Edit/Project";
 import { Section } from "@/components/Admin/Employees/Edit/Section";
 import axios from "@/lib/axios";
 import { User as UserType } from "@/types/user";
@@ -22,8 +23,8 @@ export default async function ManageUser({ params }: Readonly<PageParams>) {
 
       <div className="w-full max-w-xl space-y-8">
         <Information user={user} />
-
         <Section user={user} />
+        <Project user={user} />
       </div>
     </main>
   );
