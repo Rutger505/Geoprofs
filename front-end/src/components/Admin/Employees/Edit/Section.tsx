@@ -1,31 +1,29 @@
 import { rerender } from "@/actions/rerender";
 import axios from "@/lib/axios";
 import { Section as SectionType } from "@/lib/models/section";
-import { updateUserInformation } from "@/lib/models/user";
+import { getUserSection, updateUserSection } from "@/lib/models/user";
 import { User } from "@/types/user";
 
 export async function Section({ user }: Readonly<{ user: User }>) {
   const sectionsResponse = await axios.get<SectionType[]>("/sections");
   const sections = sectionsResponse.data;
 
+  const userSection = await getUserSection(user.id);
+  console.log(userSection);
+
   return (
     <section className="space-y-6">
-      {JSON.stringify(sections)}
       <h2 className="text-xl font-medium">Sectie</h2>
       <form
         className="space-y-4"
         action={async (formData) => {
           "use server";
 
-          const email = formData.get("email") as string;
-          const firstName = formData.get("firstName") as string;
-          const lastName = formData.get("lastName") as string;
+          const sectionId = formData.get("section") as string;
 
-          await updateUserInformation({
-            id: user.id,
-            email,
-            firstName,
-            lastName,
+          await updateUserSection({
+            userId: user.id,
+            sectionId,
           });
           await rerender();
         }}
@@ -37,7 +35,7 @@ export async function Section({ user }: Readonly<{ user: User }>) {
           <select
             id="section"
             name="section"
-            defaultValue={1} // TODO set properly
+            defaultValue={userSection.id}
             className="w-full rounded-md border border-gray-300 p-2"
           >
             {sections.map((section) => (

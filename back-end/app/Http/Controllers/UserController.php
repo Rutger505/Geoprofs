@@ -50,4 +50,12 @@ class UserController extends Controller
 
         return response(null, 204);
     }
+
+    public function getSection($userId)
+    {
+        var_dump($userId);
+
+        $user = User::find($userId)->with(['section'])->first();
+        return response()->json($user);
+    }
 }

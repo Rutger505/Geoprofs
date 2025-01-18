@@ -32,6 +32,8 @@ Route::prefix('/users')->group(function (): void {
         Route::put('/', [UserController::class, 'update']);
 
         Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+
+        Route::get('/section', [UserController::class, 'getSection']);
     });
 });
 
@@ -77,7 +79,6 @@ Route::prefix('projects')->group(function () {
     });
 
     Route::get('/leave/{projectId}', [ProjectController::class, 'getAllLeaveFromProject']);
-
 });
 
 Route::prefix('sections')->group(function () {
@@ -92,9 +93,5 @@ Route::prefix('sections')->group(function () {
         Route::get('/{sectionId}', [SectionController::class, 'showUsers']);
     });
 
-
     Route::get('/leave/{sectionId}', [SectionController::class, 'getAllLeaveFromSection']);
-
-
 });
-

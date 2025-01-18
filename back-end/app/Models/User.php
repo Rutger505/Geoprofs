@@ -61,8 +61,13 @@ class User extends Model
         $this->roleName = $role->name;
     }
 
-    public function leave(): hasMany
+    public function leave(): HasMany
     {
         return $this->hasMany(Leave::class, 'userId', 'id');
+    }
+
+    public function section(): BelongsTo
+    {
+        return $this->belongsTo(SectionUser::class, 'id', 'userId');
     }
 }
