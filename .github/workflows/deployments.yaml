@@ -1,0 +1,203 @@
+name: Deployments
+
+on:
+  push:
+    tags:
+      - "*"
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - "*"
+
+jobs:
+  configure:
+    name: Generate Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      application_name: ${{ steps.config.outputs.application_name }}
+      environment: ${{ steps.config.outputs.environment }}
+      is_production: ${{ steps.config.outputs.is_production }}
+      image_repository: ${{ steps.config.outputs.image_repository }}
+      tag: ${{ steps.config.outputs.tag }}
+      hostname: ${{ steps.config.outputs.hostname }}
+      certificate_issuer: ${{ steps.config.outputs.certificate_issuer }}
+      postgres_namespace: ${{ steps.config.outputs.postgres_namespace }}
+      laravel_app_env: ${{ steps.config.outputs.laravel_app_env }}
+      laravel_app_debug: ${{ steps.config.outputs.laravel_app_debug }}
+      laravel_log_level: ${{ steps.config.outputs.laravel_log_level }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configuration
+        id: config
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            IS_PRODUCTION="true"
+            TAG=$GITHUB_REF_NAME
+            ENVIRONMENT="production"
+            HOSTNAME=${{ vars.BASE_DOMAIN }}
+            CERTIFICATE_ISSUER="letsencrypt-production"
+            POSTGRES_NAMESPACE="postgres-production"
+            LARAVEL_APP_ENV="production"
+            LARAVEL_APP_DEBUG="false"
+            LARAVEL_LOG_LEVEL="warn"
+          else
+            IS_PRODUCTION="false"
+            TAG=$GITHUB_SHA
+            ENVIRONMENT="pr-${{ github.event.pull_request.number }}"
+            HOSTNAME=${{ github.sha }}.${{ vars.BASE_DOMAIN }}
+            CERTIFICATE_ISSUER="letsencrypt-staging"
+            POSTGRES_NAMESPACE="postgres-test"
+            LARAVEL_APP_ENV="development"
+            LARAVEL_APP_DEBUG="true"
+            LARAVEL_LOG_LEVEL="debug"
+          fi
+
+          source ./application.env
+
+          echo "application_name=$APPLICATION_NAME" >> $GITHUB_OUTPUT
+          echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
+          echo "is_production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
+          echo "image_repository=$IMAGE_REPOSITORY" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "hostname=$HOSTNAME" >> $GITHUB_OUTPUT
+          echo "certificate_issuer=$CERTIFICATE_ISSUER" >> $GITHUB_OUTPUT
+          echo "postgres_namespace=$POSTGRES_NAMESPACE" >> $GITHUB_OUTPUT
+          echo "laravel_app_env=$LARAVEL_APP_ENV" >> $GITHUB_OUTPUT
+          echo "laravel_app_debug=$LARAVEL_APP_DEBUG" >> $GITHUB_OUTPUT
+          echo "laravel_log_level=$LARAVEL_LOG_LEVEL" >> $GITHUB_OUTPUT
+
+  build-images:
+    if: github.event.action != 'closed'
+    name: Build Docker Images
+    needs: [configure]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [front-end, back-end]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.component }}
+          push: true
+          tags: ${{ needs.configure.outputs.image_repository }}-${{ matrix.component }}:${{ needs.configure.outputs.tag }}
+          cache-from: |
+            type=gha,scope=${{ github.ref_name }}-${{ matrix.component }}
+            type=gha,scope=development-${{ matrix.component }}
+            type=gha,scope=main-${{ matrix.component }}
+          cache-to: |
+            type=gha,mode=max,scope=${{ github.ref_name }}-${{ matrix.component }}
+            ${{ startsWith(github.ref, 'refs/tags/') && format('type=gha,mode=max,scope=main-{0}', matrix.component) || '' }}
+
+  deploy:
+    if: github.event.action != 'closed'
+    name: Deploy to Kubernetes
+    needs: [configure, build-images]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.configure.outputs.environment }}
+      url: https://${{ needs.configure.outputs.hostname }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Kubernetes
+        uses: ./.github/actions/setup-k8s
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: OpenTofu Apply
+        working-directory: ./deploy
+        env:
+          TF_VAR_application_name: ${{ needs.configure.outputs.application_name }}
+          TF_VAR_image_repository: ${{ needs.configure.outputs.image_repository }}
+          TF_VAR_tag: ${{ needs.configure.outputs.tag }}
+          TF_VAR_hostname: ${{ needs.configure.outputs.hostname }}
+          TF_VAR_certificate_issuer: ${{ needs.configure.outputs.certificate_issuer }}
+          TF_VAR_postgres_namespace: ${{ needs.configure.outputs.postgres_namespace }}
+          TF_VAR_laravel_config: >-
+            {
+              "app_env": "${{ needs.configure.outputs.laravel_app_env }}",
+              "app_debug": "${{ needs.configure.outputs.laravel_app_debug }}",
+              "log_level": "${{ needs.configure.outputs.laravel_log_level }}",
+              "app_key": "${{ secrets.LARAVEL_APP_KEY }}",
+              "mail_address": "${{ secrets.LARAVEL_MAIL_ADDRESS }}",
+              "mail_password": "${{ secrets.LARAVEL_MAIL_PASSWORD }}",
+              "auth_secret": "${{ secrets.AUTH_SECRET }}"
+            }
+          TF_VAR_postgres_config: >-
+            {
+              "username": "${{ secrets.POSTGRES_USER }}",
+              "password": "${{ secrets.POSTGRES_PASSWORD }}"
+            }
+        run: |
+          tofu init
+          tofu workspace select -or-create ${{ needs.configure.outputs.environment }}
+          tofu plan -input=false -out=tfplan
+          tofu apply -input=false -auto-approve tfplan
+
+  cleanup:
+    if: github.event.action == 'closed' && needs.configure.outputs.is_production == 'false'
+    name: Cleanup PR Environment
+    needs: [configure]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.configure.outputs.environment }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Kubernetes
+        uses: ./.github/actions/setup-k8s
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: OpenTofu Destroy
+        working-directory: ./deploy
+        env:
+          TF_VAR_application_name: ${{ needs.configure.outputs.application_name }}
+          TF_VAR_image_repository: ${{ needs.configure.outputs.image_repository }}
+          TF_VAR_tag: ${{ needs.configure.outputs.tag }}
+          TF_VAR_hostname: ${{ needs.configure.outputs.hostname }}
+          TF_VAR_certificate_issuer: ${{ needs.configure.outputs.certificate_issuer }}
+          TF_VAR_postgres_namespace: ${{ needs.configure.outputs.postgres_namespace }}
+          TF_VAR_laravel_config: >-
+            {
+              "app_env": "${{ needs.configure.outputs.laravel_app_env }}",
+              "app_debug": "${{ needs.configure.outputs.laravel_app_debug }}",
+              "log_level": "${{ needs.configure.outputs.laravel_log_level }}",
+              "app_key": "${{ secrets.LARAVEL_APP_KEY }}",
+              "mail_address": "${{ secrets.LARAVEL_MAIL_ADDRESS }}",
+              "mail_password": "${{ secrets.LARAVEL_MAIL_PASSWORD }}",
+              "auth_secret": "${{ secrets.AUTH_SECRET }}"
+            }
+          TF_VAR_postgres_config: >-
+            {
+              "username": "${{ secrets.POSTGRES_USER }}",
+              "password": "${{ secrets.POSTGRES_PASSWORD }}"
+            }
+        run: |
+          tofu init
+          tofu workspace select ${{ needs.configure.outputs.environment }}
+          tofu plan -destroy -input=false -out=tfplan
+          tofu apply -input=false -auto-approve tfplan
+          tofu workspace select default
+          tofu workspace delete ${{ needs.configure.outputs.environment }}
