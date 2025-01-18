@@ -1,15 +1,11 @@
-import { rerender } from "@/actions/rerender";
-import axios from "@/lib/axios";
-import { Section as SectionType } from "@/lib/models/section";
+import { getSections } from "@/lib/models/section";
 import { getUserSection, updateUserSection } from "@/lib/models/user";
 import { User } from "@/types/user";
+import { redirect } from "next/navigation";
 
 export async function Section({ user }: Readonly<{ user: User }>) {
-  const sectionsResponse = await axios.get<SectionType[]>("/sections");
-  const sections = sectionsResponse.data;
-
+  const sections = await getSections();
   const userSection = await getUserSection(user.id);
-  console.log(userSection);
 
   return (
     <section className="space-y-6">
@@ -25,7 +21,8 @@ export async function Section({ user }: Readonly<{ user: User }>) {
             userId: user.id,
             sectionId,
           });
-          await rerender();
+
+          redirect(`/admin/employees/${user.id}`);
         }}
       >
         <div className="space-y-2">

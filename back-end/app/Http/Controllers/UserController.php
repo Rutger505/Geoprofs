@@ -53,9 +53,8 @@ class UserController extends Controller
 
     public function getSection($userId)
     {
-        var_dump($userId);
+        $user = User::where("id", $userId)->with('section')->first();
 
-        $user = User::find($userId)->with(['section'])->first();
-        return response()->json($user);
+        return response()->json($user->section);
     }
 }

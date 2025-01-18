@@ -1,7 +1,6 @@
 import axios from "@/lib/axios";
 import { Section } from "@/lib/models/section";
 import { User } from "@/types/user";
-import { AxiosError } from "axios";
 
 export interface UpdateUserInformationInput
   extends Pick<User, "firstName" | "lastName" | "email" | "id"> {}
@@ -22,17 +21,10 @@ export async function updateUserSection({
   userId: string;
   sectionId: string;
 }) {
-  try {
-    const res = await axios.post(`/sections/users`, {
-      userId: +userId,
-      sectionId: +sectionId,
-    });
-    console.log("datta", res.data);
-  } catch (err) {
-    if (err instanceof AxiosError) {
-      console.log(err.response.data);
-    }
-  }
+  await axios.post(`/sections/users`, {
+    userId: +userId,
+    sectionId: +sectionId,
+  });
 }
 
 export async function getUserSection(userId: string) {

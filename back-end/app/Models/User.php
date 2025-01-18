@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Model
@@ -66,8 +67,15 @@ class User extends Model
         return $this->hasMany(Leave::class, 'userId', 'id');
     }
 
-    public function section(): BelongsTo
+    public function section(): HasOneThrough
     {
-        return $this->belongsTo(SectionUser::class, 'id', 'userId');
+        return $this->hasOneThrough(
+            Sections::class,
+            SectionUser::class,
+            'userId',
+            'id',
+            'id',
+            'sectionId'
+        );
     }
 }
