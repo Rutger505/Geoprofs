@@ -76,7 +76,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        component: [front-end, back-end]
+        component:
+          - component: front-end
+            image: frontend
+          - component: back-end
+            image: backend
 
     steps:
       - name: Checkout repository
@@ -94,16 +98,16 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./${{ matrix.component }}
+          context: ./${{ matrix.component.component }}
           push: true
-          tags: ${{ needs.configure.outputs.image_repository }}-${{ matrix.component }}:${{ needs.configure.outputs.tag }}
+          tags: ${{ needs.configure.outputs.image_repository }}-${{ matrix.component.image }}:${{ needs.configure.outputs.tag }}
           cache-from: |
-            type=gha,scope=${{ github.ref_name }}-${{ matrix.component }}
-            type=gha,scope=development-${{ matrix.component }}
-            type=gha,scope=main-${{ matrix.component }}
+            type=gha,scope=${{ github.ref_name }}-${{ matrix.component.image }}
+            type=gha,scope=development-${{ matrix.component.image }}
+            type=gha,scope=main-${{ matrix.component.image }}
           cache-to: |
-            type=gha,mode=max,scope=${{ github.ref_name }}-${{ matrix.component }}
-            ${{ startsWith(github.ref, 'refs/tags/') && format('type=gha,mode=max,scope=main-{0}', matrix.component) || '' }}
+            type=gha,mode=max,scope=${{ github.ref_name }}-${{ matrix.component.image }}
+            ${{ startsWith(github.ref, 'refs/tags/') && format('type=gha,mode=max,scope=main-{0}', matrix.component.image) || '' }}
 
   deploy:
     if: github.event.action != 'closed'
