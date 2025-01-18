@@ -33,7 +33,7 @@ export async function Section({ user }: Readonly<{ user: User }>) {
             id="section"
             name="section"
             defaultValue={userSection.id}
-            className="w-full rounded-md border border-gray-300 p-2"
+            className="w-full rounded-md border border-gray-300 bg-white p-2"
           >
             {sections.map((section) => (
               <option key={section.id} value={section.id}>

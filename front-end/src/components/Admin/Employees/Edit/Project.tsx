@@ -33,7 +33,7 @@ export async function Project({ user }: Readonly<{ user: User }>) {
             id="project"
             name="project"
             defaultValue={userProject.id}
-            className="w-full rounded-md border border-gray-300 p-2"
+            className="w-full rounded-md border border-gray-300 bg-white p-2"
           >
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
