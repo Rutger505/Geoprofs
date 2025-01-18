@@ -58,11 +58,16 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: front-end
+          context: .
           push: true
-          tags: ${{ steps.config.outputs.docker_image }}:${{ steps.config.outputs.tag }}
-          cache-from: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache
-          cache-to: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache,mode=max
+          tags: ${{ needs.configure.outputs.image }}
+          cache-from: |
+            type=gha,scope=${{ github.ref_name }}
+            type=gha,scope=development
+            type=gha,scope=main
+          cache-to: |
+            type=gha,mode=max,scope=${{ github.ref_name }}
+            ${{ startsWith(github.ref, 'refs/tags/') && 'type=gha,mode=max,scope=main' || '' }}
 
   build-back-end-docker-image:
     name: Build back-end Docker image
@@ -100,11 +105,16 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: back-end
+          context: .
           push: true
-          tags: ${{ steps.config.outputs.docker_image }}:${{ steps.config.outputs.tag }}
-          cache-from: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache
-          cache-to: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache,mode=max
+          tags: ${{ needs.configure.outputs.image }}
+          cache-from: |
+            type=gha,scope=${{ github.ref_name }}
+            type=gha,scope=development
+            type=gha,scope=main
+          cache-to: |
+            type=gha,mode=max,scope=${{ github.ref_name }}
+            ${{ startsWith(github.ref, 'refs/tags/') && 'type=gha,mode=max,scope=main' || '' }}
 
   deploy-to-kubernetes:
     name: Deploy to Kubernetes
