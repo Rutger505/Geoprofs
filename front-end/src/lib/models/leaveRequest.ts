@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import axios from "@/lib/axios";
 import {
   differenceInBusinessDays,
@@ -42,15 +41,12 @@ function getLeaveDuration(start: Date, end: Date): number {
   return differenceInBusinessDays(end, start) * 8;
 }
 
-export async function getUsersLeaveRequests(): Promise<LeaveRequest[]> {
-  const session = await auth();
-  if (!session) {
-    throw new Error("User not authenticated");
-  }
-
+export async function getUsersLeaveRequests(
+  userId: string,
+): Promise<LeaveRequest[]> {
   const leaveRequestsResposne = await axios.get<
     Omit<LeaveRequest[], "durationHours">
-  >(`/leave/${session.user.id}`);
+  >(`/leave/${userId}`);
 
   return leaveRequestsResposne.data
     .map((leaveRequest) => ({
