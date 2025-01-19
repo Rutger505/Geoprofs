@@ -1,9 +1,7 @@
 import { LeaveRequestDetails } from "@/components/LeaveRequest/LeaveRequestDetails";
 import { StatusIcon } from "@/components/LeaveRequest/StatusIcon";
-import {
-  getStatusTranslation,
-  LeaveRequest as LeaveRequestType,
-} from "@/lib/models/leaveRequest";
+import { LeaveRequest as LeaveRequestType } from "@/lib/models/leaveRequest";
+import { getStatusTranslation } from "@/lib/status";
 import { differenceInHours, format, isSameDay } from "date-fns";
 
 interface Props {

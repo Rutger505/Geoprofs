@@ -1,3 +1,4 @@
+"use server";
 import axios from "@/lib/axios";
 import {
   differenceInBusinessDays,
@@ -22,15 +23,6 @@ export interface LeaveRequest {
   durationHours: number;
   category: LeaveRequestCategory;
   updatedAt: Date | null;
-}
-
-export function getStatusTranslation(status: LeaveRequestStatus) {
-  const statusMap = {
-    accepted: "Geaccepteerd",
-    denied: "Geweigerd",
-    pending: "In afwachting",
-  };
-  return statusMap[status];
 }
 
 function getLeaveDuration(start: Date, end: Date): number {
@@ -64,4 +56,20 @@ export async function getUsersLeaveRequests(
         leaveRequest.endDate,
       ),
     }));
+}
+
+export async function createLeaveRequest(
+  userId: string,
+  startDate: Date,
+  endDate: Date,
+  reason: string,
+  categoryId: number,
+) {
+  await axios.post("/leave", {
+    userId,
+    startDate,
+    endDate,
+    reason,
+    categoryId,
+  });
 }
