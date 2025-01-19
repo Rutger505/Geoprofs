@@ -32,9 +32,12 @@ export async function Section({ user }: Readonly<{ user: User }>) {
           <select
             id="section"
             name="section"
-            defaultValue={userSection.id}
+            defaultValue={"id" in userSection ? userSection.id : ""}
             className="w-full rounded-md border border-gray-300 bg-white p-2"
           >
+            <option value="" disabled>
+              Selecteer een sectie
+            </option>
             {sections.map((section) => (
               <option key={section.id} value={section.id}>
                 {section.name}

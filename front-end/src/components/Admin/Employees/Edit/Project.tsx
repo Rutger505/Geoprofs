@@ -32,9 +32,12 @@ export async function Project({ user }: Readonly<{ user: User }>) {
           <select
             id="project"
             name="project"
-            defaultValue={userProject.id}
+            defaultValue={"id" in userProject ? userProject.id : ""}
             className="w-full rounded-md border border-gray-300 bg-white p-2"
           >
+            <option value="" disabled>
+              Selecteer een sectie
+            </option>
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
                 {project.name}
