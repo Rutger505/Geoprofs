@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Projects extends Model
 {
-    protected $primaryKey = 'projectId';
+    protected $primaryKey = 'id';
     protected $fillable = ['name'];
     use HasFactory;
 }
