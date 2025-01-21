@@ -13,7 +13,7 @@ interface Category {
 }
 
 interface Props {
-  userId: number;
+  userId: string;
   categories: Category[];
 }
 
@@ -63,13 +63,7 @@ export function LeaveRequestForm({ userId, categories }: Readonly<Props>) {
         throw new Error("Reden mag maximaal 255 karakters bevatten");
       }
 
-      await createLeaveRequest(
-        userId,
-        formatDate(startDate),
-        formatDate(endDate),
-        reason,
-        categoryId,
-      );
+      await createLeaveRequest(userId, start, end, reason, categoryId);
     },
   });
 
