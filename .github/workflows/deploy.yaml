@@ -51,7 +51,7 @@ jobs:
             ENVIRONMENT="staging"
             HOSTNAME="staging.${{ vars.BASE_DOMAIN }}"
             CERTIFICATE_ISSUER="letsencrypt-production"
-            POSTGRES_NAMESPACE="postgres-staging"
+            POSTGRES_NAMESPACE="postgres-test"
             LARAVEL_APP_ENV="staging"
             LARAVEL_APP_DEBUG="true"
             LARAVEL_LOG_LEVEL="debug"
