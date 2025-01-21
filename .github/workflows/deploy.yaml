@@ -1,226 +1,252 @@
-name: Deploy
+name: Deployments
 
 on:
   push:
     tags:
-      - '*'
+      - "*"
     branches:
-      - development
+      - "development"
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [opened, synchronize, reopened, closed]
     branches:
-      - development
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  DOCKER_IMAGE_PREFIX: rutger505/geoprofs
-  APP_NAME: geoprofs
+      - "*"
 
 jobs:
-  build-front-end-docker-image:
-    name: Build front-end Docker image
+  configure:
+    name: Generate Configuration
     runs-on: ubuntu-latest
     outputs:
+      application_name: ${{ steps.config.outputs.application_name }}
+      environment: ${{ steps.config.outputs.environment }}
+      is_production: ${{ steps.config.outputs.is_production }}
+      image_repository: ${{ steps.config.outputs.image_repository }}
       tag: ${{ steps.config.outputs.tag }}
+      hostname: ${{ steps.config.outputs.hostname }}
+      certificate_issuer: ${{ steps.config.outputs.certificate_issuer }}
+      postgres_namespace: ${{ steps.config.outputs.postgres_namespace }}
+      laravel_app_env: ${{ steps.config.outputs.laravel_app_env }}
+      laravel_app_debug: ${{ steps.config.outputs.laravel_app_debug }}
+      laravel_log_level: ${{ steps.config.outputs.laravel_log_level }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Generate build config
+      - name: Configuration
         id: config
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
+            IS_PRODUCTION="true"
             TAG=$GITHUB_REF_NAME
-          else
+            ENVIRONMENT="production"
+            HOSTNAME=${{ vars.BASE_DOMAIN }}
+            CERTIFICATE_ISSUER="letsencrypt-production"
+            POSTGRES_NAMESPACE="postgres-production"
+            LARAVEL_APP_ENV="production"
+            LARAVEL_APP_DEBUG="false"
+            LARAVEL_LOG_LEVEL="warn"
+          elif [[ $GITHUB_REF == refs/heads/development ]]; then
+            IS_PRODUCTION="false"
             TAG=$GITHUB_SHA
+            ENVIRONMENT="staging"
+            HOSTNAME="staging.${{ vars.BASE_DOMAIN }}"
+            CERTIFICATE_ISSUER="letsencrypt-production"
+            POSTGRES_NAMESPACE="postgres-staging"
+            LARAVEL_APP_ENV="staging"
+            LARAVEL_APP_DEBUG="true"
+            LARAVEL_LOG_LEVEL="debug"
+          else
+            IS_PRODUCTION="false"
+            TAG=$GITHUB_SHA
+            ENVIRONMENT="pr-${{ github.event.pull_request.number }}"
+            HOSTNAME=${{ github.sha }}.${{ vars.BASE_DOMAIN }}
+            CERTIFICATE_ISSUER="letsencrypt-staging"
+            POSTGRES_NAMESPACE="postgres-test"
+            LARAVEL_APP_ENV="development"
+            LARAVEL_APP_DEBUG="true"
+            LARAVEL_LOG_LEVEL="debug"
           fi
           
-          DOCKER_IMAGE=${{ env.DOCKER_IMAGE_PREFIX }}-frontend
-          echo "Setting docker_image to $DOCKER_IMAGE"
-          echo "docker_image=$DOCKER_IMAGE" >> $GITHUB_OUTPUT
+          source ./application.env
           
-          echo "Setting tag to $TAG"
+          echo "application_name=$APPLICATION_NAME" >> $GITHUB_OUTPUT
+          echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
+          echo "is_production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
+          echo "image_repository=$IMAGE_REPOSITORY" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: front-end
-          push: true
-          tags: ${{ steps.config.outputs.docker_image }}:${{ steps.config.outputs.tag }}
-          cache-from: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache
-          cache-to: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache,mode=max
-
-  build-back-end-docker-image:
-    name: Build back-end Docker image
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Generate build config
-        id: config
-        run: |
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            TAG=$GITHUB_REF_NAME
-          else
-            TAG=$GITHUB_SHA
-          fi
+          echo "hostname=$HOSTNAME" >> $GITHUB_OUTPUT
+          echo "certificate_issuer=$CERTIFICATE_ISSUER" >> $GITHUB_OUTPUT
+          echo "postgres_namespace=$POSTGRES_NAMESPACE" >> $GITHUB_OUTPUT
+          echo "laravel_app_env=$LARAVEL_APP_ENV" >> $GITHUB_OUTPUT
+          echo "laravel_app_debug=$LARAVEL_APP_DEBUG" >> $GITHUB_OUTPUT
+          echo "laravel_log_level=$LARAVEL_LOG_LEVEL" >> $GITHUB_OUTPUT
           
-          DOCKER_IMAGE=${{ env.DOCKER_IMAGE_PREFIX }}-backend
-          echo "Setting docker_image to $DOCKER_IMAGE"
-          echo "docker_image=$DOCKER_IMAGE" >> $GITHUB_OUTPUT
-          
-          echo "Setting tag to $TAG"
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: back-end
-          push: true
-          tags: ${{ steps.config.outputs.docker_image }}:${{ steps.config.outputs.tag }}
-          cache-from: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache
-          cache-to: type=registry,ref=${{ steps.config.outputs.docker_image }}:cache,mode=max
-
-  deploy-to-kubernetes:
-    name: Deploy to Kubernetes
+  build-images:
+    if: github.event.action != 'closed'
+    name: Build Docker Images
+    needs: [configure]
     runs-on: ubuntu-latest
-    needs:
-      - build-front-end-docker-image
-      - build-back-end-docker-image
-
     strategy:
       matrix:
-        environment:
-          - ${{ startsWith(github.ref, 'refs/tags/') && 'production' || (github.ref == 'refs/heads/development' && 'staging' || format('pr-{0}', github.event.pull_request.number)) }}
-    environment:
-      name: ${{ matrix.environment }}
-      url: https://${{ steps.config.outputs.ingress_host }}
+        component:
+          - component: front-end
+            image: frontend
+          - component: back-end
+            image: backend
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate deployment config
-        id: config
-        run: |
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            INGRESS_HOST=${{ vars.BASE_DOMAIN }}
-            CLUSTER_ISSUER_NAME=letsencrypt-production
-            POSTGRES_NAMESPACE=postgres-production
-            LARAVEL_APP_ENV=production
-            LARAVEL_APP_DEBUG=false
-            LARAVEL_LOG_LEVEL=warn
-          
-            rm k8s/ingress-test.yaml
-          elif [[ $GITHUB_REF == refs/heads/development ]]; then
-            INGRESS_HOST=staging.${{ vars.BASE_DOMAIN }}
-            CLUSTER_ISSUER_NAME=letsencrypt-production
-            POSTGRES_NAMESPACE=postgres-test
-            LARAVEL_APP_ENV=staging
-            LARAVEL_APP_DEBUG=true
-            LARAVEL_LOG_LEVEL=debug
-          
-            rm k8s/ingress-test.yaml
-          else
-            INGRESS_HOST=${{ github.sha }}.${{ vars.BASE_DOMAIN }}
-            CLUSTER_ISSUER_NAME=letsencrypt-staging
-            POSTGRES_NAMESPACE=postgres-test
-            LARAVEL_APP_ENV=development
-            LARAVEL_APP_DEBUG=true
-            LARAVEL_LOG_LEVEL=debug
-          
-            rm k8s/ingress-production.yaml
-          fi
-          
-          echo "Setting ingress host to $INGRESS_HOST"
-          echo "ingress_host=$INGRESS_HOST" >> $GITHUB_OUTPUT
-          
-          echo "Setting cluster issuer name to $CLUSTER_ISSUER_NAME"
-          echo "cluster_issuer_name=$CLUSTER_ISSUER_NAME" >> $GITHUB_OUTPUT
-          
-          echo "Setting postgres_namespace to $POSTGRES_NAMESPACE"
-          echo "postgres_namespace=$POSTGRES_NAMESPACE" >> $GITHUB_OUTPUT
-          
-          NAMESPACE=$APP_NAME-${{ matrix.environment }}
-          echo "Setting namespace to $NAMESPACE"
-          echo "namespace=$NAMESPACE" >> $GITHUB_OUTPUT
-          
-          echo "Setting laravel_app_env to $LARAVEL_APP_ENV"
-          echo "laravel_app_env=$LARAVEL_APP_ENV" >> $GITHUB_OUTPUT
-          
-          echo "Setting laravel_app_debug to $LARAVEL_APP_DEBUG"
-          echo "laravel_app_debug=$LARAVEL_APP_DEBUG" >> $GITHUB_OUTPUT
-          
-          echo "Setting laravel_log_level to $LARAVEL_LOG_LEVEL"
-          echo "laravel_log_level=$LARAVEL_LOG_LEVEL" >> $GITHUB_OUTPUT
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Install envsubst
-        run: sudo apt-get update && sudo apt-get install -y gettext-base
-
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          version: 'v1.31.0'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Set up Kubernetes context
-        uses: azure/k8s-set-context@v4
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
         with:
-          method: kubeconfig
+          context: ./${{ matrix.component.component }}
+          push: true
+          tags: ${{ needs.configure.outputs.image_repository }}-${{ matrix.component.image }}:${{ needs.configure.outputs.tag }}
+          cache-from: |
+            type=gha,scope=${{ github.ref_name }}-${{ matrix.component.image }}
+            type=gha,scope=development-${{ matrix.component.image }}
+            type=gha,scope=main-${{ matrix.component.image }}
+          cache-to: |
+            type=gha,mode=max,scope=${{ github.ref_name }}-${{ matrix.component.image }}
+            ${{ startsWith(github.ref, 'refs/tags/') && format('type=gha,mode=max,scope=main-{0}', matrix.component.image) || '' }}
+
+  deploy:
+    if: github.event.action != 'closed'
+    name: Deploy to Kubernetes
+    needs: [ configure, build-images ]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.configure.outputs.environment }}
+      url: https://${{ needs.configure.outputs.hostname }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Kubernetes
+        uses: ./.github/actions/setup-k8s
+        with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
 
-      - name: Insert environment variables into Kubernetes files
+      - name: OpenTofu Apply
+        working-directory: ./deploy
         env:
-          NAMESPACE: ${{ steps.config.outputs.namespace }}
-          TAG: ${{ needs.build-front-end-docker-image.outputs.tag }}
-          INGRESS_HOST: ${{ steps.config.outputs.ingress_host }}
-          CLUSTER_ISSUER_NAME: ${{ steps.config.outputs.cluster_issuer_name }}
-          BASE_URL: https://${{ steps.config.outputs.ingress_host }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_NAMESPACE: ${{ steps.config.outputs.postgres_namespace }}
-          LARAVEL_APP_KEY: ${{ secrets.LARAVEL_APP_KEY }}
-          LARAVEL_APP_ENV: ${{ steps.config.outputs.laravel_app_env }}
-          LARAVEL_APP_DEBUG: ${{ steps.config.outputs.laravel_app_debug }}
-          LARAVEL_MAIL_ADDRESS: ${{ secrets.LARAVEL_MAIL_ADDRESS }}
-          LARAVEL_MAIL_PASSWORD: ${{ secrets.LARAVEL_MAIL_PASSWORD }}
-          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          TF_VAR_application_name: ${{ needs.configure.outputs.application_name }}
+          TF_VAR_image_repository: ${{ needs.configure.outputs.image_repository }}
+          TF_VAR_tag: ${{ needs.configure.outputs.tag }}
+          TF_VAR_hostname: ${{ needs.configure.outputs.hostname }}
+          TF_VAR_certificate_issuer: ${{ needs.configure.outputs.certificate_issuer }}
+          TF_VAR_postgres_namespace: ${{ needs.configure.outputs.postgres_namespace }}
+          TF_VAR_laravel_config: >-
+            {
+              "app_env": "${{ needs.configure.outputs.laravel_app_env }}",
+              "app_debug": "${{ needs.configure.outputs.laravel_app_debug }}",
+              "log_level": "${{ needs.configure.outputs.laravel_log_level }}",
+              "app_key": "${{ secrets.LARAVEL_APP_KEY }}",
+              "mail_address": "${{ secrets.LARAVEL_MAIL_ADDRESS }}",
+              "mail_password": "${{ secrets.LARAVEL_MAIL_PASSWORD }}",
+              "auth_secret": "${{ secrets.AUTH_SECRET }}"
+            }
+          TF_VAR_postgres_config: >-
+            {
+              "username": "${{ secrets.POSTGRES_USER }}",
+              "password": "${{ secrets.POSTGRES_PASSWORD }}"
+            }
         run: |
-          FILES=$(ls k8s/*.yaml | tr '\n' ' ')
-          
-          for FILE in $FILES; do
-            echo "Processing $FILE"
-            envsubst < $FILE > /tmp/envsubst || exit 1
-            mv /tmp/envsubst $FILE || exit 1
-          done
+          tofu init
+          tofu workspace select -or-create ${{ needs.configure.outputs.environment }}
+          tofu plan -input=false -out=tfplan
+          tofu apply -input=false -auto-approve tfplan
 
-      - name: Deploy to Kubernetes
-        uses: Azure/k8s-deploy@v5
+  run-e2e-tests:
+    if: github.event.action != 'closed' && github.event_name == 'pull_request'
+    name: Run end-to-end tests
+    needs: [ configure, deploy ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      BASE_URL: https://${{ needs.configure.outputs.hostname }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          namespace: ${{ steps.config.outputs.namespace }}
-          manifests: |
-            k8s/
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Playwright tests
+        run: npx playwright test --project="Google Chrome"
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  cleanup:
+    if: github.event.action == 'closed' && needs.configure.outputs.is_production == 'false'
+    name: Cleanup PR Environment
+    needs: [ configure ]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.configure.outputs.environment }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Kubernetes
+        uses: ./.github/actions/setup-k8s
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: OpenTofu Destroy
+        working-directory: ./deploy
+        env:
+          TF_VAR_application_name: ${{ needs.configure.outputs.application_name }}
+          TF_VAR_image_repository: ${{ needs.configure.outputs.image_repository }}
+          TF_VAR_tag: ${{ needs.configure.outputs.tag }}
+          TF_VAR_hostname: ${{ needs.configure.outputs.hostname }}
+          TF_VAR_certificate_issuer: ${{ needs.configure.outputs.certificate_issuer }}
+          TF_VAR_postgres_namespace: ${{ needs.configure.outputs.postgres_namespace }}
+          TF_VAR_laravel_config: >-
+            {
+              "app_env": "${{ needs.configure.outputs.laravel_app_env }}",
+              "app_debug": "${{ needs.configure.outputs.laravel_app_debug }}",
+              "log_level": "${{ needs.configure.outputs.laravel_log_level }}",
+              "app_key": "${{ secrets.LARAVEL_APP_KEY }}",
+              "mail_address": "${{ secrets.LARAVEL_MAIL_ADDRESS }}",
+              "mail_password": "${{ secrets.LARAVEL_MAIL_PASSWORD }}",
+              "auth_secret": "${{ secrets.AUTH_SECRET }}"
+            }
+          TF_VAR_postgres_config: >-
+            {
+              "username": "${{ secrets.POSTGRES_USER }}",
+              "password": "${{ secrets.POSTGRES_PASSWORD }}"
+            }
+        run: |
+          tofu init
+          tofu workspace select ${{ needs.configure.outputs.environment }}
+          tofu plan -destroy -input=false -out=tfplan
+          tofu apply -input=false -auto-approve tfplan
+          tofu workspace select default
+          tofu workspace delete ${{ needs.configure.outputs.environment }}

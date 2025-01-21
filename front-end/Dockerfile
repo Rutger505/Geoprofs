@@ -1,12 +1,13 @@
-FROM node:20-alpine AS development
+FROM node:22-alpine AS base
+
 WORKDIR /app
 
-RUN apk add --no-cache bash
+
+FROM base AS development
 
 COPY package.json package-lock.json ./
 
-
-RUN npm install --verbose --loglevel verbose
+RUN npm install
 
 COPY . .
 
@@ -14,37 +15,40 @@ EXPOSE 3000
 
 CMD ["npm", "run", "dev"]
 
-FROM node:22-alpine AS dependencies
-WORKDIR /app
+
+FROM base AS deps
 
 COPY package.json package-lock.json ./
 
 RUN npm ci
 
-FROM node:22-alpine AS builder
-ENV NODE_ENV=production
-WORKDIR /app
 
+FROM base AS builder
+
+# Client side environment variables must be set here.
+# They won't be read from .env file during runtime
+
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-COPY --from=dependencies /app/node_modules ./node_modules
 
-ENV SKIP_ENV_VALIDATION=true
-
-RUN npm run build
+RUN SKIP_ENV_VALIDATION=1 npm run build
 
 
-FROM node:22-alpine AS production
+FROM base AS production
 
 ENV NODE_ENV=production
 
-WORKDIR /app
+RUN addgroup --system --gid 1001 nodejs \
+    && adduser --system --uid 1001 nextjs
+USER nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
 EXPOSE 3000
+ENV PORT=3000
 
-COPY --from=builder /app/next.config.mjs ./
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/package.json /app/package-lock.json ./
-COPY --from=dependencies /app/node_modules ./node_modules
+ENV HOSTNAME="0.0.0.0"
+CMD ["node", "server.js"]
 
-CMD ["npm", "start"]
