@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - "*"
+    branches:
+      - "development"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
@@ -43,6 +45,16 @@ jobs:
             LARAVEL_APP_ENV="production"
             LARAVEL_APP_DEBUG="false"
             LARAVEL_LOG_LEVEL="warn"
+          elif [[ $GITHUB_REF == refs/heads/development ]]; then
+            IS_PRODUCTION="false"
+            TAG=$GITHUB_SHA
+            ENVIRONMENT="staging"
+            HOSTNAME="staging.${{ vars.BASE_DOMAIN }}"
+            CERTIFICATE_ISSUER="letsencrypt-production"
+            POSTGRES_NAMESPACE="postgres-staging"
+            LARAVEL_APP_ENV="staging"
+            LARAVEL_APP_DEBUG="true"
+            LARAVEL_LOG_LEVEL="debug"
           else
             IS_PRODUCTION="false"
             TAG=$GITHUB_SHA
@@ -54,9 +66,9 @@ jobs:
             LARAVEL_APP_DEBUG="true"
             LARAVEL_LOG_LEVEL="debug"
           fi
-
+          
           source ./application.env
-
+          
           echo "application_name=$APPLICATION_NAME" >> $GITHUB_OUTPUT
           echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
           echo "is_production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
@@ -68,6 +80,8 @@ jobs:
           echo "laravel_app_env=$LARAVEL_APP_ENV" >> $GITHUB_OUTPUT
           echo "laravel_app_debug=$LARAVEL_APP_DEBUG" >> $GITHUB_OUTPUT
           echo "laravel_log_level=$LARAVEL_LOG_LEVEL" >> $GITHUB_OUTPUT
+          
+          cat $GITHUB_OUTPUT
 
   build-images:
     if: github.event.action != 'closed'
@@ -112,7 +126,7 @@ jobs:
   deploy:
     if: github.event.action != 'closed'
     name: Deploy to Kubernetes
-    needs: [configure, build-images]
+    needs: [ configure, build-images ]
     runs-on: ubuntu-latest
     environment:
       name: ${{ needs.configure.outputs.environment }}
@@ -157,10 +171,41 @@ jobs:
           tofu plan -input=false -out=tfplan
           tofu apply -input=false -auto-approve tfplan
 
+  run-e2e-tests:
+    if: github.event.action != 'closed' && github.event_name == 'pull_request'
+    name: Run end-to-end tests
+    needs: [ configure, deploy ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      BASE_URL: https://${{ needs.configure.outputs.hostname }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Playwright tests
+        run: npx playwright test --project="Google Chrome"
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
   cleanup:
     if: github.event.action == 'closed' && needs.configure.outputs.is_production == 'false'
     name: Cleanup PR Environment
-    needs: [configure]
+    needs: [ configure ]
     runs-on: ubuntu-latest
     environment:
       name: ${{ needs.configure.outputs.environment }}
