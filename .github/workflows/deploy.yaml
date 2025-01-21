@@ -68,6 +68,8 @@ jobs:
           echo "laravel_app_env=$LARAVEL_APP_ENV" >> $GITHUB_OUTPUT
           echo "laravel_app_debug=$LARAVEL_APP_DEBUG" >> $GITHUB_OUTPUT
           echo "laravel_log_level=$LARAVEL_LOG_LEVEL" >> $GITHUB_OUTPUT
+          
+          cat $GITHUB_OUTPUT
 
   build-images:
     if: github.event.action != 'closed'
