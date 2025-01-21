@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - "*"
+    branches:
+      - "development"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
@@ -43,6 +45,16 @@ jobs:
             LARAVEL_APP_ENV="production"
             LARAVEL_APP_DEBUG="false"
             LARAVEL_LOG_LEVEL="warn"
+          elif [[ $GITHUB_REF == refs/heads/development ]]; then
+            IS_PRODUCTION="false"
+            TAG=$GITHUB_SHA
+            ENVIRONMENT="staging"
+            HOSTNAME="staging.${{ vars.BASE_DOMAIN }}"
+            CERTIFICATE_ISSUER="letsencrypt-production"
+            POSTGRES_NAMESPACE="postgres-staging"
+            LARAVEL_APP_ENV="staging"
+            LARAVEL_APP_DEBUG="true"
+            LARAVEL_LOG_LEVEL="debug"
           else
             IS_PRODUCTION="false"
             TAG=$GITHUB_SHA
@@ -54,9 +66,9 @@ jobs:
             LARAVEL_APP_DEBUG="true"
             LARAVEL_LOG_LEVEL="debug"
           fi
-
+          
           source ./application.env
-
+          
           echo "application_name=$APPLICATION_NAME" >> $GITHUB_OUTPUT
           echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
           echo "is_production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
