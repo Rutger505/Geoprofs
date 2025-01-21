@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sections;
 use App\Models\SectionUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 
@@ -62,13 +63,18 @@ class SectionController extends Controller
             'sectionId' => 'required|int',
         ]);
 
+        if (!Sections::where('id', $request->sectionId)->exists() || !User::where('id', $request->userId)->exists()) {
+            return response()->json(["message" => "Section or user doesn't exist"], 404);
+        }
+
+        SectionUser::where('userId', $request->userId)->delete();
+
         SectionUser::create([
-            'userId' => $request['userId'],
-            'sectionId' => $request['sectionId']
+            'userId' => $request->userId,
+            'sectionId' => $request->sectionId
         ]);
 
-        return response()->json(["message" => "User added to section successfully"], 200);
-
+        return response(null, 204);
     }
 
 

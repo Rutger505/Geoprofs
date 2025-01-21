@@ -63,6 +63,8 @@ class ProjectController extends Controller
             return response()->json(["message" => "User or project doesn't exist"], 404);
         }
 
+        ProjectUser::where('userId', $request['userId'])->delete();
+
         ProjectUser::create([
             'userId' => $request['userId'],
             'projectId' => $request['projectId']
