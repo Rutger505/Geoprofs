@@ -3,6 +3,52 @@ name: Code Quality
 on: push
 
 jobs:
+  next-lint:
+    name: Run next lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: front-end/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./front-end
+        run: npm ci
+
+      - name: Run next lint
+        working-directory: ./front-end
+        run: npm run lint
+
+  typescript-check:
+    name: Run typescript check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: front-end/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./front-end
+        run: npm ci
+
+      - name: Run typescript check
+        working-directory: ./front-end
+        run: npx tsc --noEmit
+
   test-front-end:
     name: Test Frontend
     runs-on: ubuntu-latest
