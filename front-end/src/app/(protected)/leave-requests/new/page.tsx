@@ -8,7 +8,7 @@ export default async function RequestLeaveRequest() {
   if (!session) {
     redirect("/");
   }
-  const categories = await axios.get("/leave/categories");
+  const categories = await axios.get("/leave/category/");
 
   return (
     <main className="flex flex-col items-center gap-14 py-20">
