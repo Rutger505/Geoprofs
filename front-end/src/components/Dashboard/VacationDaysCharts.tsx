@@ -23,7 +23,7 @@ export default async function VacationDaysCharts({
     .reduce((total, leaveRequest) => total + leaveRequest.durationHours, 0);
   const paidLeaveLeaveDays = convertHoursToDays(paidLeaveLeaveHours);
 
-  const totalHoursResposne = await axios.get(`/user/${session.user.id}/hours`);
+  const totalHoursResposne = await axios.get(`/users/${session.user.id}/hours`);
   const totalHours = totalHoursResposne.data.hours;
   const totalDays = convertHoursToDays(totalHours);
 
