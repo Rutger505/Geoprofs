@@ -3,6 +3,7 @@ import axios from "@/lib/axios";
 import {
   differenceInBusinessDays,
   differenceInHours,
+  format,
   isSameDay,
 } from "date-fns";
 
@@ -67,8 +68,8 @@ export async function createLeaveRequest(
 ) {
   await axios.post("/leave", {
     userId,
-    startDate,
-    endDate,
+    startDate: format(startDate, "dd-mm-yyyy"),
+    endDate: format(endDate, "dd-mm-yyyy"),
     reason,
     categoryId,
   });
