@@ -178,7 +178,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      BASE_URL: ${{ needs.configure.outputs.hostname }}
+      BASE_URL: https://${{ needs.configure.outputs.hostname }}
 
     steps:
       - name: Checkout repository
