@@ -43,7 +43,7 @@ jobs:
       - name: Composer install
         uses: php-actions/composer@v6
         with:
-          container_workdir: /github/workspace/back-end
+          container_workdir: /github/workspace/Geoprofs/back-end
 
       - name: PHPUnit
         uses: php-actions/phpunit@v4
