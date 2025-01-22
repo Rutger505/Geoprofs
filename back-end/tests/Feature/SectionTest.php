@@ -93,7 +93,7 @@ class sectionTest extends TestCase
 
         $response->assertStatus(200);
     }
-    
+
 
     public function test_deleting_user_from_section(): void
     {
