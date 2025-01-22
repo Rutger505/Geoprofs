@@ -78,15 +78,12 @@ jobs:
     name: Test Backend
     runs-on: ubuntu-latest
 
-
-
     env:
       DB_CONNECTION: pgsql
       DB_PORT: 5432
       DB_DATABASE: geoprofs
-      DB_USERNAME: user
-      DB_PASSWORD: secret
-      
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
 
     services:
       postgres:
