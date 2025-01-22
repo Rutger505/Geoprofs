@@ -1,4 +1,5 @@
 const randomEmail = () => `test-${Math.random().toString(36).substring(2)}@example.com`;
+const randomString = () => `${Math.random().toString(36).substring(2)}`;
 
 import { expect, test } from "@playwright/test";
 
@@ -40,16 +41,26 @@ test.describe("User", () => {
     await expect(page.getByRole("paragraph")).toContainText("Medewerker geregistreerd!");
   });
 
-  test("should show error message with invalid credentials", async ({
-                                                                      page
-                                                                    }) => {
+  test('test', async ({ page }) => {
+  // arrange
     await page.goto("/");
 
-    await page.getByLabel("Email").fill("invalid@example.com");
-    await page.getByLabel("Wachtwoord").fill("wrongpassword");
+    // login
+    await page.getByLabel("Email").fill("admin@example.com");
+    await page.getByLabel("Wachtwoord").fill("secret");
     await page.getByRole("button", { name: "Inloggen" }).click();
 
-    // Check for error message
-    await expect(page.getByText("Invalid credentials.")).toBeVisible();
+    // navigate to users page
+    await page.getByRole("link", { name: "Werknemers" }).click();
+
+
+    await page.locator('div').filter({ hasText: /^Employee Example$/ }).getByRole('link').click();
+
+    const newName = randomString();
+    await page.getByLabel('Achternaam').fill(newName);
+
+    await page.locator('form').filter({ hasText: 'EmailVoornaamAchternaamOpslaan' }).getByRole('button').click();
+
+    await expect(page.locator('h1')).toContainText(newName);
   });
 });
