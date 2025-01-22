@@ -43,14 +43,14 @@ jobs:
       - name: Composer install
         uses: php-actions/composer@v6
         with:
-          working-directory: ./back-end
+          working-directory: back-end
 
       - name: PHPUnit
         uses: php-actions/phpunit@v3
         with:
           php-version: 8.1
           args: "--configuration=/phpunit.xml --coverage-text"
-          working-directory: ./back-end
+          working-directory: back-end
 
   sonar:
     needs: [test-front-end]
