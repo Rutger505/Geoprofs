@@ -43,7 +43,7 @@ jobs:
       - name: Composer install
         uses: php-actions/composer@v6
         with:
-          container_workdir: ./back-end
+          container_workdir: ./back-end/composer.json
 
       - name: PHPUnit
         uses: php-actions/phpunit@v4
