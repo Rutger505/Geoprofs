@@ -17,17 +17,6 @@ interface Props {
   categories: Category[];
 }
 
-// Helper to format date to dd-mm-yyyy
-const formatDate = (date: string): string => {
-  const [year, month, day] = date.split("-");
-  return `${day}-${month}-${year}`;
-};
-
-// Helper to convert dd-mm-yyyy to yyyy-mm-dd for input[type="date"]
-const toInputDate = (date: string): string => {
-  const [day, month, year] = date.split("-");
-  return `${year}-${month}-${day}`;
-};
 
 export function LeaveRequestForm({ userId, categories }: Readonly<Props>) {
   const [startDate, setStartDate] = useState(
