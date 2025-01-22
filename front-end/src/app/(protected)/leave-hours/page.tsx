@@ -9,7 +9,7 @@ export default async function Dashboard() {
     redirect("/");
   }
 
-  const leaveRequests = await getUsersLeaveRequests();
+  const leaveRequests = await getUsersLeaveRequests(session.user.id);
 
   return (
     <main className="flex flex-col items-center gap-14 py-20">
