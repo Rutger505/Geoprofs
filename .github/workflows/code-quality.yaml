@@ -32,25 +32,22 @@ jobs:
         with:
           name: coverage
           path: front-end/coverage
-
   test-back-end:
     name: Test Backend
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: Composer install
+        uses: php-actions/composer@v6 # or alternative dependency management
+      - name: PHPUnit
+        uses: php-actions/phpunit@v3
         with:
           php-version: 8.1
-          extensions: mbstring, pdo, tokenizer
-          coverage: xdebug
-
-      - name: Run PHPUnit Tests
-        run: vendor/bin/phpunit --configuration=phpunit.xml --coverage-text
-        working-directory: ./back-end
+          args: "--configuration=/phpunit.xml --coverage-text"
+          working-directory: ./back-end
 
   sonar:
     needs: [test-front-end]
