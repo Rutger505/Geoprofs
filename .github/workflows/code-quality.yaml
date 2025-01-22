@@ -40,18 +40,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: List files in workspace
-        run: |
-          echo $GITHUB_WORKSPACE
-          ls $GITHUB_WORKSPACE
-
-      - name: ls
-        run: ls ${{ github.workspace }}/back-end
-
       - name: Composer install
         uses: php-actions/composer@v6
         with:
-          container_workdir: ${{ github.workspace }}/back-end
+          working_dir: ./back-end
 
       - name: PHPUnit
         uses: php-actions/phpunit@v4
