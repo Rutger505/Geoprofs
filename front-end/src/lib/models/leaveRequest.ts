@@ -68,8 +68,8 @@ export async function createLeaveRequest(
 ) {
   await axios.post("/leave", {
     userId,
-    startDate: format(startDate, "dd-mm-yyyy"),
-    endDate: format(endDate, "dd-mm-yyyy"),
+    startDate: format(startDate, "dd-MM-yyyy"),
+    endDate: format(endDate, "dd-MM-yyyy"),
     reason,
     categoryId,
   });

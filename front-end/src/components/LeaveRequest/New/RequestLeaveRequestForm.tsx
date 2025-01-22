@@ -41,8 +41,6 @@ export function LeaveRequestForm({ userId, categories }: Readonly<Props>) {
 
   const { mutate, isPending, error, isSuccess } = useMutation({
     mutationFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       // Validate dates
       const start = new Date(startDate);
       const end = new Date(endDate);
@@ -104,7 +102,7 @@ export function LeaveRequestForm({ userId, categories }: Readonly<Props>) {
         <Select
           className="w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(event) => setCategoryId(+event.target.value)}
-          defaultValue=""
+          defaultValue={""}
           required
         >
           <option disabled value="">
