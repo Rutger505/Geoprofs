@@ -48,10 +48,6 @@ jobs:
           extensions: mbstring, pdo, tokenizer
           coverage: xdebug
 
-      - name: Install Dependencies
-        run: composer install
-        working-directory: ./back-end
-
       - name: Run PHPUnit Tests
         run: vendor/bin/phpunit --configuration=phpunit.xml --coverage-text
         working-directory: ./back-end
