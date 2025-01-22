@@ -45,6 +45,9 @@ jobs:
           echo $GITHUB_WORKSPACE
           ls $GITHUB_WORKSPACE
 
+      - name: ls
+        run: ls ${{ github.workspace }}/back-end
+
       - name: Composer install
         uses: php-actions/composer@v6
         with:
