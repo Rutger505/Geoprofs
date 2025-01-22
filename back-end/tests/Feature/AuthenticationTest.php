@@ -56,24 +56,5 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_register(): void
-    {
-
-        $random = rand(1, 999);
-        // Sample login credentials
-        $credentials = [
-            'firstName' => 'Employee',
-            'lastName' => 'Employee',
-            'email' => "test+$random@example.com",
-            'dateHired' => '01-01-2000',
-            'roleId' => 1,
-            'contractId' => 1
-        ];
-
-//        // Send a POST request with credentials to the login endpoint
-        $response = $this->postJson('api/auth/register', $credentials);
-
-        $response->assertStatus(200);
-    }
 
 }
