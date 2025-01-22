@@ -78,23 +78,16 @@ jobs:
     name: Test Backend
     runs-on: ubuntu-latest
 
-    env:
-      DB_CONNECTION: pgsql
-      DB_PORT: 5432
-      DB_DATABASE: geoprofs
-      DB_USERNAME: postgres
-      DB_PASSWORD: postgres
-
     services:
       postgres:
         image: postgres:17
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: secret
           POSTGRES_DB: geoprofs
         ports:
         - 5432:5432
-        options: --health-cmd pg_isready --health-interval 3s --health-timeout 5s --health-retries 10
+        options: --health-cmd pg_isready --health-interval 1s --health-timeout 5s --health-retries 20
 
     steps:
       - uses: actions/checkout@v4
@@ -107,6 +100,8 @@ jobs:
       - name: Test Backend
         run: |
           cd back-end
+          
+          cp .env.example .env
           
           composer install
           
