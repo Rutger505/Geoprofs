@@ -41,7 +41,7 @@ test.describe("User", () => {
     await expect(page.getByRole("paragraph")).toContainText("Medewerker geregistreerd!");
   });
 
-  test('test', async ({ page }) => {
+  test('should change user last name', async ({ page }) => {
   // arrange
     await page.goto("/");
 
@@ -62,5 +62,11 @@ test.describe("User", () => {
     await page.locator('form').filter({ hasText: 'EmailVoornaamAchternaamOpslaan' }).getByRole('button').click();
 
     await expect(page.locator('h1')).toContainText(newName);
+
+    // reset
+    await page.getByLabel('Achternaam').fill('Example');
+    await page.locator('form').filter({ hasText: 'EmailVoornaamAchternaamOpslaan' }).getByRole('button').click();
+
+    await expect(page.locator('h1')).toContainText('Example');
   });
 });
