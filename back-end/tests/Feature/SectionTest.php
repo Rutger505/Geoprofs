@@ -91,7 +91,7 @@ class sectionTest extends TestCase
 
         $response = $this->postJson("/api/sections/users", $credentials);
 
-        $response->assertStatus(200);
+        $response->assertStatus(204);
     }
 
 

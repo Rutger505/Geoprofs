@@ -13,7 +13,7 @@ class UserTest extends TestCase
      */
     public function test_hours(): void
     {
-        $response = $this->get('api/user/1/hours');
+        $response = $this->get('api/users/1/hours');
 
         $response->assertStatus(200);
     }

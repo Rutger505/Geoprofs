@@ -86,7 +86,7 @@ jobs:
           POSTGRES_PASSWORD: secret
           POSTGRES_DB: geoprofs
         ports:
-        - 5432:5432
+          - 5432:5432
         options: --health-cmd pg_isready --health-interval 1s --health-timeout 5s --health-retries 20
 
     steps:
