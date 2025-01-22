@@ -1,0 +1,23 @@
+{
+  "name": "geoprofs",
+  "version": "1.0.0",
+  "description": "School project, Web-application made with Next.js and Laravel for managing leave requests for the Geoprofs company.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rutger505/Geoprofs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rutger505/Geoprofs/issues"
+  },
+  "homepage": "https://github.com/Rutger505/Geoprofs#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.7"
+  }
+}

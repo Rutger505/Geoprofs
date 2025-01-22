@@ -1,4 +1,4 @@
-import { RegisterEmployeeForm } from "@/components/Admin/RegisterEmployee/RegisterEmployeeForm";
+import { RegisterEmployeeForm } from "@/components/Admin/Employees/RegisterEmployee/RegisterEmployeeForm";
 import axios from "@/lib/axios";
 import { Contract, getContracts } from "@/lib/models/contract";
 

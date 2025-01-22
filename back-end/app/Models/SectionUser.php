@@ -20,4 +20,8 @@ class SectionUser extends Model
         return $this->belongsTo(User::class, 'userId', 'id');
     }
 
+    public function section(): BelongsTo
+    {
+        return $this->belongsTo(Sections::class, 'sectionId', 'id');
+    }
 }
