@@ -40,10 +40,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: List files in workspace
+        run: ls -R /github/workspace
+
       - name: Composer install
         uses: php-actions/composer@v6
         with:
-          container_workdir: /github/workspace/Geoprofs/back-end
+          container_workdir: /github/workspace/back-end
 
       - name: PHPUnit
         uses: php-actions/phpunit@v4
