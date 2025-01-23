@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 
+const randomEmail = () => `test-${Math.random().toString(36).substring(2)}@example.com`;
+const randomString = () => `${Math.random().toString(36).substring(2)}`;
+
 async function loginAsAdmin(page) {
  await page.goto("/");
  await page.getByLabel("Email").fill("admin@example.com"); 
