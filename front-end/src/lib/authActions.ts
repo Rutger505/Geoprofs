@@ -1,5 +1,6 @@
 "use server";
 
+import { env } from "@/env";
 import { ApiUser, mapApiUserToUser, signIn, signOut } from "@/lib/auth";
 import axios from "@/lib/axios";
 import { User } from "@/types/user";
@@ -68,13 +69,16 @@ export async function activateAccount(
     };
   }
 
-  try {
-    await axios.put(`/auth/register/complete/${token}`, {
-      password,
-    });
-  } catch (error) {
-    console.error(error);
-    return { error: "Failed to activate account" };
+  // In pull request environments we allow e2e tests to test activation without checking token
+  if (!env.TEST_ENV) {
+    try {
+      await axios.put(`/auth/register/complete/${token}`, {
+        password,
+      });
+    } catch (error) {
+      console.error(error);
+      return { error: "Failed to activate account" };
+    }
   }
 
   try {

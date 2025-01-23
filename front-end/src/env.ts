@@ -6,7 +6,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "production", "test"]),
     BACKEND_URL: z.string().url(),
     AUTH_SECRET: z.string(),
-    TEST_ENV: z.boolean().optional().default(false),
+    TEST_ENV: z.coerce.boolean().optional().default(false),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
