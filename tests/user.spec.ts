@@ -4,9 +4,7 @@ const randomString = () => `${Math.random().toString(36).substring(2)}`;
 import { expect, test } from "@playwright/test";
 
 test.describe("User", () => {
-  test("should be able to register user", async ({
-                                                   page
-                                                 }) => {
+  test("should be able to register user", async ({ page }) => {
     // arrange
     await page.goto("/");
 
@@ -41,8 +39,8 @@ test.describe("User", () => {
     await expect(page.getByRole("paragraph")).toContainText("Medewerker geregistreerd!");
   });
 
-  test('should change user last name', async ({ page }) => {
-  // arrange
+  test("should change user last name", async ({ page }) => {
+    // arrange
     await page.goto("/");
 
     // login
@@ -54,19 +52,49 @@ test.describe("User", () => {
     await page.getByRole("link", { name: "Werknemers" }).click();
 
 
-    await page.locator('div').filter({ hasText: /^Employee Example$/ }).getByRole('link').click();
+    await page.locator("div").filter({ hasText: /^Employee Example$/ }).getByRole("link").click();
 
     const newName = randomString();
-    await page.getByLabel('Achternaam').fill(newName);
+    await page.getByLabel("Achternaam").fill(newName);
 
-    await page.locator('form').filter({ hasText: 'EmailVoornaamAchternaamOpslaan' }).getByRole('button').click();
+    await page.locator("form").filter({ hasText: "EmailVoornaamAchternaamOpslaan" }).getByRole("button").click();
 
-    await expect(page.locator('h1')).toContainText(newName);
+    await expect(page.locator("h1")).toContainText(newName);
 
     // reset
-    await page.getByLabel('Achternaam').fill('Example');
-    await page.locator('form').filter({ hasText: 'EmailVoornaamAchternaamOpslaan' }).getByRole('button').click();
+    await page.getByLabel("Achternaam").fill("Example");
+    await page.locator("form").filter({ hasText: "EmailVoornaamAchternaamOpslaan" }).getByRole("button").click();
 
-    await expect(page.locator('h1')).toContainText('Example');
+    await expect(page.locator("h1")).toContainText("Example");
+  });
+
+  test("should save section selection", async ({ page }) => {
+    await page.goto("/");
+    await page.getByLabel("Email").fill("admin@example.com");
+    await page.getByLabel("Wachtwoord").fill("secret");
+    await page.getByRole("button", { name: "Inloggen" }).click();
+
+    await page.getByRole("link", { name: "Werknemers" }).click();
+    await page.locator("div").filter({ hasText: /^Employee Example$/ }).getByRole("link").click();
+
+    await page.getByLabel("Sectie").selectOption("1");
+    await page.getByRole("button", { name: "Opslaan" }).first().click();
+
+    await expect(page.getByLabel("Sectie")).toHaveValue("1");
+  });
+
+  test("should save project selection", async ({ page }) => {
+    await page.goto("/");
+    await page.getByLabel("Email").fill("admin@example.com");
+    await page.getByLabel("Wachtwoord").fill("secret");
+    await page.getByRole("button", { name: "Inloggen" }).click();
+
+    await page.getByRole("link", { name: "Werknemers" }).click();
+    await page.locator("div").filter({ hasText: /^Employee Example$/ }).getByRole("link").click();
+
+    await page.getByLabel("Project").selectOption("1");
+    await page.getByRole("button", { name: "Opslaan" }).nth(1).click();
+
+    await expect(page.getByLabel("Project")).toHaveValue("1");
   });
 });

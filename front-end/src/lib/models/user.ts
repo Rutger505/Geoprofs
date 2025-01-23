@@ -10,8 +10,6 @@ export async function updateUserInformation({
   id,
   ...data
 }: UpdateUserInformationInput) {
-  console.log(data);
-
   await axios.put(`/users/${id}`, data);
 }
 
