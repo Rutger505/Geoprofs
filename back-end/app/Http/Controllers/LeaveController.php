@@ -52,11 +52,10 @@ class LeaveController extends Controller
             ->get();
 
         $leave_hours = 0;
-        foreach ($leave_requests as $leave) {
+        foreach ($leave_requests[0]->leave as $leave) {
             $start = Carbon::parse($leave->startDate);
             $end = Carbon::parse($leave->endDate);
 
-            // Calculate total hours between start and end
             $leaveHours = $start->diffInHours($end);
             $leave_hours += $leaveHours;
         }
@@ -68,7 +67,7 @@ class LeaveController extends Controller
 
 
         return response()->json([
-            'hours' => round($remaining_hours)
+            'hours' => round($remaining_hours),
         ]);
     }
 
