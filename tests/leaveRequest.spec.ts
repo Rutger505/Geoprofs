@@ -1,10 +1,32 @@
-import {test} from '@playwright/test';
-import {loginAsMedewerker} from './auth.spec';
+import {expect, test} from '@playwright/test';
+import {loginAsMedewerker} from './components/employeeLogin';
 
-test.describe('Admin Actions', () => {
-    test('should successfully login and access the dashboard', async ({page}) => {
-        await loginAsMedewerker(page);
-        // Additional assertions or actions for this test
+test.describe('Verlof verzoek', () => {
+    test('request leave', async ({page}) => {
+
+        await loginAsMedewerker(page, 'secret');
+
+
+        await page.getByRole('link', {name: 'Verlofverzoeken'}).click();
+
+        await page.getByText("Nieuw Verlofverzoek").click();
+
+        await page.getByLabel('Startdatum').fill('2030-01-01');
+
+
+        await page.getByLabel('Einddatum').fill('2030-01-02');
+
+        await page.getByLabel('Categorie').selectOption({label: 'Ziek'});
+
+        await page.getByLabel('Reden').fill('Koorst heeft mij weer te pakken');
+
+        await page.getByText('Verlof aanvragen').click();
+
+        await expect(
+            await page.getByText('Verlofaanvraag')
+        ).toBeVisible();
+
+
     });
 
 
