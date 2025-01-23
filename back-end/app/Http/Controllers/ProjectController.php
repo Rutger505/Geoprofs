@@ -95,14 +95,11 @@ class ProjectController extends Controller
         return response()->json($users);
     }
 
-    public function getAllLeaveFromProject(Request $request)
+    public function getAllLeaveFromProject(Request $request, $projectId)
     {
-        $request->validate([
-            'projectId' => 'required|int',
-        ]);
 
 
-        $usersWithLeave = ProjectUser::where('projectId', $request['projectId'])
+        $usersWithLeave = ProjectUser::where('projectId', $projectId)
             ->with(['user.leave'])
             ->get()
             ->pluck('user');
