@@ -9,7 +9,7 @@ class LeaveCategory extends Model
 {
 
     protected $table = 'leave_category';
-    protected  $fillable = ['name', 'isPaidLeave'];
+    protected $fillable = ['name', 'isPaidLeave'];
 
     use HasFactory;
 }

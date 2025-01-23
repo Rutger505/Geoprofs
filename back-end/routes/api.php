@@ -43,6 +43,12 @@ Route::prefix('/roles')->group(function (): void {
 });
 
 Route::prefix('/leave')->group(function (): void {
+    Route::prefix('/category')->group(function (): void {
+        Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
+        Route::get('/', [LeaveCategoryController::class, 'getLeaveCategories']);
+        Route::delete('/{leaveCategoryId}', [LeaveCategoryController::class, 'deleteLeaveCategory']);
+    });
+
     Route::post('/', [LeaveController::class, 'storeLeaveRequest']);
 
     Route::get('/{userId}', [LeaveController::class, 'getLeaveRequests']);
@@ -51,12 +57,6 @@ Route::prefix('/leave')->group(function (): void {
 
     Route::put('/{leaveId}', [LeaveController::class, 'updateLeaveStatus']);
     Route::delete('/{leaveId}', [LeaveController::class, 'deleteLeave']);
-
-    Route::prefix('/category')->group(function (): void {
-        Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
-        Route::get('/', [LeaveCategoryController::class, 'getLeaveCategories']);
-        Route::delete('/{leaveCategoryId}', [LeaveCategoryController::class, 'deleteLeaveCategory']);
-    });
 });
 
 //contract moet gefixed worden
