@@ -1,5 +1,4 @@
 import { ActivateAccountForm } from "@/components/Auth/ActivateAccountForm";
-import { env } from "@/env";
 import { auth } from "@/lib/auth";
 import { getPendingAccount } from "@/lib/authActions";
 import { redirect } from "next/navigation";
@@ -12,14 +11,6 @@ export default async function CompletePage({
   const session = await auth();
   if (session) {
     redirect("/dashboard");
-  }
-
-  if (env.TEST_ENV) {
-    return (
-      <main className={"flex flex-col justify-center gap-20"}>
-        De website is in test modes.
-      </main>
-    );
   }
 
   const token = (await params).token;
