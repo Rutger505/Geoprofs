@@ -51,7 +51,14 @@ class LeaveController extends Controller
             ->with(['leave', 'leave.category'])
             ->get();
 
+        $contact = User::where('id', $user->id)->with('contract')->first();
+
+        if ($leave_requests->isEmpty()) {
+            return response()->json(['hours' => $contact->contract->totalLeaveHours]);
+        }
+
         $leave_hours = 0;
+
         foreach ($leave_requests[0]->leave as $leave) {
             $start = Carbon::parse($leave->startDate);
             $end = Carbon::parse($leave->endDate);
@@ -60,8 +67,6 @@ class LeaveController extends Controller
             $leave_hours += $leaveHours;
         }
 
-
-        $contact = User::where('id', $user->id)->with('contract')->first();
 
         $remaining_hours = $contact->contract->totalLeaveHours - $leave_hours;
 
