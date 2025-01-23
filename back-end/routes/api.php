@@ -10,6 +10,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health', [HealthController::class, 'index']);
@@ -24,8 +25,18 @@ Route::prefix('/auth')->group(function (): void {
     Route::put('/register/complete/{token}', [RegistrationController::class, 'register']);
 });
 
-Route::prefix('/user/{user}')->group(function (): void {
-    Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+Route::prefix('/users')->group(function (): void {
+    Route::get('/', [UserController::class, 'index']);
+
+    Route::prefix('/{user}')->group(function (): void {
+        Route::get('/', [UserController::class, 'show']);
+        Route::put('/', [UserController::class, 'update']);
+
+        Route::get('/hours', [LeaveController::class, 'getLeaveHours']);
+
+        Route::get('/section', [UserController::class, 'getSection']);
+        Route::get('/project', [UserController::class, 'getProject']);
+    });
 });
 
 Route::prefix('/roles')->group(function (): void {
@@ -33,6 +44,12 @@ Route::prefix('/roles')->group(function (): void {
 });
 
 Route::prefix('/leave')->group(function (): void {
+    Route::prefix('/category')->group(function (): void {
+        Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
+        Route::get('/', [LeaveCategoryController::class, 'getLeaveCategories']);
+        Route::delete('/{leaveCategoryId}', [LeaveCategoryController::class, 'deleteLeaveCategory']);
+    });
+
     Route::post('/', [LeaveController::class, 'storeLeaveRequest']);
 
     Route::get('/{userId}', [LeaveController::class, 'getLeaveRequests']);
@@ -41,15 +58,9 @@ Route::prefix('/leave')->group(function (): void {
 
     Route::put('/{leaveId}', [LeaveController::class, 'updateLeaveStatus']);
     Route::delete('/{leaveId}', [LeaveController::class, 'deleteLeave']);
-
-    Route::prefix('/category')->group(function (): void {
-        Route::post('/', [LeaveCategoryController::class, 'createLeaveCategory']);
-        Route::get('/', [LeaveCategoryController::class, 'getLeaveCategories']);
-        Route::delete('/{leaveCategoryId}', [LeaveCategoryController::class, 'deleteLeaveCategory']);
-    });
 });
 
-
+//contract moet gefixed worden
 Route::prefix('/contract')->group(function () {
     Route::post('/store', [ContractController::class, 'store']);
     Route::get('/show', [ContractController::class, 'show']);
@@ -70,13 +81,11 @@ Route::prefix('projects')->group(function () {
     });
 
     Route::get('/leave/{projectId}', [ProjectController::class, 'getAllLeaveFromProject']);
-
 });
 
 Route::prefix('sections')->group(function () {
     Route::post('/', [SectionController::class, 'store']);
     Route::get('/', [SectionController::class, 'show']);
-
     Route::delete('/{sectionId}', [SectionController::class, 'delete']);
     Route::put('/{sectionId}', [SectionController::class, 'update']);
 
@@ -85,7 +94,6 @@ Route::prefix('sections')->group(function () {
         Route::delete('/{sectionId}', [SectionController::class, 'removeUserFromSection']);
         Route::get('/{sectionId}', [SectionController::class, 'showUsers']);
     });
-
 
     Route::get('/leave/{sectionId}', [SectionController::class, 'getAllLeaveFromSection']);
 
@@ -97,3 +105,4 @@ Route::prefix('/ceo')->group(function () {
 
     Route::get('/project', [CeoController::class, 'showProject']);
 });
+

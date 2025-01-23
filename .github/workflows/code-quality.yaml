@@ -3,6 +3,52 @@ name: Code Quality
 on: push
 
 jobs:
+  next-lint:
+    name: Run next lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: front-end/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./front-end
+        run: npm ci
+
+      - name: Run next lint
+        working-directory: ./front-end
+        run: npm run lint
+
+  typescript-check:
+    name: Run typescript check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: front-end/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./front-end
+        run: npm ci
+
+      - name: Run typescript check
+        working-directory: ./front-end
+        run: npx tsc --noEmit
+
   test-front-end:
     name: Test Frontend
     runs-on: ubuntu-latest
@@ -33,9 +79,45 @@ jobs:
           name: coverage
           path: front-end/coverage
 
+  test-back-end:
+    name: Test Backend
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: geoprofs
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 1s --health-timeout 5s --health-retries 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          coverage: none
+
+      - name: Test Backend
+        run: |
+          cd back-end
+          
+          cp .env.example .env
+          
+          composer install
+          
+          php artisan db:create
+          php artisan migrate
+          php artisan db:seed
+          
+          php artisan test
 
   sonar:
-    needs: [test-front-end]
+    needs: [ test-front-end ]
     if: always()
     name: SonarQube Cloud Analysis
     runs-on: ubuntu-latest

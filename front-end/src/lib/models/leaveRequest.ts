@@ -1,8 +1,9 @@
-import { auth } from "@/lib/auth";
+"use server";
 import axios from "@/lib/axios";
 import {
   differenceInBusinessDays,
   differenceInHours,
+  format,
   isSameDay,
 } from "date-fns";
 
@@ -25,15 +26,6 @@ export interface LeaveRequest {
   updatedAt: Date | null;
 }
 
-export function getStatusTranslation(status: LeaveRequestStatus) {
-  const statusMap = {
-    accepted: "Geaccepteerd",
-    denied: "Geweigerd",
-    pending: "In afwachting",
-  };
-  return statusMap[status];
-}
-
 function getLeaveDuration(start: Date, end: Date): number {
   if (isSameDay(start, end)) {
     return differenceInHours(end, start);
@@ -42,15 +34,12 @@ function getLeaveDuration(start: Date, end: Date): number {
   return differenceInBusinessDays(end, start) * 8;
 }
 
-export async function getUsersLeaveRequests(): Promise<LeaveRequest[]> {
-  const session = await auth();
-  if (!session) {
-    throw new Error("User not authenticated");
-  }
-
+export async function getUsersLeaveRequests(
+  userId: string,
+): Promise<LeaveRequest[]> {
   const leaveRequestsResposne = await axios.get<
     Omit<LeaveRequest[], "durationHours">
-  >(`/leave/leave-requests?userId=${session.user.id}`);
+  >(`/leave/${userId}`);
 
   return leaveRequestsResposne.data
     .map((leaveRequest) => ({
@@ -68,4 +57,20 @@ export async function getUsersLeaveRequests(): Promise<LeaveRequest[]> {
         leaveRequest.endDate,
       ),
     }));
+}
+
+export async function createLeaveRequest(
+  userId: string,
+  startDate: Date,
+  endDate: Date,
+  reason: string,
+  categoryId: number,
+) {
+  await axios.post("/leave", {
+    userId,
+    startDate: format(startDate, "dd-MM-yyyy"),
+    endDate: format(endDate, "dd-MM-yyyy"),
+    reason,
+    categoryId,
+  });
 }

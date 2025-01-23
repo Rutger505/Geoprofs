@@ -18,8 +18,8 @@ type NavigationPerRole = {
 export const navigationPerRole: NavigationPerRole = {
   Employee: [
     { name: "Dashboard", href: "/dashboard" },
-    { name: "Aanvragen", href: "#" },
-    { name: "Verlofsaldo", href: "#" },
+    { name: "Verlofverzoeken", href: "/leave-requests" },
+    { name: "Verlofsaldo", href: "/leave-hours" },
   ],
   SectionManager: [
     { name: "Aanvragen", href: "#" },

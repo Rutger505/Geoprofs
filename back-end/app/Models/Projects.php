@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Projects extends Model
 {
-    protected $primaryKey = 'projectId';
+    protected $primaryKey = 'id';
     protected $fillable = ['name'];
     use HasFactory;
 
