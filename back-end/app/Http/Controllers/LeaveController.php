@@ -41,29 +41,35 @@ class LeaveController extends Controller
 
     public function getLeaveHours(User $user)
     {
-
-
         $leave_requests = User::where('id', $user->id)
             ->whereHas('leave', function ($query) {
                 $query->where('status', 'accepted');
             })
-            ->with('leave')
+            ->whereHas('leave.category', function ($query) {
+                $query->where('isPaidLeave', true);
+            })
+            ->with(['leave', 'leave.category'])
             ->get();
 
         $leave_hours = 0;
         foreach ($leave_requests as $leave) {
-
             $start = Carbon::parse($leave->startDate);
             $end = Carbon::parse($leave->endDate);
 
-            $leave_hours = $leave_hours + round($start->diffInDays($end));
+            // Calculate total hours between start and end
+            $leaveHours = $start->diffInHours($end);
+            $leave_hours += $leaveHours;
         }
 
-        $contact = User::where('id', $user->id)->with('contract')->get();
 
-        $contact_hours = $contact->contract->totalLeaveHours - $leave_hours;
+        $contact = User::where('id', $user->id)->with('contract')->first();
 
-        return response()->json(['hours' => [$leave, $contact]]);
+        $remaining_hours = $contact->contract->totalLeaveHours - $leave_hours;
+
+
+        return response()->json([
+            'hours' => round($remaining_hours)
+        ]);
     }
 
     public function getLeaveRequests($userId)
