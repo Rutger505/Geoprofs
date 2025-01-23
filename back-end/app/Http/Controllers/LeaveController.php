@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contracts;
 use App\Models\Leave;
 use App\Models\User;
 use Carbon\Carbon;
@@ -42,13 +41,29 @@ class LeaveController extends Controller
 
     public function getLeaveHours(User $user)
     {
-        $contract = Contracts::join('user_contract', 'contracts.id', '=', 'user_contract.contractId')
-            ->where('user_contract.userId', $user->id)
-            ->select('contracts.*')
-            ->first();
 
 
-        return response()->json(['hours' => $contract->totalLeaveHours]);
+        $leave_requests = User::where('id', $user->id)
+            ->whereHas('leave', function ($query) {
+                $query->where('status', 'accepted');
+            })
+            ->with('leave')
+            ->get();
+
+        $leave_hours = 0;
+        foreach ($leave_requests as $leave) {
+
+            $start = Carbon::parse($leave->startDate);
+            $end = Carbon::parse($leave->endDate);
+
+            $leave_hours = $leave_hours + round($start->diffInDays($end));
+        }
+
+        $contact = User::where('id', $user->id)->with('contract')->get();
+
+        $contact_hours = $contact->contract->totalLeaveHours - $leave_hours;
+
+        return response()->json(['hours' => [$leave, $contact]]);
     }
 
     public function getLeaveRequests($userId)
@@ -80,6 +95,7 @@ class LeaveController extends Controller
         Leave::where('id', $leaveId)->update([
             'status' => $request['status'],
         ]);
+
 
         return response()->json(['message' => 'Leave status updated']);
     }

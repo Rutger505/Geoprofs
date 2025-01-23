@@ -90,4 +90,16 @@ class User extends Model
             'projectId'
         );
     }
+
+    public function contract(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Contracts::class,
+            UserContract::class,
+            'userId',
+            'id',
+            'id',
+            'contractId'
+        );
+    }
 }
