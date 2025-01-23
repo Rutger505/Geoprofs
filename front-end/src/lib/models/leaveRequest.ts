@@ -1,5 +1,6 @@
 "use server";
 import axios from "@/lib/axios";
+import { getUserSection } from "@/lib/models/section";
 import {
   differenceInBusinessDays,
   differenceInHours,
@@ -59,6 +60,20 @@ export async function getUsersLeaveRequests(
     }));
 }
 
+export async function getSectionManagerLeaveRequests(
+  userId: string,
+): Promise<LeaveRequest[]> {
+  const section = await getUserSection(userId);
+
+  const leaveRequestsResposne = await axios.get<LeaveRequest[]>(
+    `/sections/leave/${section.id}`,
+  );
+
+  console.log(leaveRequestsResposne.data);
+
+  return leaveRequestsResposne.data;
+}
+
 export async function createLeaveRequest(
   userId: string,
   startDate: Date,
@@ -72,5 +87,17 @@ export async function createLeaveRequest(
     endDate: format(endDate, "dd-MM-yyyy"),
     reason,
     categoryId,
+  });
+}
+
+export async function acceptLeaveRequest(leaveRequestId: number) {
+  await axios.put(`/leave/${leaveRequestId}`, {
+    status: "accepted",
+  });
+}
+
+export async function denyLeaveRequest(leaveRequestId: number) {
+  await axios.put(`/leave/${leaveRequestId}`, {
+    status: "denied",
   });
 }
