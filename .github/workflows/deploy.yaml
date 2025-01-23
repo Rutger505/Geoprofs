@@ -27,6 +27,7 @@ jobs:
       laravel_app_env: ${{ steps.config.outputs.laravel_app_env }}
       laravel_app_debug: ${{ steps.config.outputs.laravel_app_debug }}
       laravel_log_level: ${{ steps.config.outputs.laravel_log_level }}
+      next_test_env: ${{ steps.config.outputs.next_test_env }}
 
     steps:
       - name: Checkout repository
@@ -65,6 +66,7 @@ jobs:
             LARAVEL_APP_ENV="development"
             LARAVEL_APP_DEBUG="true"
             LARAVEL_LOG_LEVEL="debug"
+            NEXT_TEST_ENV="true"
           fi
           
           source ./application.env
@@ -80,6 +82,7 @@ jobs:
           echo "laravel_app_env=$LARAVEL_APP_ENV" >> $GITHUB_OUTPUT
           echo "laravel_app_debug=$LARAVEL_APP_DEBUG" >> $GITHUB_OUTPUT
           echo "laravel_log_level=$LARAVEL_LOG_LEVEL" >> $GITHUB_OUTPUT
+          echo "next_test_env=$NEXT_TEST_ENV" >> $GITHUB_OUTPUT
           
           cat $GITHUB_OUTPUT
 
@@ -159,6 +162,10 @@ jobs:
               "mail_address": "${{ secrets.LARAVEL_MAIL_ADDRESS }}",
               "mail_password": "${{ secrets.LARAVEL_MAIL_PASSWORD }}",
               "auth_secret": "${{ secrets.AUTH_SECRET }}"
+            }
+          TF_VAR_next_config: >-
+            {
+              "test_env": "${{ needs.configure.outputs.next_test_env }}"
             }
           TF_VAR_postgres_config: >-
             {

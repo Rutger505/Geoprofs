@@ -31,6 +31,7 @@ resource "kubernetes_config_map" "app" {
     NEXT_PUBLIC_BACKEND_URL = "https://${var.hostname}/api"
     BACKEND_URL            = "http://${var.application_name}-backend-service.${kubernetes_namespace.app.metadata[0].name}.svc.cluster.local/api"
     AUTH_TRUST_HOST        = "true"
+    TEST_ENV               = var.next_config.test_env
   }
 }
 

@@ -41,6 +41,13 @@ variable "laravel_config" {
   })
 }
 
+variable "next_config" {
+  description = "Redis configuration"
+  type = object({
+    test_env = bool
+  })
+}
+
 variable "postgres_config" {
   description = "PostgreSQL configuration"
   type = object({
