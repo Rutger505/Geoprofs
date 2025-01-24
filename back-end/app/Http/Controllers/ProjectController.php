@@ -100,7 +100,8 @@ class ProjectController extends Controller
         $usersWithLeave = ProjectUser::where('projectId', $projectId)
             ->with(['user.leave.category'])
             ->get()
-            ->pluck('user');
+            ->pluck('user.leave')
+            ->flatten();
 
         return response()->json($usersWithLeave, 200);
     }

@@ -1,7 +1,6 @@
 "use server";
 import axios from "@/lib/axios";
 import { getUserSection } from "@/lib/models/section";
-import { User } from "@/types/user";
 import {
   differenceInBusinessDays,
   differenceInHours,
@@ -26,10 +25,6 @@ export interface LeaveRequest {
   durationHours: number;
   category: LeaveRequestCategory;
   updatedAt: Date | null;
-}
-
-interface UserWithLeaveRequests extends User {
-  leave: LeaveRequest[];
 }
 
 function getLeaveDuration(start: Date, end: Date): number {
@@ -63,23 +58,23 @@ export async function getUsersLeaveRequests(
     Omit<LeaveRequest[], "durationHours">
   >(`/leave/${userId}`);
 
-  return leaveRequestsResponse.data.map(mapLeaveRequestDates);
+  return leaveRequestsResponse.data
+    .map(mapLeaveRequestDates)
+    .sort(sortLeaveRequestsByDate);
 }
 
 export async function getSectionManagerLeaveRequests(
   userId: string,
-): Promise<UserWithLeaveRequests[]> {
+): Promise<LeaveRequest[]> {
   const section = await getUserSection(userId);
 
-  const leaveRequestsResponse = await axios.get<UserWithLeaveRequests[]>(
+  const leaveRequestsResponse = await axios.get<LeaveRequest[]>(
     `/sections/leave/${section.id}`,
   );
 
-  // Map each user and their leave requests
-  return leaveRequestsResponse.data.map((user) => ({
-    ...user,
-    leave: user.leave.map(mapLeaveRequestDates),
-  }));
+  return leaveRequestsResponse.data
+    .map(mapLeaveRequestDates)
+    .sort(sortLeaveRequestsByDate);
 }
 
 export async function createLeaveRequest(
@@ -108,4 +103,8 @@ export async function denyLeaveRequest(leaveRequestId: number) {
   await axios.put(`/leave/${leaveRequestId}`, {
     status: "denied",
   });
+}
+
+function sortLeaveRequestsByDate(a: LeaveRequest, b: LeaveRequest) {
+  return a.startDate.getTime() - b.startDate.getTime();
 }
