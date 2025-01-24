@@ -1,6 +1,7 @@
 "use server";
 import axios from "@/lib/axios";
 import { getUserSection } from "@/lib/models/section";
+import { User } from "@/types/user";
 import {
   differenceInBusinessDays,
   differenceInHours,
@@ -27,6 +28,10 @@ export interface LeaveRequest {
   updatedAt: Date | null;
 }
 
+interface UserWithLeaveRequests extends User {
+  leave: LeaveRequest[];
+}
+
 function getLeaveDuration(start: Date, end: Date): number {
   if (isSameDay(start, end)) {
     return differenceInHours(end, start);
@@ -35,43 +40,46 @@ function getLeaveDuration(start: Date, end: Date): number {
   return differenceInBusinessDays(end, start) * 8;
 }
 
+function mapLeaveRequestDates(
+  leaveRequest: Omit<LeaveRequest, "durationHours">,
+): LeaveRequest {
+  // First convert the dates to ensure we're working with Date objects
+  const startDate = new Date(leaveRequest.startDate);
+  const endDate = new Date(leaveRequest.endDate);
+
+  return {
+    ...leaveRequest,
+    startDate,
+    endDate,
+    updatedAt: leaveRequest.updatedAt ? new Date(leaveRequest.updatedAt) : null,
+    durationHours: getLeaveDuration(startDate, endDate),
+  };
+}
+
 export async function getUsersLeaveRequests(
   userId: string,
 ): Promise<LeaveRequest[]> {
-  const leaveRequestsResposne = await axios.get<
+  const leaveRequestsResponse = await axios.get<
     Omit<LeaveRequest[], "durationHours">
   >(`/leave/${userId}`);
 
-  return leaveRequestsResposne.data
-    .map((leaveRequest) => ({
-      ...leaveRequest,
-      startDate: new Date(leaveRequest.startDate),
-      endDate: new Date(leaveRequest.endDate),
-      updatedAt: leaveRequest.updatedAt
-        ? new Date(leaveRequest.updatedAt)
-        : null,
-    }))
-    .map((leaveRequest) => ({
-      ...leaveRequest,
-      durationHours: getLeaveDuration(
-        leaveRequest.startDate,
-        leaveRequest.endDate,
-      ),
-    }));
+  return leaveRequestsResponse.data.map(mapLeaveRequestDates);
 }
 
 export async function getSectionManagerLeaveRequests(
   userId: string,
-): Promise<LeaveRequest[]> {
+): Promise<UserWithLeaveRequests[]> {
   const section = await getUserSection(userId);
 
-  const leaveRequestsResposne = await axios.get<LeaveRequest[]>(
+  const leaveRequestsResponse = await axios.get<UserWithLeaveRequests[]>(
     `/sections/leave/${section.id}`,
   );
 
-  console.log(leaveRequestsResposne.data);
-
-  return leaveRequestsResposne.data;
+  // Map each user and their leave requests
+  return leaveRequestsResponse.data.map((user) => ({
+    ...user,
+    leave: user.leave.map(mapLeaveRequestDates),
+  }));
 }
 
 export async function createLeaveRequest(

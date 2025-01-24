@@ -102,14 +102,11 @@ class SectionController extends Controller
 
     public function getAllLeaveFromSection($sectionId)
     {
-
         $usersWithLeave = SectionUser::where('sectionId', $sectionId)
-            ->with(['user.leave'])
+            ->with(['user.leave.category'])
             ->get()
             ->pluck('user');
 
-        return response()->json([$usersWithLeave], 200);
+        return response()->json($usersWithLeave, 200);
     }
-
-
 }

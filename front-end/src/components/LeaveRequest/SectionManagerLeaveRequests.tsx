@@ -9,19 +9,23 @@ export async function SectionManagerLeaveRequests() {
     redirect("/");
   }
 
-  const leaveRequests = await getSectionManagerLeaveRequests(session.user.id);
+  const usersWithLeaveRequests = await getSectionManagerLeaveRequests(
+    session.user.id,
+  );
 
   return (
     <section className={"grid w-96 gap-3"}>
-      {leaveRequests.length ? (
-        leaveRequests.map((request) => (
-          <LeaveRequest
-            key={request.id}
-            request={request}
-            expanded={true}
-            showActions={true}
-          />
-        ))
+      {usersWithLeaveRequests.length ? (
+        usersWithLeaveRequests.map((user) =>
+          user.leave.map((request) => (
+            <LeaveRequest
+              key={request.id}
+              request={request}
+              expanded={true}
+              showActions={true}
+            />
+          )),
+        )
       ) : (
         <div className={"text-gray-400"}>Geen verlofverzoeken</div>
       )}
