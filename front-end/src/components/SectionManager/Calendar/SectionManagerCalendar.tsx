@@ -4,7 +4,8 @@ import {
   getSectionManagerLeaveRequests,
   LeaveRequest,
 } from "@/lib/models/leaveRequest";
-import { getUserSection, getUsersInSection } from "@/lib/models/section";
+import { getUsersInSection } from "@/lib/models/section";
+import { getUserSection } from "@/lib/models/user";
 import { redirect } from "next/navigation";
 
 interface LeavesPerUser {
