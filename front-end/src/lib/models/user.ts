@@ -33,6 +33,11 @@ export async function getUserSection(userId: string) {
 
 export async function getUserProject(userId: string) {
   const res = await axios.get<Project | {}>(`/users/${userId}/project`);
+
+  if (!("id" in res.data)) {
+    return null;
+  }
+
   return res.data;
 }
 
