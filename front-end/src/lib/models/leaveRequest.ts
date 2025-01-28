@@ -1,7 +1,6 @@
 "use server";
 import axios from "@/lib/axios";
-import { getUserSection } from "@/lib/models/section";
-import { getUserProject } from "@/lib/models/user";
+import { getUserProject, getUserSection } from "@/lib/models/user";
 import {
   differenceInBusinessDays,
   differenceInHours,
@@ -69,6 +68,10 @@ export async function getSectionManagerLeaveRequests(
   userId: string,
 ): Promise<LeaveRequest[]> {
   const section = await getUserSection(userId);
+
+  if (!section) {
+    return [];
+  }
 
   const leaveRequestsResponse = await axios.get<LeaveRequest[]>(
     `/sections/leave/${section.id}`,
