@@ -1,5 +1,5 @@
 "use client";
-import { createSection } from "@/app/admin/sections/create/create-section";
+import { createSection } from "@/app/(protected)/admin/sections/create/create-section";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import clsx from "clsx";
 import { useState } from "react";
