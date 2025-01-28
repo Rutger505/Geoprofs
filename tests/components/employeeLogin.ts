@@ -1,4 +1,4 @@
-export async function loginAsMedewerker(page, password: string) {
+export async function loginAsEmployee(page, password: string) {
     await page.goto('/');
     await page.getByLabel('Email').fill('employee@example.com');
     await page.getByLabel('Wachtwoord').fill(password);

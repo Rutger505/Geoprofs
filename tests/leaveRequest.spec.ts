@@ -1,10 +1,10 @@
 import {expect, test} from '@playwright/test';
-import {loginAsMedewerker} from './components/employeeLogin';
+import {loginAsEmployee} from './components/employeeLogin';
 
 test.describe('Verlof verzoek', () => {
     test('request leave', async ({page}) => {
 
-        await loginAsMedewerker(page, 'secret');
+        await loginAsEmployee(page, 'secret');
 
 
         await page.getByRole('link', {name: 'Verlofverzoeken'}).click();
