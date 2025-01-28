@@ -49,7 +49,7 @@ choco install mkcert
 2. In the back-end directory, run `composer install` to install dependencies
 3. In the back-end directory, run `php artisan key:generate` to generate the application key
 4. In the root directory run `make` to start the services (including the database) 
-6. In the back-end directory, run `php artisan db:seed` to seed the database
+5. In the back-end directory, run `php artisan db:seed` to seed the database
 
 ## Troubleshooting
 
