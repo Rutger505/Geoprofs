@@ -32,7 +32,11 @@ export function SwitchModeButton({
   });
 
   return (
-    <button onClick={() => mutate()} className={"flex items-center gap-2"}>
+    <button
+      onClick={() => mutate()}
+      className={"flex items-center gap-2"}
+      title="switchModeButton"
+    >
       <div>
         {roles.map((role, index) => {
           const isActive = useAsEmployee ? index === 0 : index === 1;
