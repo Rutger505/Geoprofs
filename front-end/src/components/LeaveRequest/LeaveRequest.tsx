@@ -1,16 +1,21 @@
+import { LeaveRequestActions } from "@/components/LeaveRequest/LeaveRequestActions";
 import { LeaveRequestDetails } from "@/components/LeaveRequest/LeaveRequestDetails";
 import { StatusIcon } from "@/components/LeaveRequest/StatusIcon";
-import {
-  getStatusTranslation,
-  LeaveRequest as LeaveRequestType,
-} from "@/lib/models/leaveRequest";
+import { LeaveRequest as LeaveRequestType } from "@/lib/models/leaveRequest";
+import { getStatusTranslation } from "@/lib/status";
 import { differenceInHours, format, isSameDay } from "date-fns";
 
 interface Props {
   request: LeaveRequestType;
+  expanded?: boolean;
+  showActions?: boolean;
 }
 
-export function LeaveRequest({ request }: Readonly<Props>) {
+export function LeaveRequest({
+  request,
+  expanded = false,
+  showActions = false,
+}: Readonly<Props>) {
   const formatDateRange = (start: Date, end: Date) => {
     if (isSameDay(start, end)) {
       return `${format(start, "d MMM")} ${differenceInHours(end, start)} uur ${end.getFullYear()}`;
@@ -37,7 +42,11 @@ export function LeaveRequest({ request }: Readonly<Props>) {
           {formatDateRange(request.startDate, request.endDate)}
         </div>
 
-        <LeaveRequestDetails request={request} />
+        <LeaveRequestDetails request={request} expanded={expanded} />
+
+        {showActions && request.status === "pending" && (
+          <LeaveRequestActions request={request} expanded={expanded} />
+        )}
       </div>
     </div>
   );

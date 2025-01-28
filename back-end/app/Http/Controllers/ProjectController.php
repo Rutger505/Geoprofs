@@ -58,10 +58,12 @@ class ProjectController extends Controller
         ]);
 
 
-        if (!Projects::where('id', $request[$request['projectId']])->exists() || !User::where('id', $request['userId'])->exists()) {
+        if (!Projects::where('id', $request['projectId'])->exists() || !User::where('id', $request['userId'])->exists()) {
 
             return response()->json(["message" => "User or project doesn't exist"], 404);
         }
+
+        ProjectUser::where('userId', $request['userId'])->delete();
 
         ProjectUser::create([
             'userId' => $request['userId'],
@@ -93,20 +95,14 @@ class ProjectController extends Controller
         return response()->json($users);
     }
 
-    public function getAllLeaveFromProject(Request $request)
+    public function getAllLeaveFromProject(Request $request, $projectId)
     {
-        $request->validate([
-            'projectId' => 'required|int',
-        ]);
-
-
-        $usersWithLeave = ProjectUser::where('projectId', $request['projectId'])
-            ->with(['user.leave'])
+        $usersWithLeave = ProjectUser::where('projectId', $projectId)
+            ->with(['user.leave.category'])
             ->get()
-            ->pluck('user');
+            ->pluck('user.leave')
+            ->flatten();
 
-        return response()->json([$usersWithLeave], 200);
+        return response()->json($usersWithLeave, 200);
     }
-
-
 }

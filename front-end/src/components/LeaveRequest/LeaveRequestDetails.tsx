@@ -6,6 +6,7 @@ import { useState } from "react";
 
 interface Props {
   request: LeaveRequestType;
+  expanded: boolean;
 }
 
 export function LeaveRequestDetails({ request }: Readonly<Props>) {
