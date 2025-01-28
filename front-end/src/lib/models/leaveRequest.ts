@@ -18,6 +18,7 @@ export interface LeaveRequestCategory {
 
 export interface LeaveRequest {
   id: number;
+  userId: string;
   status: LeaveRequestStatus;
   reason: string;
   startDate: Date;
@@ -75,6 +76,10 @@ export async function getSectionManagerLeaveRequests(
   return leaveRequestsResponse.data
     .map(mapLeaveRequestDates)
     .sort(sortLeaveRequestsByDate);
+}
+
+export async function acceptedLeaveRequest(leaverequest: LeaveRequest) {
+  return leaverequest.status === "accepted";
 }
 
 export async function createLeaveRequest(

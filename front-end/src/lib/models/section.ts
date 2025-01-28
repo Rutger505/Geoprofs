@@ -1,4 +1,5 @@
 import axios from "@/lib/axios";
+import { User } from "@/types/user";
 
 export interface Section {
   id: number;
@@ -13,4 +14,9 @@ export async function getSections() {
 export async function getUserSection(userId: string) {
   const sectionResponse = await axios.get<Section>(`/users/${userId}/section`);
   return sectionResponse.data;
+}
+
+export async function getUsersInSection(sectionId: string | number) {
+  const usersResponse = await axios.get<User[]>(`/sections/users/${sectionId}`);
+  return usersResponse.data;
 }
