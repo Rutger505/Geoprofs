@@ -97,15 +97,12 @@ class ProjectController extends Controller
 
     public function getAllLeaveFromProject(Request $request, $projectId)
     {
-
-
         $usersWithLeave = ProjectUser::where('projectId', $projectId)
-            ->with(['user.leave'])
+            ->with(['user.leave.category'])
             ->get()
-            ->pluck('user');
+            ->pluck('user.leave')
+            ->flatten();
 
-        return response()->json([$usersWithLeave], 200);
+        return response()->json($usersWithLeave, 200);
     }
-
-
 }

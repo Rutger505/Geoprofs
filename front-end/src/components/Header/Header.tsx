@@ -22,7 +22,7 @@ export const navigationPerRole: NavigationPerRole = {
     { name: "Verlofsaldo", href: "/leave-hours" },
   ],
   SectionManager: [
-    { name: "Aanvragen", href: "#" },
+    { name: "Beheer Verlofverzoeken", href: "/section-manager/leave-requests" },
     { name: "Kalender", href: "#" },
   ],
   ProjectManager: [{ name: "Kalender", href: "#" }],
