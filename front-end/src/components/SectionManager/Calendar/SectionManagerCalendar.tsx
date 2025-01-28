@@ -19,6 +19,11 @@ export async function SectionManagerCalendar() {
   }
 
   const userSection = await getUserSection(session.user.id);
+
+  if (!userSection) {
+    return <div>Je bent geen gecoppeld aan een sectie</div>;
+  }
+
   const users = await getUsersInSection(userSection.id);
 
   const allLeaveRequests = await getSectionManagerLeaveRequests(
