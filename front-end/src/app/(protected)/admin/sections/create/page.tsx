@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function Sections() {
   const [sectionName, setSectionName] = useState("");
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       return await createSection(sectionName);
     },
@@ -47,15 +47,15 @@ export default function Sections() {
           <div className="space-y-4">
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={isPending}
               className={clsx(
                 "w-full rounded-md px-4 py-2 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2",
-                isLoading
+                isPending
                   ? "bg-gray-400"
                   : "bg-blue-500 hover:bg-blue-600 focus:ring-blue-500",
               )}
             >
-              {isLoading ? "Bezig met registreren..." : "Registreer"}
+              {isPending ? "Bezig met registreren..." : "Registreer"}
             </Button>
           </div>
         </div>
