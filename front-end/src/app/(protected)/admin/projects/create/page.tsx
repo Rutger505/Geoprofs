@@ -1,6 +1,6 @@
 "use client";
 
-import { createProject } from "@/app/(protected)/admin/projects/create/create-project";
+import { createProject } from "@/lib/models/project";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
