@@ -28,11 +28,21 @@ export async function updateUserSection({
 
 export async function getUserSection(userId: string) {
   const res = await axios.get<Section | {}>(`/users/${userId}/section`);
+
+  if (!("id" in res.data)) {
+    return null;
+  }
+
   return res.data;
 }
 
 export async function getUserProject(userId: string) {
   const res = await axios.get<Project | {}>(`/users/${userId}/project`);
+
+  if (!("id" in res.data)) {
+    return null;
+  }
+
   return res.data;
 }
 
