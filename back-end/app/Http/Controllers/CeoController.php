@@ -14,8 +14,6 @@ class CeoController extends Controller
         $leave = Sections::with('user.leave')->get();
 
         return response()->json($leave);
-
-
     }
 
     public function showProject()
@@ -23,6 +21,5 @@ class CeoController extends Controller
         $leave = Projects::with('user.leave')->get();
 
         return response()->json($leave);
-
     }
 }

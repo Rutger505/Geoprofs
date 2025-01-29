@@ -96,13 +96,9 @@ Route::prefix('sections')->group(function () {
     });
 
     Route::get('/leave/{sectionId}', [SectionController::class, 'getAllLeaveFromSection']);
-
 });
-
 
 Route::prefix('/ceo')->group(function () {
     Route::get('/section', [CeoController::class, 'showSection']);
-
     Route::get('/project', [CeoController::class, 'showProject']);
 });
-
