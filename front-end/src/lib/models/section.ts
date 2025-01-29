@@ -1,7 +1,8 @@
-import axios from "@/lib/axios";
-import { AxiosError } from "axios";
-import { User } from "@/types/user";
+"use server";
 
+import axios from "@/lib/axios";
+import { User } from "@/types/user";
+import { AxiosError } from "axios";
 
 export interface Section {
   id: number;
