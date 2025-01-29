@@ -1,4 +1,4 @@
-import { SectionManagerLeaveRequests } from "@/components/LeaveRequest/SectionManagerLeaveRequests";
+import { SectionManagerLeaveRequests } from "@/components/SectionManager/SectionManagerLeaveRequests";
 
 export default async function LeaveRequests() {
   return (
