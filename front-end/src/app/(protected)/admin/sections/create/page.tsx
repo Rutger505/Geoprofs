@@ -1,6 +1,6 @@
 "use client";
 
-import { createSection } from "@/app/(protected)/admin/sections/create/create-section";
+import { createSection } from "@/lib/models/section";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
