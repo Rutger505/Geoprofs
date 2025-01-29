@@ -1,6 +1,6 @@
 import axios from "@/lib/axios";
-import { AxiosError } from "axios";
 import { User } from "@/types/user";
+import { AxiosError } from "axios";
 
 export interface Project {
   id: number;
@@ -18,18 +18,15 @@ export async function createProject(name: string) {
       name,
     });
   } catch (error) {
-    if (!(error instanceof AxiosError) || error.response?.status !== 409) {
-      if (error instanceof AxiosError) {
-        console.error(error.message);
-        console.error(error.response?.data);
-      }
-
-      return { error: "Er is iets misgegaan" };
+    if (error instanceof AxiosError) {
+      console.error(error.message);
+      console.error(error.response?.data);
     }
 
-    return { error: "Unexpected error" };
+    return { error: "Er is iets misgegaan" };
   }
-  
+
+  return { error: "Unexpected error" };
 }
 
 export async function getUsersInProject(projectId: string | number) {
