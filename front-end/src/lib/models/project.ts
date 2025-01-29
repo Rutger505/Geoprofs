@@ -1,5 +1,6 @@
 import axios from "@/lib/axios";
 import { AxiosError } from "axios";
+import { User } from "@/types/user";
 
 export interface Project {
   id: number;
@@ -28,4 +29,10 @@ export async function createProject(name: string) {
 
     return { error: "Unexpected error" };
   }
+  
+}
+
+export async function getUsersInProject(projectId: string | number) {
+  const usersResponse = await axios.get<User[]>(`/projects/users/${projectId}`);
+  return usersResponse.data;
 }

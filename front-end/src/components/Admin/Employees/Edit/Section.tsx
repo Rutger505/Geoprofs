@@ -32,7 +32,7 @@ export async function Section({ user }: Readonly<{ user: User }>) {
           <select
             id="section"
             name="section"
-            defaultValue={"id" in userSection ? userSection.id : ""}
+            defaultValue={userSection ? userSection.id : ""}
             className="w-full rounded-md border border-gray-300 bg-white p-2"
           >
             <option value="" disabled>

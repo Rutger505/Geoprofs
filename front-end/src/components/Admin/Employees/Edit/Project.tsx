@@ -32,7 +32,7 @@ export async function Project({ user }: Readonly<{ user: User }>) {
           <select
             id="project"
             name="project"
-            defaultValue={"id" in userProject ? userProject.id : ""}
+            defaultValue={userProject ? userProject.id : ""}
             className="w-full rounded-md border border-gray-300 bg-white p-2"
           >
             <option value="" disabled>
