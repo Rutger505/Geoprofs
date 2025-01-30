@@ -25,15 +25,11 @@ export async function createSection(name: string) {
       name,
     });
   } catch (error) {
-    if (!(error instanceof AxiosError) || error.response?.status !== 409) {
-      if (error instanceof AxiosError) {
-        console.error(error.message);
-        console.error(error.response?.data);
-      }
-
-      return { error: "Er is iets misgegaan" };
+    if (error instanceof AxiosError) {
+      console.error(error.message);
+      console.error(error.response?.data);
     }
 
-    return { error: "Unexpected error" };
+    return { error: "Er is iets misgegaan" };
   }
 }
