@@ -25,8 +25,6 @@ export async function createProject(name: string) {
 
     return { error: "Er is iets misgegaan" };
   }
-
-  return { error: "Unexpected error" };
 }
 
 export async function getUsersInProject(projectId: string | number) {
