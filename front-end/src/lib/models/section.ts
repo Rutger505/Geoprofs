@@ -32,6 +32,4 @@ export async function createSection(name: string) {
 
     return { error: "Er is iets misgegaan" };
   }
-
-  return { error: "Unexpected error" };
 }
