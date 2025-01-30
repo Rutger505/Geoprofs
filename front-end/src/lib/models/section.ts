@@ -1,4 +1,5 @@
 import axios from "@/lib/axios";
+import { LeaveRequest } from "@/lib/models/leaveRequest";
 import { User } from "@/types/user";
 
 export interface Section {
@@ -19,4 +20,14 @@ export async function getUserSection(userId: string) {
 export async function getUsersInSection(sectionId: string | number) {
   const usersResponse = await axios.get<User[]>(`/sections/users/${sectionId}`);
   return usersResponse.data;
+}
+
+type SectionWithUsersWithLeaves = Section & {
+  user: User & { leave: LeaveRequest[] }[];
+};
+
+export async function getSectionsLeaves() {
+  const projectsResponse =
+    await axios.get<SectionWithUsersWithLeaves[]>("/ceo/section");
+  return projectsResponse.data;
 }

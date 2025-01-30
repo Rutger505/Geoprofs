@@ -1,12 +1,8 @@
 "use server";
 import axios from "@/lib/axios";
 import { getUserSection } from "@/lib/models/section";
-import {
-  differenceInBusinessDays,
-  differenceInHours,
-  format,
-  isSameDay,
-} from "date-fns";
+import { mapLeaveRequestDates } from "@/lib/util";
+import { format } from "date-fns";
 
 export type LeaveRequestStatus = "accepted" | "denied" | "pending";
 
@@ -26,30 +22,6 @@ export interface LeaveRequest {
   durationHours: number;
   category: LeaveRequestCategory;
   updatedAt: Date | null;
-}
-
-function getLeaveDuration(start: Date, end: Date): number {
-  if (isSameDay(start, end)) {
-    return differenceInHours(end, start);
-  }
-
-  return differenceInBusinessDays(end, start) * 8;
-}
-
-function mapLeaveRequestDates(
-  leaveRequest: Omit<LeaveRequest, "durationHours">,
-): LeaveRequest {
-  // First convert the dates to ensure we're working with Date objects
-  const startDate = new Date(leaveRequest.startDate);
-  const endDate = new Date(leaveRequest.endDate);
-
-  return {
-    ...leaveRequest,
-    startDate,
-    endDate,
-    updatedAt: leaveRequest.updatedAt ? new Date(leaveRequest.updatedAt) : null,
-    durationHours: getLeaveDuration(startDate, endDate),
-  };
 }
 
 export async function getUsersLeaveRequests(

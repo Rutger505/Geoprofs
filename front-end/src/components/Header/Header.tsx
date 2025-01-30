@@ -27,8 +27,8 @@ export const navigationPerRole: NavigationPerRole = {
   ],
   ProjectManager: [{ name: "Kalender", href: "#" }],
   CEO: [
-    { name: "Presentie Afdeling", href: "#" },
-    { name: "Presentie Project", href: "#" },
+    { name: "Afdelingen", href: "/ceo/sections" },
+    { name: "Projecten", href: "/ceo/projects" },
   ],
   Admin: [
     { name: "Werknemers", href: "/admin/employees" },
