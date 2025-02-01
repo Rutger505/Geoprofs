@@ -18,23 +18,25 @@ type NavigationPerRole = {
 export const navigationPerRole: NavigationPerRole = {
   Employee: [
     { name: "Dashboard", href: "/dashboard" },
-    { name: "Aanvragen", href: "#" },
-    { name: "Verlofsaldo", href: "#" },
+    { name: "Verlofverzoeken", href: "/leave-requests" },
+    { name: "Verlofsaldo", href: "/leave-hours" },
   ],
   SectionManager: [
-    { name: "Aanvragen", href: "#" },
-    { name: "Kalender", href: "#" },
+    { name: "Beheer Verlofverzoeken", href: "/section-manager/leave-requests" },
+    { name: "Kalender", href: "/section-manager/section-calendar" },
   ],
-  ProjectManager: [{ name: "Kalender", href: "#" }],
+  ProjectManager: [
+    { name: "Kalender", href: "/project-manager/project-calendar" },
+  ],
   CEO: [
-    { name: "Presentie Afdeling", href: "#" },
-    { name: "Presentie Project", href: "#" },
+    { name: "Afdelingen", href: "/ceo/sections" },
+    { name: "Projecten", href: "/ceo/projects" },
   ],
   Admin: [
     { name: "Werknemers", href: "/admin/employees" },
-    { name: "Contracten", href: "#" },
-    { name: "Afdelingen", href: "#" },
-    { name: "Projecten", href: "#" },
+    { name: "Contracten", href: "/admin/contracts" },
+    { name: "Afdelingen", href: "/admin/sections" },
+    { name: "Projecten", href: "/admin/projects" },
   ],
 };
 

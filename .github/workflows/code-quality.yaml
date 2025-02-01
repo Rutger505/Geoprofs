@@ -79,9 +79,45 @@ jobs:
           name: coverage
           path: front-end/coverage
 
+  test-back-end:
+    name: Test Backend
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: geoprofs
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 1s --health-timeout 5s --health-retries 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          coverage: none
+
+      - name: Test Backend
+        run: |
+          cd back-end
+          
+          cp .env.example .env
+          
+          composer install
+          
+          php artisan db:create
+          php artisan migrate
+          php artisan db:seed
+          
+          php artisan test
 
   sonar:
-    needs: [test-front-end]
+    needs: [ test-front-end ]
     if: always()
     name: SonarQube Cloud Analysis
     runs-on: ubuntu-latest

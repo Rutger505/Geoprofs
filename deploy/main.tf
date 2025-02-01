@@ -83,7 +83,7 @@ resource "kubernetes_deployment" "backend" {
         init_container {
           name    = "${var.application_name}-migrate"
           image   = "${var.image_repository}-backend:${var.tag}"
-          command = ["sh", "-c", "php artisan db:create && php artisan migrate"]
+          command = ["sh", "-c", "php artisan db:create && php artisan migrate --force"]
 
           env_from {
             config_map_ref {

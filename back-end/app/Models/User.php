@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Model
@@ -61,8 +62,32 @@ class User extends Model
         $this->roleName = $role->name;
     }
 
-    public function leave(): hasMany
+    public function leave(): HasMany
     {
         return $this->hasMany(Leave::class, 'userId', 'id');
+    }
+
+    public function section(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Sections::class,
+            SectionUser::class,
+            'userId',
+            'id',
+            'id',
+            'sectionId'
+        );
+    }
+
+    public function project(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Projects::class,
+            ProjectUser::class,
+            'userId',
+            'id',
+            'id',
+            'projectId'
+        );
     }
 }

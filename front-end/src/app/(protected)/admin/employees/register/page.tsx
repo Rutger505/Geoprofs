@@ -1,4 +1,4 @@
-import { RegisterEmployeeForm } from "@/components/Admin/RegisterEmployee/RegisterEmployeeForm";
+import { RegisterEmployeeForm } from "@/components/Admin/Employees/RegisterEmployee/RegisterEmployeeForm";
 import axios from "@/lib/axios";
 import { Contract, getContracts } from "@/lib/models/contract";
 
@@ -33,7 +33,6 @@ export default async function Page() {
   let contracts: Contract[] | undefined;
   try {
     contracts = await getContracts();
-    console.log(contracts);
   } catch (error) {
     console.error(error);
     return (
