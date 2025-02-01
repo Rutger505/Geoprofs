@@ -1,32 +1,32 @@
 import { auth } from "@/lib/auth";
 import {
   acceptedLeaveRequest,
-  getSectionManagerLeaveRequests,
+  getProjectManagerLeaveRequests,
   LeaveRequest,
 } from "@/lib/models/leaveRequest";
-import { getUsersInSection } from "@/lib/models/section";
-import { getUserSection } from "@/lib/models/user";
+import { getUsersInProject } from "@/lib/models/project";
+import { getUserProject } from "@/lib/models/user";
 import { redirect } from "next/navigation";
 
 interface LeavesPerUser {
   [userId: string]: LeaveRequest[];
 }
 
-export async function SectionManagerCalendar() {
+export async function ProjectManagerCalendar() {
   const session = await auth();
   if (!session) {
     redirect("/");
   }
 
-  const userSection = await getUserSection(session.user.id);
+  const userProject = await getUserProject(session.user.id);
 
-  if (!userSection) {
-    return <div>Je bent geen gekoppeld aan een sectie</div>;
+  if (!userProject) {
+    return <div>U bent niet gekoppeld aan een project</div>;
   }
 
-  const users = await getUsersInSection(userSection.id);
+  const users = await getUsersInProject(userProject.id);
 
-  const allLeaveRequests = await getSectionManagerLeaveRequests(
+  const allLeaveRequests = await getProjectManagerLeaveRequests(
     session.user.id,
   );
   const acceptedLeaveRequests = allLeaveRequests.filter(acceptedLeaveRequest);

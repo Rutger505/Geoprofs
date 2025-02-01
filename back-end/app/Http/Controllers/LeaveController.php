@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NotificationMail;
 use App\Models\Contracts;
 use App\Models\Leave;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 
 class LeaveController extends Controller
 {
@@ -35,6 +38,7 @@ class LeaveController extends Controller
             'categoryId' => $request->categoryId,
             'userId' => $request->userId
         ]);
+
 
         return response()->json(['message' => 'Leave request made']);
     }
@@ -80,6 +84,12 @@ class LeaveController extends Controller
         Leave::where('id', $leaveId)->update([
             'status' => $request['status'],
         ]);
+
+
+        $user = Leave::where('id', $leaveId)->first()->user;
+
+        Mail::to($user->email)->send(new NotificationMail($user->email, $request['status']));
+
 
         return response()->json(['message' => 'Leave status updated']);
     }
