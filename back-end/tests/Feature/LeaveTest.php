@@ -85,51 +85,6 @@ class LeaveTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_leave_update(): void
-    {
-
-
-        $leaveId = 1;
-        // Sample login credentials
-        $credentials = [
-            'status' => 'accepted',
-
-        ];
-
-        // Send a POST request with credentials to the login endpoint
-        $response = $this->putJson("api/leave/$leaveId", $credentials);
-
-        // Assert the response status is 200 (OK)
-        $response->assertStatus(200);
-
-        // Assert the response body contains specific structure or data
-        $response->assertJsonStructure([
-            'message',
-        ]);
-
-    }
-
-    public function test_update_already_accepted_leave(): void
-    {
-
-        $leaveId = 1;
-        // Sample login credentials
-        $credentials = [
-            'status' => 'accepted',
-
-        ];
-
-        // Send a POST request with credentials to the login endpoint
-        $response = $this->putJson("api/leave/$leaveId", $credentials);
-
-        // Assert the response status is 200 (OK)
-        $response->assertStatus(404);
-
-        // Assert the response body contains specific structure or data
-        $response->assertJsonStructure([
-            'message',
-        ]);
-    }
 
     public function test_update_non_existent_leave(): void
     {

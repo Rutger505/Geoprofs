@@ -1,4 +1,6 @@
 import axios from "@/lib/axios";
+import { LeaveRequest } from "@/lib/models/leaveRequest";
+import { mapLeaveRequestDates } from "@/lib/util";
 import { User } from "@/types/user";
 import { AxiosError } from "axios";
 
@@ -10,6 +12,29 @@ export interface Project {
 export async function getProjects() {
   const projectsResponse = await axios.get<Project[]>("/projects");
   return projectsResponse.data;
+}
+
+export type ProjectWithUsersWithLeaves = Project & {
+  user: (User & { leave: LeaveRequest[] })[];
+};
+
+export async function getProjectsLeaves(): Promise<
+  ProjectWithUsersWithLeaves[]
+> {
+  const projectsResponse =
+    await axios.get<ProjectWithUsersWithLeaves[]>("/ceo/project");
+
+  const transformedData = projectsResponse.data.map((project) => ({
+    ...project,
+    user: project.user.map((user) => ({
+      ...user,
+      leave: user.leave.map((leave) => mapLeaveRequestDates(leave)),
+    })),
+  }));
+
+  console.log(transformedData[0].user[0].leave[0]);
+
+  return transformedData;
 }
 
 export async function createProject(name: string) {
