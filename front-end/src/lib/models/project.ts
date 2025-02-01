@@ -1,8 +1,8 @@
 import axios from "@/lib/axios";
-import { User } from "@/types/user";
-import { AxiosError } from "axios";
 import { LeaveRequest } from "@/lib/models/leaveRequest";
 import { mapLeaveRequestDates } from "@/lib/util";
+import { User } from "@/types/user";
+import { AxiosError } from "axios";
 
 export interface Project {
   id: number;
@@ -15,12 +15,14 @@ export async function getProjects() {
 }
 
 export type ProjectWithUsersWithLeaves = Project & {
-  user: User & { leave: LeaveRequest[] }[];
+  user: (User & { leave: LeaveRequest[] })[];
 };
 
-export async function getProjectsLeaves() {
+export async function getProjectsLeaves(): Promise<
+  ProjectWithUsersWithLeaves[]
+> {
   const projectsResponse =
-    await axios.get<ProjectWithUsersWithLeaves[]>("/ceo/section");
+    await axios.get<ProjectWithUsersWithLeaves[]>("/ceo/project");
 
   const transformedData = projectsResponse.data.map((project) => ({
     ...project,
