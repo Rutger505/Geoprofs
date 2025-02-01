@@ -1,7 +1,7 @@
 import GroupChart from "@/components/Ceo/GroupChart";
 import { auth } from "@/lib/auth";
 import { mapGroupDataToChartItems } from "@/lib/models/group";
-import { getProjectsLeaves } from "@/lib/models/project";
+import { getSectionsLeaves } from "@/lib/models/section";
 import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
@@ -10,11 +10,11 @@ export default async function Dashboard() {
     redirect("/");
   }
 
-  const projectsData = await getProjectsLeaves();
+  const projectsData = await getSectionsLeaves();
 
   return (
     <main className="flex flex-col items-center gap-14 py-20">
-      <h1 className={"text-3xl font-semibold"}>Projecten</h1>
+      <h1 className={"text-3xl font-semibold"}>Afdelingen</h1>
 
       {mapGroupDataToChartItems(projectsData).map((groupData) => (
         <GroupChart
