@@ -14,7 +14,9 @@ export default async function Dashboard() {
 
   return (
     <main className="flex flex-col items-center gap-14 py-20">
-      <h1 className={"text-3xl font-semibold"}>Projecten</h1>
+      <h1 className={"text-3xl font-semibold"}>
+        Aantal verlofverzoeken per project
+      </h1>
 
       {mapGroupDataToChartItems(projectsData).map((groupData) => (
         <GroupChart
